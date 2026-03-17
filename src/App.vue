@@ -1,17 +1,17 @@
-<script setup lang="ts">
-import { RouterView, RouterLink } from 'vue-router'
-</script>
-
 <template>
-  <div>
+  <div id="app">
     <RouterView></RouterView>
   </div>
 </template>
 
+<script setup lang='ts'>
+import { RouterView } from 'vue-router';
+</script>
+
 <style scoped>
-.not-found-container {
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
+#id {
+  margin: 0 auto;
+  padding: 0;
+  background-color: #abdbf1;
 }
 </style>
