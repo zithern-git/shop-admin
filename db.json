@@ -1,10 +1,10 @@
 {
   "users": [
-    { "id": 1, "username": "admin", "password": "123456", "role": "admin" },
-    { "id": 2, "username": "test", "password": "test123", "role": "user" }
+    { "id": 1, "username": "admin", "password": "123", "role": "admin" },
+    { "id": 2, "username": "user", "password": "123", "role": "user" }
   ],
-  "posts": [
-    { "id": 1, "title": "文章1", "content": "仅登录用户可见" },
-    { "id": 2, "title": "文章2", "content": "仅管理员可见" }
+  "menus": [
+    { "id": 1, "name": "首页", "path": "/index" },
+    { "id": 2, "name": "用户管理", "path": "/users" }
   ]
 }
