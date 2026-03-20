@@ -4,13 +4,14 @@ import NotFound from '@/views/NotFound.vue'
 import LoginView from '@/views/LoginView.vue'
 
 const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(),
   routes: [
     { path: '/', redirect: '/login' },
     {
       path: '/index',
       name: 'index',
-      component: () => import('../views/IndexView.vue'),
+      component: IndexView,
+      // () => import('../views/IndexView.vue'),
       // 路由守卫：如果没登录，强制跳回登录页
       beforeEnter: (to, from, next) => {
         const isLoggedIn = localStorage.getItem('isLoggedIn')

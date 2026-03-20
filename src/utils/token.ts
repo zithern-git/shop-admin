@@ -11,7 +11,7 @@ const TOKEN_KEY = 'user_token';
  * @param {string} token - 登录返回的 Token 字符串
  * @param {number} expires - 过期时间（单位：天，默认 1 天）
  */
-export function setToken(token, expires = 1) {
+export function setToken(token:string, expires = 1) {
   // 设置 Cookie：key + 值 + 过期时间 + 路径（/ 表示全站可用）
   cookies.set(TOKEN_KEY, token, {
     expires: new Date(Date.now() + expires * 24 * 60 * 60 * 1000),

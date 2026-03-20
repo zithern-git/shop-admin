@@ -1,24 +1,37 @@
 <template>
   <el-row class="login-container">
-    
     <!-- 左侧列：lg断点（≥1200px）占16列+全屏高度，md断点（992-1200px）占12列+满屏高度-->
-    <el-col :md="12" :lg="16"
-      class="login-left">
+    <el-col :md="12" :lg="16" class="login-left">
       <h2 class="text-5xl font-600 text-light-50">欢迎光临</h2>
       <p class="my-4 text-light-50">这是一个后台管理系统。</p>
     </el-col>
-    
+
     <!-- 右侧列：lg断点（≥1200px）占8列+全屏高度，md断点（992-1200px）占12列+满屏高度-->
-    <el-col :md="12" :lg="8"
-     class="login-right">
+    <el-col :md="12" :lg="8" class="login-right">
       <h2 class="title-left">欢迎回来</h2>
       <p class="my-4 text-gray-500">账号密码登录</p>
-      <el-form label-width="auto" style="max-width: 600px" ref="ruleFormRef" :model="ruleForm" :rules="rules">
+      <el-form
+        label-width="auto"
+        style="max-width: 600px"
+        ref="ruleFormRef"
+        :model="ruleForm"
+        :rules="rules"
+      >
         <el-form-item prop="username">
-          <el-input v-model="ruleForm.username" placeholder="请输入用户名" prefix-icon="User" clearable/>
+          <el-input
+            v-model="ruleForm.username"
+            placeholder="请输入用户名"
+            prefix-icon="User"
+            clearable
+          />
         </el-form-item>
         <el-form-item prop="password">
-          <el-input v-model="ruleForm.password" placeholder="请输入密码" prefix-icon="Lock" show-password/>
+          <el-input
+            v-model="ruleForm.password"
+            placeholder="请输入密码"
+            prefix-icon="Lock"
+            show-password
+          />
           <!-- <el-input v-model="ruleForm.password" placeholder="请输入密码" show-password>
             <template #prefix>
               <el-icon><Lock /></el-icon>
@@ -26,24 +39,30 @@
           </el-input> -->
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" round class="w-full" @click="submitForm(ruleFormRef)" :disabled="loading">
+          <el-button
+            type="primary"
+            round
+            class="w-full"
+            @click="submitForm(ruleFormRef)"
+            :disabled="loading"
+          >
             {{ loading ? '登录中...' : '登 录' }}
           </el-button>
         </el-form-item>
-     </el-form>
+      </el-form>
     </el-col>
   </el-row>
 </template>
 
-<script setup lang='ts' name="LoginView">
-import {ref, reactive} from 'vue'
+<script setup lang="ts" name="LoginView">
+import { ref, reactive } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElNotification } from 'element-plus'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
-import {login} from '@/api/manager'
-import { useCookies } from '@vueuse/integrations'
-import { setToken } from '@/utils/token';
+import { login } from '@/api/manager'
+// import { useCookies } from '@vueuse/integrations'
+import { setToken } from '@/utils/token'
 
 interface RuleForm {
   username: string
@@ -61,7 +80,7 @@ const loading = ref(false)
 const errorMsg = ref('')
 
 const rules = reactive<FormRules<RuleForm>>({
-    username: [
+  username: [
     { required: true, message: '用户名不能为空', trigger: 'blur' },
     { min: 2, max: 5, message: '长度应该为2-5', trigger: 'blur' },
   ],
@@ -76,13 +95,13 @@ const rules = reactive<FormRules<RuleForm>>({
 
 // 1. 先定义错误类型（替代 any）
 interface RequestError extends Error {
-  message: string;
+  message: string
   // 可选：axios 错误的额外属性（按需添加）
   response?: {
-    status: number;
-    data: any; // 若知道格式可定义更具体的类型
-  };
-  request?: XMLHttpRequest;
+    status: number
+    data: any // 若知道格式可定义更具体的类型
+  }
+  request?: XMLHttpRequest
 }
 
 const submitForm = async (formEl: FormInstance | undefined) => {
@@ -117,29 +136,30 @@ const handleLogin = async () => {
 
     if (res.data.length > 0) {
       // 保存状态
-      /* localStorage.setItem('isLoggedIn', 'true')
-      localStorage.setItem('userInfo', JSON.stringify(res.data[0])) */
+      localStorage.setItem('isLoggedIn', 'true')
+      localStorage.setItem('userInfo', JSON.stringify(res.data[0]))
+
       // 存储 Token 到 Cookie
-      setToken(res.data.token);
-      
+      // setToken(res.data.token)
+
       ElNotification({
         message: '登录成功！',
         type: 'success',
-        duration: 1000
+        duration: 1000,
       })
-      
-      // 跳转到关于
+
+      // 跳转到首页
       router.push('/index')
     } else {
       errorMsg.value = '用户名或密码错误'
       ElNotification({
         message: errorMsg.value,
         type: 'error',
-        duration: 2000
+        duration: 2000,
       })
     }
-  } catch (error ) {
-    const err = error as RequestError;
+  } catch (error) {
+    const err = error as RequestError
     // 关键：精准区分错误类型
     console.error('登录请求详细错误:', err)
     // 1. 网络错误（Mock 服务未启动/地址错误）
@@ -147,15 +167,15 @@ const handleLogin = async () => {
       ElNotification({
         message: '连接服务器失败，请检查 Mock 服务是否启动',
         type: 'error',
-        duration: 2000
+        duration: 2000,
       })
-    } 
+    }
     // 2. 其他错误（如接口返回格式错误、状态码错误）
     else {
       ElNotification({
         message: `登录失败：${err.message || '未知错误'}`,
         type: 'error',
-        duration: 2000
+        duration: 2000,
       })
     }
   } finally {
@@ -174,7 +194,7 @@ const handleLogin = async () => {
 }
 
 .title-left {
-  @apply text-4xl font-600
+  @apply text-4xl font-600;
 }
 .login-container .login-right {
   @apply lg:h-full md:h-3/4 flex items-center justify-center flex-col;
