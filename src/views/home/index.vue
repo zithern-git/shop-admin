@@ -11,12 +11,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCookies } from '@vueuse/integrations/useCookies'
-import request from '@/utils/request';
-import { removeToken, getToken } from '@/utils/token';
-import { ElMessage } from 'element-plus';
+// import { useCookies } from '@vueuse/integrations/useCookies'
+// import request from '@/utils/request';
+// import { removeToken, getToken } from '@/utils/token';
+// import { ElMessage } from 'element-plus';
 
-const cookies = useCookies(['locale'])
+// const cookies = useCookies(['locale'])
 const router = useRouter()
 const userInfo = ref({})
 
