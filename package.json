@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --open",
+    "dev": "vite",
     "mock": "npx json-server db.json",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",

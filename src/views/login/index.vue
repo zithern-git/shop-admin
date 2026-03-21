@@ -71,10 +71,6 @@ const validatorUsername = (rule: any, value: any, callback: any) => {
 }
 
 const validatorPassword = (rule: any, value: any, callback: any) => {
-  // rule：即为校验规则对象
-  // value：即为表单元素文本内容
-  // 函数：如果符合条件callback放行通过即为
-  // 如果不符合条件callback方法，注入错误提示信息
   if (value.length >= 6) {
     callback()
   } else {

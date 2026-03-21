@@ -15,10 +15,29 @@
 .layout_container {
   width: 100%;
   height: 100vh;
-  background-color: #b0df98;
   .layout_slider {
-    // width: $base-menu-width;
-    width: 260px;
+    width: $base-menu-width;
+    height: 100%;
+    background-color: #adc1e4;
+  }
+  .layout_tabbar {
+    position: fixed;
+    width: calc(100% - #{$base-menu-width});
+    height: $base-tabbar-height;
+    top: 0;
+    left: $base-menu-width;
+    background-color: #444440;
+  }
+  .layout_main {
+    position: absolute;
+    width: calc(100% - #{$base-menu-width});
+    // height: calc(100vh - #{$base-tabbar-height});
+    height: 1000px;
+    top: $base-tabbar-height;
+    left: $base-menu-width;
+    padding: 20px;
+    background-color: #fff;
+    overflow: auto;
   }
 }
 </style>
