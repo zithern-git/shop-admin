@@ -1,7 +1,9 @@
 <template>
   <div class="layout_container">
     <!-- 左侧菜单 -->
-    <div class="layout_slider">slider</div>
+    <div class="layout_slider">
+      <Logo />
+    </div>
     <!-- 顶部导航 -->
     <div class="layout_tabbar">tabbar</div>
     <!-- 内容展示区域 -->
@@ -9,7 +11,9 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Logo from './logo/index.vue'
+</script>
 
 <style scoped lang="scss">
 .layout_container {
@@ -18,7 +22,7 @@
   .layout_slider {
     width: $base-menu-width;
     height: 100%;
-    background-color: #adc1e4;
+    background-color: $base-menu-background;
   }
   .layout_tabbar {
     position: fixed;
