@@ -16,5 +16,9 @@
   width: 100%;
   height: 100vh;
   background-color: #b0df98;
+  .layout_slider {
+    // width: $base-menu-width;
+    width: 260px;
+  }
 }
 </style>

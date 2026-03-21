@@ -4,8 +4,8 @@
   </div>
 </template>
 
-<script setup lang='ts'>
-import { RouterView } from 'vue-router';
+<script setup lang="ts">
+import { RouterView } from 'vue-router'
 // import request from './utils/request';
 // import { onMounted } from 'vue';
 // import { reqLogin } from '@/api/user/index'
@@ -30,10 +30,13 @@ onMounted(() => {
 }) */
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #id {
   margin: 0 auto;
   padding: 0;
   background-color: #abdbf1;
+}
+h1 {
+  color: red;
 }
 </style>

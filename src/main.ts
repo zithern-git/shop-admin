@@ -6,6 +6,8 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import App from './App.vue'
 import router from './router'
 import 'virtual:windi.css'
+// 引入模板的全局样式
+import '@/styles/index.scss'
 
 const app = createApp(App)
 
