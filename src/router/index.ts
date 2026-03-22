@@ -1,10 +1,10 @@
 // 通过vue-router插件实现模板路由配置
 import { createRouter, createWebHashHistory } from 'vue-router'
-import { constantRoute } from './routes'
+import { constantRoutes } from './routes'
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes: constantRoute,
+  routes: constantRoutes,
   // 滚动行为：每次路由切换后，页面滚动条强制回到「左上角（顶部 + 最左侧）」。
   scrollBehavior() {
     return {

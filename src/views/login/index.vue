@@ -34,7 +34,13 @@
           />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" round class="w-full" @click="login()" :disabled="loading">
+          <el-button
+            type="primary"
+            round
+            class="w-full !bg-blue-500 !border-blue-500 !text-white"
+            @click="login()"
+            :disabled="loading"
+          >
             {{ loading ? '登录中...' : '登 录' }}
           </el-button>
         </el-form-item>
@@ -132,7 +138,7 @@ const login = async () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .login-container {
   @apply flex h-screen lg:flex-row;
 }

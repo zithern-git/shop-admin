@@ -10,6 +10,12 @@ import { resolve } from 'path' // 核心：引入path模块
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    hmr: true,
+    watch: {
+      usePolling: true,
+    },
+  },
   plugins: [
     vue(),
     vueJsx(),

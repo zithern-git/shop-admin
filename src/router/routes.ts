@@ -1,5 +1,5 @@
 // 对外暴露配置路由（常量路由）
-export const constantRoute = [
+export const constantRoutes = [
   {
     // 登录
     path: '/login',
@@ -11,6 +11,7 @@ export const constantRoute = [
     path: '/',
     component: () => import('@/layout/index.vue'),
     name: 'layout',
+    children: [{ path: '/home', component: () => import('@/views/home/index.vue') }],
   },
   {
     // 404
@@ -19,6 +20,7 @@ export const constantRoute = [
     name: '404',
   },
   {
+    // 任意路由
     path: '/:pathMatch(.*)*', // 通配符，匹配所有未定义路径
     redirect: '/404',
     name: 'any',

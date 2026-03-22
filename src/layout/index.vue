@@ -5,7 +5,7 @@
       <Logo />
       <el-scrollbar class="scrollbar">
         <!-- 菜单组件 -->
-        <el-menu
+        <!-- <el-menu
           active-text-color="#ffd04b"
           background-color="rgb(150, 194, 227)"
           class="el-menu-vertical-demo"
@@ -48,6 +48,9 @@
               <el-menu-item index="1-4-1">item one</el-menu-item>
             </el-sub-menu>
           </el-sub-menu>
+        </el-menu> -->
+        <el-menu>
+          <Menu :menuList="userStore.menuRoutes"></Menu>
         </el-menu>
       </el-scrollbar>
     </div>
@@ -60,8 +63,14 @@
 
 <script setup lang="ts">
 import Logo from './logo/index.vue'
-
 import { HomeFilled, DataBoard, Lock, User } from '@element-plus/icons-vue'
+// import { RouterView, RouterLink } from 'vue-router'
+// 引入菜单组件
+import Menu from './menu/index.vue'
+// 获取用户相关的小仓库
+import useUserStore from '@/store/modules/user'
+const userStore = useUserStore()
+console.log(userStore.menuRoutes)
 
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
@@ -84,9 +93,10 @@ const handleClose = (key: string, keyPath: string[]) => {
     position: fixed;
     width: calc(100% - #{$base-menu-width});
     height: $base-tabbar-height;
+    // height: 50px;
     top: 0;
     left: $base-menu-width;
-    background-color: #444440;
+    background-color: #cd4619;
   }
   .layout_main {
     position: absolute;
