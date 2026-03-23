@@ -82,7 +82,7 @@
       top: $base-tabbar-height;
       left: $base-menu-width;
       padding: 20px;
-      background-color: #7fe3ac;
+      background-color: #fff;
       overflow: auto;
     }
   }

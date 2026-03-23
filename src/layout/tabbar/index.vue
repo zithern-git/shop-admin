@@ -20,7 +20,7 @@
     height: 100%;
     display: flex;
     justify-content: space-between;
-    background-image: linear-gradient(to right, rgba(236, 236, 148, 0.5), rgba(107, 107, 239, 0.5));
+    background-image: linear-gradient(to right, rgba(243, 243, 178, 0.5), rgba(107, 164, 239, 0.5));
     .tabbar-left {
       display: flex;
       align-items: center;
