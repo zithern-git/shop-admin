@@ -1,59 +1,54 @@
 <template>
-  <h1>{{ menuList }}</h1>
-  <!-- <el-menu
-          active-text-color="#ffd04b"
-          background-color="rgb(150, 194, 227)"
-          class="el-menu-vertical-demo"
-          default-active="1"
-          text-color="#fff"
-          @open="handleOpen"
-          @close="handleClose"
-        >
-          <el-menu-item index="1">
-            <el-icon><HomeFilled /></el-icon>
-            <span>首页</span>
-          </el-menu-item>
-          <el-menu-item index="2">
-            <el-icon><DataBoard /></el-icon>
-            <span>数据大屏</span>
-          </el-menu-item>
-          <el-sub-menu index="3">
-            <template #title>
-              <el-icon><Lock /></el-icon>
-              <span>权限管理</span>
-            </template>
-            <el-menu-item index="1-1">用户管理</el-menu-item>
-            <el-menu-item index="1-2">角色管理</el-menu-item>
-            <el-menu-item index="1-3">菜单管理</el-menu-item>
-          </el-sub-menu>
-          <el-sub-menu index="4">
-            <template #title>
-              <el-icon><User /></el-icon>
-              <span>系统管理</span>
-            </template>
-            <el-menu-item-group title="Group One">
-              <el-menu-item index="1-1">item one</el-menu-item>
-              <el-menu-item index="1-2">item two</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="Group Two">
-              <el-menu-item index="1-3">item three</el-menu-item>
-            </el-menu-item-group>
-            <el-sub-menu index="1-4">
-              <template #title>item four</template>
-              <el-menu-item index="1-4-1">item one</el-menu-item>
-            </el-sub-menu>
-          </el-sub-menu>
-        </el-menu> -->
-  <template v-for="(item, index) in menuList" :key="item.path">
-    <el-menu-item v-if="!item.children">
-      <template #title> </template>
-    </el-menu-item>
+  <template v-for="(item,index) in menuList" :key="item.path">
+    <!-- 没有子路由 -->
+    <template v-if="!item.children" >
+      <el-menu-item :index="item.path" v-if="!item.meta.hidden">
+        <template #title>
+          <el-icon>
+            <component :is="item.meta.icon"></component>
+          </el-icon>
+          <span>{{ item.meta.title }}</span>
+        </template>
+      </el-menu-item>
+    </template>
+    <!-- 有子路由且只有一个 -->
+    <template v-if="item.children?.length === 1 && item.children[0].path && item.children[0].meta?.title">
+      <el-menu-item :index="item.children[0].path" v-if="item.children[0].meta.hidden">
+        <template #title>
+          <el-icon>
+            <component :is="item.children[0].meta.icon"></component>
+          </el-icon>
+          <span>{{ item.children[0].meta.title }}</span>
+        </template>
+      </el-menu-item>
+    </template>
+    <!-- 有子路由且多于1个 -->
+    <el-sub-menu v-if="item.children?.length > 1" :index="item.path">
+        <template #title>
+          <el-icon>
+            <component :is="item.meta.icon"></component>
+          </el-icon>
+          <span>{{  item.meta.title  }}</span>
+        </template>
+        <!-- 递归自身 -->
+        <Menu :menuList="item.children"></Menu>
+    </el-sub-menu>
   </template>
 </template>
 
 <script setup lang="ts">
+// 直接在脚本内声明 name，无需拆分标签（VUE3.3+原生支持）
+defineOptions({
+  name: 'Menu'
+})
+
 // 获取父组件传递过来的全部路由数组
 defineProps(['menuList'])
 </script>
+<!-- <script lang="ts"> // VUE2的写法
+export default {
+  name: 'Menu'
+}
+</script> -->
 
 <style scoped></style>
