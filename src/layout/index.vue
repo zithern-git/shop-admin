@@ -5,7 +5,10 @@
       <Logo />
       <el-scrollbar class="scrollbar">
         <!-- 菜单组件 -->
-        <el-menu background-color="#96c2e3">
+        <el-menu
+          background-color="#96c2e3"
+          active-text-color="#ffd04b"
+          >
           <Menu :menuList="userStore.menuRoutes"></Menu>
         </el-menu>
       </el-scrollbar>
@@ -13,15 +16,19 @@
     <!-- 顶部导航 -->
     <div class="layout_tabbar">tabbar</div>
     <!-- 内容展示区域 -->
-    <div class="layout_main">main</div>
+    <div class="layout_main">
+      <Main></Main>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+// 引入左侧菜单Logo子组件
 import Logo from './logo/index.vue'
-// import { RouterView, RouterLink } from 'vue-router'
 // 引入菜单组件
 import Menu from './menu/index.vue'
+// 右侧内容展示区域
+import Main from './main/index.vue'
 // 获取用户相关的小仓库
 import useUserStore from '@/store/modules/user'
 const userStore = useUserStore()
