@@ -3,6 +3,8 @@ import axios from 'axios'
 // 引入 axios 1.x 正确的内部类型
 import type { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios'
 import { ElMessage } from 'element-plus'
+// 引入用户相关的仓库
+import useUserStore from '@/store/modules/user'
 
 // 第一步：利用axios 的create 方法创建 axios 实例
 const request: AxiosInstance = axios.create({
@@ -16,9 +18,10 @@ const request: AxiosInstance = axios.create({
 // 第二步：实例添加请求拦截器与响应拦截器
 // 请求拦截器：使用 InternalAxiosRequestConfig 类型
 request.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  // 获取用户相关的小仓库：获取仓库内部token，登录成功以后携带给服务器
+  const userStore = useUserStore()
   // 返回配置对象，config配置对象，headers属性请求头，经常给服务器端携带公共参数
-  // console.log('@@', config)
-  // config.headers.token = '123'
+  config.headers.token = userStore.token
   return config
 })
 

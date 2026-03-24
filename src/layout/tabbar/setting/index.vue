@@ -3,12 +3,12 @@
   <el-button size="small" icon="FullScreen" circle style="border: 1px solid #d5d3d3;" @click="fullScreen"/>
   <el-button size="small" icon="Setting" circle style="border: 1px solid #d5d3d3;"/>
   <img
-    src="../../../../public/logo.png"
+    :src="userStore.avatar"
     style="width: 24px; height: 24px; border-radius: 12px; margin: 0 10px"
   />
   <el-dropdown>
     <span class="el-dropdown-link">
-      admin
+      {{userStore.username}}
       <el-icon class="el-icon--right">
         <arrow-down />
       </el-icon>
@@ -24,6 +24,10 @@
 <script setup lang="ts">
 // 获取骨架的小仓库
 import useLayoutSettingStore from '@/store/modules/setting'
+// 获取用户相关的小仓库
+import useUserStore from '@/store/modules/user'
+
+const userStore = useUserStore()
 
 const layoutSettingStore = useLayoutSettingStore()
 // 刷新按钮点击回调

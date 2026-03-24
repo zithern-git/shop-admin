@@ -57,8 +57,9 @@ export default [
   {
     url: '/api/user/info',
     method: 'get',
-    response: ({ request }) => {
-      const token = request.headers.token
+    // response: ({ request }) => { // vite-plugin-mock 没有 request 这个参数！
+    response: ({ headers }) => {
+      const token = headers.token || ''
       const userList = createUserList()
       const user = userList.find(item => item.token === token)
 
@@ -79,7 +80,7 @@ export default [
         }
       } else {
         return {
-          code: 401,
+          code: 201,
           data: {user}
         }
       }

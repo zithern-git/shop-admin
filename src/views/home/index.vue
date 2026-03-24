@@ -1,26 +1,18 @@
 <template>
   <div class="profile-container">
-    <h2>后台首页</h2>
-    <hr>
-    <button @click="handleLogout">退出登录</button>
+    <h2>{{userStore.username}}</h2>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-const userInfo = ref({})
-
+// 引入组合式API函数之生命周期函数
+import { onMounted } from 'vue'
+// 获取用户仓库
+import useUserStore from '@/store/modules/user'
+const userStore = useUserStore()
+// 目前首页挂载完毕发请求获取用户信息
 onMounted(() => {
-  // 从 localStorage 取出用户信息
-  const raw = localStorage.getItem('userInfo')
-  if (raw) userInfo.value = JSON.parse(raw)
+  userStore.userInfo()
 })
 
-const handleLogout = () => {
-  localStorage.clear()
-  router.push('/login')
-}
 </script>
