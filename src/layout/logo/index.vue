@@ -6,6 +6,9 @@
 </template>
 <script setup lang="ts">
 import { setting } from '@/setting'
+ defineOptions({
+    name: 'Logo'
+  })
 </script>
 
 <style scoped lang="scss">

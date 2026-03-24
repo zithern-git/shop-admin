@@ -37,13 +37,20 @@
   import Tabbar from './tabbar/index.vue'
   // 右侧内容展示区域
   import Main from './main/index.vue'
+  import useLayoutSettingStore from '@/store/modules/setting'
 
   // 获取用户相关的小仓库
   import useUserStore from '@/store/modules/user'
   const userStore = useUserStore()
 
+  const LayoutSettingStore = useLayoutSettingStore()
+
   // 获取路由对象
   const $route = useRoute()
+
+  defineOptions({
+    name: 'Layout'
+  })
 </script>
 
 <style scoped lang="scss">
