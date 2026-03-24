@@ -2,7 +2,7 @@
  * @Author: zithern-git 2385186645@qq.com
  * @Date: 2026-03-23 09:51:31
  * @LastEditors: zithern-git 2385186645@qq.com
- * @LastEditTime: 2026-03-23 17:50:09
+ * @LastEditTime: 2026-03-24 14:50:17
  * @FilePath: \shop-admin\src\router\routes.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -24,9 +24,9 @@ export const constantRoutes = [
     component: () => import('@/layout/index.vue'),
     name: 'layout',
     meta: {
-      title: 'layout',
+      // title: 'layout',
       hidden: false,
-      icon: 'Avatar', // 菜单文字左侧的图标，支持element-plus全部图标
+      // icon: 'Avatar', // 菜单文字左侧的图标，支持element-plus全部图标
     },
     redirect: '/home',
     children: [
@@ -60,6 +60,7 @@ export const constantRoutes = [
       hidden: false,
       icon: 'Lock',
     },
+    redirect: '/acl/user', // 面包屑组件中，点击一级路由重定向到第一个二级路由
     children: [
       { path: '/acl/user',
         // path: '/acl/user',  不能写这种路径，点击之后页面会跳转到404！！！！！
@@ -100,6 +101,7 @@ export const constantRoutes = [
       hidden: false,
       icon: 'Goods',
     },
+    redirect: '/product/trademark', // 面包屑组件中，点击一级路由重定向到第一个二级路由
     children: [
       { path: '/product/trademark',
         component: () => import('@/views/product/trademark/index.vue'),

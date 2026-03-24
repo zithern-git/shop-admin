@@ -45,8 +45,6 @@
   const userStore = useUserStore()
 
   const LayoutSettingStore = useLayoutSettingStore()
-  console.log('@@', LayoutSettingStore.fold)
-// :class="fold: LayoutSettingStore.fold ? true : false"
   // 获取路由对象
   const $route = useRoute()
 
