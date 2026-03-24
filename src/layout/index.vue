@@ -1,7 +1,7 @@
 <template>
   <div class="layout_container">
     <!-- 左侧菜单 -->
-    <div class="layout_slider">
+    <div class="layout_slider" :class="{fold: LayoutSettingStore.fold}">
       <Logo />
       <el-scrollbar class="scrollbar">
         <!-- 菜单组件 -->
@@ -9,6 +9,7 @@
           background-color="#96c2e3"
           active-text-color="#ffd04b"
           text-color="#fff"
+          :collapse="LayoutSettingStore.fold"
           :default-active="$route.path"
         >
           <Menu :menuList="userStore.menuRoutes"></Menu>
@@ -16,11 +17,11 @@
       </el-scrollbar>
     </div>
     <!-- 顶部导航 -->
-    <div class="layout_tabbar">
+    <div class="layout_tabbar" :class="{fold: LayoutSettingStore.fold}">
       <Tabbar></Tabbar>
     </div>
     <!-- 内容展示区域 -->
-    <div class="layout_main">
+    <div class="layout_main" :class="{fold: LayoutSettingStore.fold}">
       <Main></Main>
     </div>
   </div>
@@ -44,7 +45,8 @@
   const userStore = useUserStore()
 
   const LayoutSettingStore = useLayoutSettingStore()
-
+  console.log('@@', LayoutSettingStore.fold)
+// :class="fold: LayoutSettingStore.fold ? true : false"
   // 获取路由对象
   const $route = useRoute()
 
@@ -62,13 +64,16 @@
       width: $base-menu-width;
       height: 100%;
       background-color: $base-menu-background;
-
+      transition: all 0.4s ease;
       .scrollbar {
         height: calc(100% - #{$base-menu-logo-height});
 
         .el-menu {
           border-right: none;
         }
+      }
+      &.fold {
+        width: $base-menu-min-width;
       }
     }
 
@@ -79,6 +84,12 @@
       top: 0;
       left: $base-menu-width;
       color: #000;
+      transition: all 0.4s ease;
+      &.fold {
+        width: calc(100% - #{$base-menu-min-width});
+      left: $base-menu-min-width;
+
+      }
     }
 
     .layout_main {
@@ -91,6 +102,11 @@
       padding: 20px;
       background-color: #fff;
       overflow: auto;
+      transition: all 0.4s ease;
+      &.fold {
+        width: calc(100% - #{$base-menu-min-width});
+      left: $base-menu-min-width;
+      }
     }
   }
 </style>
