@@ -4,7 +4,7 @@ import { reqLogin, reqUserInfo } from '@/api/user/index'
 // 创建用户相关的小仓库
 import { defineStore } from 'pinia'
 // 引入操作本地存储的工具方法
-import { SET_TOKEN, GET_TOKEN } from '@/utils/token'
+import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from '@/utils/token'
 // 引入路由（常量路由）
 import { constantRoutes } from '@/router/routes'
 
@@ -41,14 +41,22 @@ const useUserStore = defineStore('User', {
     async userInfo() {
       // 获取用户信息进行存储仓库当中[用户头像、名字]
       const result = await reqUserInfo()
-      console.log('result', result.data)
       // 如果获取用户信息成功，存储一下用户信息
       if (result.code === 200) {
-        this.username = result.data.username
-        this.avatar = result.data.avatar
+        this.username = result.data.username;
+        this.avatar = result.data.avatar;
+        return 'ok';
       } else {
-
+        return Promise.reject('获取用户信息失败');
       }
+    },
+    // 用户退出登录的方法
+    userLogout() {
+      // 目前没有mock接口：退出登录接口（通知服务器本地用户唯一标识失效）
+      this.token = '';
+      this.username = '';
+      this.avatar = '';
+      REMOVE_TOKEN();
     }
   },
 })

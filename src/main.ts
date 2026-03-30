@@ -8,6 +8,8 @@ import router from './router'
 import 'virtual:windi.css'
 // 引入模板的全局样式
 import '@/styles/index.scss'
+// 引入路由鉴权文件
+import './permission'
 
 const app = createApp(App)
 
