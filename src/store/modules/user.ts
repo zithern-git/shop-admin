@@ -1,6 +1,7 @@
-import type { loginForm, loginResponseData } from '@/api/user/type'
+// 引入数据类型
+// import type { loginForm, loginResponseData } from '@/api/user/type'
 import type { UserState } from './types/types'
-import { reqLogin, reqUserInfo } from '@/api/user/index'
+import { reqLogin, reqUserInfo, reqLogout } from '@/api/user/index'
 // 创建用户相关的小仓库
 import { defineStore } from 'pinia'
 // 引入操作本地存储的工具方法
@@ -23,9 +24,9 @@ const useUserStore = defineStore('User', {
   // 异步|逻辑的地方
   actions: {
     // 用户登录的方法
-    async userLogin(data: loginForm) {
+    async userLogin(data: any) {
       // 登录请求
-      const res: loginResponseData = await reqLogin(data)
+      const res: any = await reqLogin(data)
       // 登录请求：成功200->token
       // 登录失败：成功201->登录失败错误信息
       if (res.code === 200) {
@@ -41,23 +42,31 @@ const useUserStore = defineStore('User', {
     async userInfo() {
       // 获取用户信息进行存储仓库当中[用户头像、名字]
       const result = await reqUserInfo()
+      // console.log('userInfo 返回:', result) // 调试日志
       // 如果获取用户信息成功，存储一下用户信息
       if (result.code === 200) {
-        this.username = result.data.username;
-        this.avatar = result.data.avatar;
-        return 'ok';
+        this.username = result.data.name
+        this.avatar = result.data.avatar
+        // console.log('设置 avatar:', this.avatar) // 调试日志
+        return 'ok'
       } else {
-        return Promise.reject('获取用户信息失败');
+        return Promise.reject('获取用户信息失败')
       }
     },
     // 用户退出登录的方法
-    userLogout() {
-      // 目前没有mock接口：退出登录接口（通知服务器本地用户唯一标识失效）
-      this.token = '';
-      this.username = '';
-      this.avatar = '';
-      REMOVE_TOKEN();
-    }
+    async userLogout() {
+      let res = await reqLogout()
+      if (res.code === 200) {
+        // 目前没有mock接口：退出登录接口（通知服务器本地用户唯一标识失效）
+        this.token = ''
+        this.username = ''
+        this.avatar = ''
+        REMOVE_TOKEN()
+        return 'ok'
+      } else {
+        return Promise.reject(new Error(res.message))
+      }
+    },
   },
 })
 // 对外暴露获取小仓库方法

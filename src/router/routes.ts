@@ -16,7 +16,7 @@ export const constantRoutes = [
     meta: {
       title: '登录', // 菜单标题
       hidden: true, // 代表路由标题在菜单中是否隐藏，true：隐藏，false：不隐藏
-    }
+    },
   },
   {
     // 登录成功以后展示数据的路由
@@ -30,13 +30,14 @@ export const constantRoutes = [
     },
     redirect: '/home',
     children: [
-      { path: '/home',
+      {
+        path: '/home',
         component: () => import('@/views/home/index.vue'),
         meta: {
           title: '首页',
           hidden: false,
           icon: 'HomeFilled',
-        }
+        },
       },
     ],
   },
@@ -46,10 +47,10 @@ export const constantRoutes = [
     component: () => import('@/views/screen/index.vue'),
     name: 'Screen',
     meta: {
-          title: '数据大屏',
-          hidden: false,
-          icon: 'Platform',
-        }
+      title: '数据大屏',
+      hidden: false,
+      icon: 'Platform',
+    },
   },
   {
     path: '/acl',
@@ -62,7 +63,8 @@ export const constantRoutes = [
     },
     redirect: '/acl/user', // 面包屑组件中，点击一级路由重定向到第一个二级路由
     children: [
-      { path: '/acl/user',
+      {
+        path: '/acl/user',
         // path: '/acl/user',  不能写这种路径，点击之后页面会跳转到404！！！！！
         component: () => import('@/views/acl/uesr/index.vue'),
         name: 'User',
@@ -70,9 +72,10 @@ export const constantRoutes = [
           title: '用户管理',
           hidden: false,
           icon: 'User',
-        }
+        },
       },
-      { path: '/acl/role',
+      {
+        path: '/acl/role',
         component: () => import('@/views/acl/role/index.vue'),
         name: 'Role',
         meta: {
@@ -81,7 +84,8 @@ export const constantRoutes = [
           icon: 'UserFilled',
         },
       },
-      { path: '/acl/permission',
+      {
+        path: '/acl/permission',
         component: () => import('@/views/acl/permission/index.vue'),
         name: 'Permission',
         meta: {
@@ -89,7 +93,7 @@ export const constantRoutes = [
           hidden: false,
           icon: 'Monitor',
         },
-      }
+      },
     ],
   },
   {
@@ -103,16 +107,18 @@ export const constantRoutes = [
     },
     redirect: '/product/trademark', // 面包屑组件中，点击一级路由重定向到第一个二级路由
     children: [
-      { path: '/product/trademark',
+      {
+        path: '/product/trademark',
         component: () => import('@/views/product/trademark/index.vue'),
         name: 'Trademark',
         meta: {
           title: '品牌管理',
           hidden: false,
           icon: 'ShoppingCartFull',
-        }
+        },
       },
-      { path: '/product/spu',
+      {
+        path: '/product/spu',
         component: () => import('@/views/product/spu/index.vue'),
         name: 'Spu',
         meta: {
@@ -121,7 +127,8 @@ export const constantRoutes = [
           icon: 'Calendar',
         },
       },
-      { path: '/product/sku',
+      {
+        path: '/product/sku',
         component: () => import('@/views/product/sku/index.vue'),
         name: 'Sku',
         meta: {
@@ -130,7 +137,8 @@ export const constantRoutes = [
           icon: 'Orange',
         },
       },
-      { path: '/product/attr',
+      {
+        path: '/product/attr',
         component: () => import('@/views/product/attr/index.vue'),
         name: 'Attr',
         meta: {
@@ -138,7 +146,7 @@ export const constantRoutes = [
           hidden: false,
           icon: 'ChromeFilled',
         },
-      }
+      },
     ],
   },
   {
@@ -147,9 +155,9 @@ export const constantRoutes = [
     component: () => import('@/views/404/index.vue'),
     name: '404',
     meta: {
-          title: '404',
-          hidden: true,
-        }
+      title: '404',
+      hidden: true,
+    },
   },
   {
     // 任意路由
@@ -157,8 +165,8 @@ export const constantRoutes = [
     redirect: '/404',
     name: 'any',
     meta: {
-          title: '任意路由',
-          hidden: true,
-        }
+      title: '任意路由',
+      hidden: true,
+    },
   },
 ]
