@@ -2,6 +2,33 @@
 // @import './reset.scss';
 @use './reset.scss';
 
+// Element Plus 按钮样式修复
+// type="primary" 的按钮应该有的样式
+.el-button--primary,
+.el-button[type="primary"],
+.el-button.el-button--primary {
+  background-color: #409eff !important;
+  border-color: #409eff !important;
+  color: #fff !important;
+}
+// type="danger" 的按钮应该有的样式
+.el-button--danger,
+.el-button[variant="danger"],
+.el-button.el-button--danger {
+  background-color: #f56c6c !important;
+  border-color: #f56c6c !important;
+  color: #fff !important;
+}
+// 普通按钮默认样式
+.el-button {
+  background-color: #fff;
+  border: 1px solid #dcdfe6;
+  color: #606266;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 // 设置全局scss变量
 ::-webkit-scrollbar {
   width: 10px;

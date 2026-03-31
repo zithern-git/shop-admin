@@ -12,5 +12,7 @@ export default defineConfig({
       '2xl': '1600px'
     },
   },
-  attributify: true
+  attributify: true,
+  // 禁用 preflight，避免覆盖 Element Plus 样式
+  preflight: false,
 } as Config)

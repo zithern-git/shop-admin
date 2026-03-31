@@ -81,7 +81,6 @@ a {
   outline: 0;
 }
 
-button,
 input,
 select,
 textarea {
@@ -89,17 +88,8 @@ textarea {
   font-size: inherit;
 }
 
-button,
-html [type='button'],
-[type='reset'],
-[type='submit'] {
-  padding: 0;
-  border: 0;
-  color: inherit;
-  background-color: transparent;
-  -webkit-appearance: button;
-  cursor: pointer;
-}
+// 注意：button 的 reset 样式已移除，避免覆盖 Element Plus 按钮样式
+// Element Plus 的 .el-button 会自行处理按钮样式
 
 button::-moz-focus-inner,
 input::-moz-focus-inner {

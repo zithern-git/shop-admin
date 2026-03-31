@@ -1,13 +1,15 @@
 <template>
   <!-- 卡片顶部添加品牌按钮 -->
   <el-card>
-    <el-button type="primary" size="default" class="add" @click="dialogFormVisible = true"><el-icon><Plus /></el-icon> 添加品牌</el-button>
+    <el-button type="primary" @click="dialogFormVisible = true"
+      ><el-icon><Plus /></el-icon> 添加品牌</el-button
+    >
     <el-dialog v-model="dialogFormVisible" title="添加品牌" width="500">
       <el-form :model="form">
         <el-form-item label="品牌名称" :label-width="formLabelWidth" required>
-          <el-input v-model="form.name" autocomplete="off" />
+          <el-input placeholder="请输入品牌名称" v-model="form.name" />
         </el-form-item>
-        <el-form-item label="品牌Logo" :label-width="formLabelWidth" required>
+        <el-form-item label="品牌LOGO" :label-width="formLabelWidth" required>
           <el-upload
             class="upload-demo"
             drag
@@ -19,17 +21,16 @@
           </el-upload>
         </el-form-item>
       </el-form>
+      <!-- 具名插槽：footer -->
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">
-            确定
-          </el-button>
+          <el-button type="primary" @click="dialogFormVisible = false"> 确定 </el-button>
         </div>
       </template>
     </el-dialog>
     <!-- 表格组件：用于展示已有品牌的数据 -->
-     <!--
+    <!--
       table
       ---border：可以设置表格纵向是否有边框
       table-column
@@ -37,11 +38,11 @@
       ---align:对齐方式
      -->
     <el-table :data="trademarkArr" border style="width: 100%; margin: 10px 0">
-      <el-table-column type="index" label="序号" width="80px" align="center"/>
-      <el-table-column prop="tmName" label="品牌名称"/>
+      <el-table-column type="index" label="序号" width="80px" align="center" />
+      <el-table-column prop="tmName" label="品牌名称" />
       <!-- el-table-column 默认展示数据用div -->
       <el-table-column label="品牌Logo">
-        <template #default='{row}'>
+        <template #default="{ row }">
           <img
             :src="row.logoUrl"
             alt="未有图片"
@@ -50,9 +51,9 @@
         </template>
       </el-table-column>
       <el-table-column prop="option" label="品牌操作">
-        <template #default="{row, $index}">
-          <el-button type="primary" icon="Edit" circle />
-          <el-button type="danger" icon="Delete" circle />
+        <template #default="{ row, $index }">
+          <el-button type="primary" icon="Edit" @click="dialogFormVisible = true" />
+          <el-button type="danger" icon="Delete" @click="dialogFormVisible = true" />
         </template>
       </el-table-column>
     </el-table>
@@ -77,73 +78,57 @@
   </el-card>
 </template>
 
-<script setup lang='ts'>
-// 引入组合式API函数ref
-import { ref, onMounted, watch, reactive } from 'vue'
-import type { ComponentSize } from 'element-plus'
-import { reqHasTrademark } from '@/api/product/trademark'
-import type {Records, TrademarkResponseData} from '@/api/product/trademark/type'
-// 当前页码
-const pageNo = ref<number>(1)
-// 每一页展示多少条数据
-const limit = ref<number>(3)
-const size = ref<ComponentSize>('default')
-const background = ref(true)
-const disabled = ref(false)
-// 存储已有品牌数据总数
-const total = ref<number>(0)
-const trademarkArr = ref<Records>([])
-// 获取已有品牌的接口封装为一个函数：在任何情况下获取数据，调用函数即可
-const getHasTrademark = async () => {
-  // pageNo.value = pager;
-  const result: TrademarkResponseData = await reqHasTrademark(pageNo.value, limit.value);
-  if (result.code === 200) {
-    // 存储已有品牌的总数
-    total.value = result.data.total;
-    trademarkArr.value = result.data.records
+<script setup lang="ts">
+  // 引入组合式API函数ref
+  import { ref, onMounted, watch, reactive } from 'vue'
+  import type { ComponentSize } from 'element-plus'
+  import { reqHasTrademark } from '@/api/product/trademark'
+  import type { Records, TrademarkResponseData } from '@/api/product/trademark/type'
+  // 当前页码
+  const pageNo = ref<number>(1)
+  // 每一页展示多少条数据
+  const limit = ref<number>(3)
+  const size = ref<ComponentSize>('default')
+  const background = ref(true)
+  const disabled = ref(false)
+  // 存储已有品牌数据总数
+  const total = ref<number>(0)
+  const trademarkArr = ref<Records>([])
+  // 获取已有品牌的接口封装为一个函数：在任何情况下获取数据，调用函数即可
+  const getHasTrademark = async () => {
+    // pageNo.value = pager;
+    const result: TrademarkResponseData = await reqHasTrademark(pageNo.value, limit.value)
+    if (result.code === 200) {
+      // 存储已有品牌的总数
+      total.value = result.data.total
+      trademarkArr.value = result.data.records
+    }
   }
-}
 
-const dialogFormVisible = ref(false)
-const formLabelWidth = '140px'
+  const dialogFormVisible = ref(false)
+  const formLabelWidth = '100px'
 
-const form = reactive({
-  name: '',
-  region: '',
-  date1: '',
-  date2: '',
-  delivery: false,
-  type: [],
-  resource: '',
-  desc: '',
-})
+  const form = reactive({
+    name: '',
+  })
 
+  // 组件挂载完毕钩子————发一次请求，获取第一页，一页三个已有品牌数据
+  onMounted(() => {
+    getHasTrademark()
+  })
 
+  // 监听 limit 变化 → 切回第1页
+  watch(limit, () => {
+    pageNo.value = 1 // ✅ 切换每页条数时，强制回到第1页
+  })
 
-
-// 组件挂载完毕钩子————发一次请求，获取第一页，一页三个已有品牌数据
-onMounted(() => {
-  getHasTrademark();
-})
-
-// 监听 limit 变化 → 切回第1页
-watch(limit, () => {
-  pageNo.value = 1 // ✅ 切换每页条数时，强制回到第1页
-})
-
-watch(
-  [pageNo, limit], // 监听两个变量
-  () => {
-    getHasTrademark() // 只要变了，就重新请求数据
-  },
-  { immediate: false }
-)
+  watch(
+    [pageNo, limit], // 监听两个变量
+    () => {
+      getHasTrademark() // 只要变了，就重新请求数据
+    },
+    { immediate: false }
+  )
 </script>
 
-<style scoped>
-.add {
-  color: #fff;
-  background-color: #76bbf0;
-  padding: 3px;
-}
-</style>
+<style scoped></style>
