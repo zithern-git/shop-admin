@@ -5,19 +5,21 @@
       ><el-icon><Plus /></el-icon> 添加品牌</el-button
     >
     <el-dialog v-model="dialogFormVisible" title="添加品牌" width="500">
-      <el-form :model="form">
+      <el-form :model="trademarkForm">
         <el-form-item label="品牌名称" :label-width="formLabelWidth" required>
-          <el-input placeholder="请输入品牌名称" v-model="form.name" />
+          <el-input placeholder="请输入品牌名称" v-model="trademarkForm.tmName" />
         </el-form-item>
         <el-form-item label="品牌LOGO" :label-width="formLabelWidth" required>
+          <!-- upload组件属性 -->
           <el-upload
-            class="upload-demo"
-            drag
-            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-            directory
-            multiple
+            class="avatar-uploader"
+            action="/api/admin/product/fileUpload"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
           >
-            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
           </el-upload>
         </el-form-item>
       </el-form>
@@ -82,8 +84,29 @@
   // 引入组合式API函数ref
   import { ref, onMounted, watch, reactive } from 'vue'
   import type { ComponentSize } from 'element-plus'
-  import { reqHasTrademark } from '@/api/product/trademark'
-  import type { Records, TrademarkResponseData } from '@/api/product/trademark/type'
+  import { reqHasTrademark, reqAddOrUpdateTrademark } from '@/api/product/trademark'
+  import type { Records, TrademarkResponseData, Trademark } from '@/api/product/trademark/type'
+  import { ElMessage } from 'element-plus'
+  import { Plus } from '@element-plus/icons-vue'
+
+  import type { UploadProps } from 'element-plus'
+
+  const imageUrl = ref('')
+
+  const handleAvatarSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
+    imageUrl.value = URL.createObjectURL(uploadFile.raw!)
+  }
+
+  const beforeAvatarUpload: UploadProps['beforeUpload'] = rawFile => {
+    if (rawFile.type !== 'image/jpeg') {
+      ElMessage.error('Avatar picture must be JPG format!')
+      return false
+    } else if (rawFile.size / 1024 / 1024 > 2) {
+      ElMessage.error('Avatar picture size can not exceed 2MB!')
+      return false
+    }
+    return true
+  }
   // 当前页码
   const pageNo = ref<number>(1)
   // 每一页展示多少条数据
@@ -107,10 +130,21 @@
 
   const dialogFormVisible = ref(false)
   const formLabelWidth = '100px'
-
-  const form = reactive({
-    name: '',
+  // 定义收集品牌表单数据
+  const trademarkForm = reactive<Trademark>({
+    tmName: '',
+    logoUrl: '',
   })
+
+  // 添加或修改品牌的接口封装为一个函数：在任何情况下添加或修改品牌，调用函数即可
+  const addOrUpdateTrademark = async () => {
+    const result = await reqAddOrUpdateTrademark(trademarkForm)
+    if (result.code === 200) {
+      ElMessage.success('添加品牌成功')
+      dialogFormVisible.value = false
+      getHasTrademark()
+    }
+  }
 
   // 组件挂载完毕钩子————发一次请求，获取第一页，一页三个已有品牌数据
   onMounted(() => {
@@ -131,4 +165,33 @@
   )
 </script>
 
-<style scoped></style>
+<style scoped>
+  .avatar-uploader .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>
+
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed var(--el-border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: var(--el-transition-duration-fast);
+  }
+
+  .avatar-uploader .el-upload:hover {
+    border-color: var(--el-color-primary);
+  }
+
+  .el-icon.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    text-align: center;
+  }
+</style>
