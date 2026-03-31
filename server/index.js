@@ -446,16 +446,23 @@ app.delete('/admin/acl/permission/remove/:id', (req, res) => {
 
 // ==================== 文件上传接口 ====================
 app.post('/admin/product/fileUpload', upload.single('file'), (req, res) => {
+  console.log('📤 收到文件上传请求')
   const { valid, message } = verifyToken(req)
-  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+  if (!valid) {
+    console.log('❌ Token 验证失败:', message)
+    return res.json({ code: 401, message, data: null, ok: false })
+  }
 
   try {
     if (!req.file) {
+      console.log('❌ 没有上传文件')
       return res.json({ code: 400, message: '没有上传文件', data: null, ok: false })
     }
     const fileUrl = `http://localhost:${PORT}/uploads/${req.file.filename}`
+    console.log('✅ 上传成功，URL:', fileUrl)
     res.json({ code: 200, message: '上传成功', data: fileUrl, ok: true })
   } catch (error) {
+    console.log('❌ 上传失败:', error.message)
     res.json({ code: 500, message: '上传失败: ' + error.message, data: null, ok: false })
   }
 })

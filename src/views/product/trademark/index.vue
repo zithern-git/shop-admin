@@ -17,6 +17,7 @@
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
+            :headers="uploadHeaders"
             ref="uploadRef"
           >
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
@@ -91,11 +92,25 @@
   import { Plus } from '@element-plus/icons-vue'
 
   import type { UploadProps } from 'element-plus'
+  import useUserStore from '@/store/modules/user'
 
+  const userStore = useUserStore()
   const imageUrl = ref('')
 
-  const handleAvatarSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
-    imageUrl.value = URL.createObjectURL(uploadFile.raw!)
+  // 上传请求头 - 携带token
+  const uploadHeaders = {
+    token: userStore.token,
+  }
+
+  const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
+    console.log('上传响应:', response)
+    if (response.code === 200) {
+      imageUrl.value = response.data
+      trademarkForm.logoUrl = response.data
+      console.log('图片URL已设置:', response.data)
+    } else {
+      ElMessage.error(response.message || '上传失败')
+    }
   }
 
   const beforeAvatarUpload: UploadProps['beforeUpload'] = rawFile => {
