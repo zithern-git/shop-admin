@@ -1,7 +1,33 @@
 <template>
   <!-- 卡片顶部添加品牌按钮 -->
   <el-card>
-    <el-button type="primary" size="default" class="add"><el-icon><Plus /></el-icon> 添加品牌</el-button>
+    <el-button type="primary" size="default" class="add" @click="dialogFormVisible = true"><el-icon><Plus /></el-icon> 添加品牌</el-button>
+    <el-dialog v-model="dialogFormVisible" title="添加品牌" width="500">
+      <el-form :model="form">
+        <el-form-item label="品牌名称" :label-width="formLabelWidth" required>
+          <el-input v-model="form.name" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="品牌Logo" :label-width="formLabelWidth" required>
+          <el-upload
+            class="upload-demo"
+            drag
+            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+            directory
+            multiple
+          >
+            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取消</el-button>
+          <el-button type="primary" @click="dialogFormVisible = false">
+            确定
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
     <!-- 表格组件：用于展示已有品牌的数据 -->
      <!--
       table
@@ -53,7 +79,7 @@
 
 <script setup lang='ts'>
 // 引入组合式API函数ref
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, reactive } from 'vue'
 import type { ComponentSize } from 'element-plus'
 import { reqHasTrademark } from '@/api/product/trademark'
 import type {Records, TrademarkResponseData} from '@/api/product/trademark/type'
@@ -77,6 +103,24 @@ const getHasTrademark = async () => {
     trademarkArr.value = result.data.records
   }
 }
+
+const dialogFormVisible = ref(false)
+const formLabelWidth = '140px'
+
+const form = reactive({
+  name: '',
+  region: '',
+  date1: '',
+  date2: '',
+  delivery: false,
+  type: [],
+  resource: '',
+  desc: '',
+})
+
+
+
+
 // 组件挂载完毕钩子————发一次请求，获取第一页，一页三个已有品牌数据
 onMounted(() => {
   getHasTrademark();
@@ -102,5 +146,4 @@ watch(
   background-color: #76bbf0;
   padding: 3px;
 }
-
 </style>
