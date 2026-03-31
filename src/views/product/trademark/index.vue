@@ -18,7 +18,6 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             :headers="uploadHeaders"
-            ref="uploadRef"
           >
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
             <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
@@ -102,12 +101,10 @@
     token: userStore.token,
   }
 
-  const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
-    console.log('上传响应:', response)
+  const handleAvatarSuccess: UploadProps['onSuccess'] = response => {
     if (response.code === 200) {
       imageUrl.value = response.data
       trademarkForm.logoUrl = response.data
-      console.log('图片URL已设置:', response.data)
     } else {
       ElMessage.error(response.message || '上传失败')
     }
