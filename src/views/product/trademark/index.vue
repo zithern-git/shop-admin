@@ -56,6 +56,7 @@
 import { ref, onMounted } from 'vue'
 import type { ComponentSize } from 'element-plus'
 import { reqHasTrademark } from '@/api/product/trademark'
+import type {Records, TrademarkResponseData} from '@/api/product/trademark/type'
 // 当前页码
 const pageNo = ref<number>(1)
 // 每一页展示多少条数据
@@ -65,10 +66,10 @@ const background = ref(true)
 const disabled = ref(false)
 // 存储已有品牌数据总数
 const total = ref<number>(0)
-const trademarkArr = ref<any>([])
+const trademarkArr = ref<Records>([])
 // 获取已有品牌的接口封装为一个函数：在任何情况下获取数据，调用函数即可
 const getHasTrademark = async () => {
-  const result = await reqHasTrademark(pageNo.value, limit.value);
+  const result: TrademarkResponseData = await reqHasTrademark(pageNo.value, limit.value);
   if (result.code === 200) {
     // 存储已有品牌的总数
     total.value = result.data.total;
