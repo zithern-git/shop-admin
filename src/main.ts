@@ -1,11 +1,11 @@
-import { createApp } from 'vue'
-import pinia from './store'
+import 'virtual:windi.css'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import pinia from './store'
+import { createApp } from 'vue'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import App from './App.vue'
 import router from './router'
-import 'virtual:windi.css'
 // 引入模板的全局样式
 import '@/styles/index.scss'
 // 引入路由鉴权文件
