@@ -1,6 +1,9 @@
 const express = require('express')
 const cors = require('cors')
 const jwt = require('jsonwebtoken')
+const multer = require('multer')
+const path = require('path')
+const fs = require('fs')
 
 const app = express()
 const PORT = 3003
@@ -9,6 +12,38 @@ const SECRET_KEY = 'your-secret-key-123456'
 // 中间件
 app.use(cors())
 app.use(express.json())
+
+// ==================== 文件上传配置 ====================
+const uploadDir = path.join(__dirname, 'uploads')
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true })
+}
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir)
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    const ext = path.extname(file.originalname)
+    cb(null, uniqueSuffix + ext)
+  }
+})
+
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jpg']
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true)
+    } else {
+      cb(new Error('只允许上传图片文件'), false)
+    }
+  },
+  limits: { fileSize: 5 * 1024 * 1024 }
+})
+
+app.use('/uploads', express.static(uploadDir))
 
 // ==================== 用户数据 ====================
 const users = [
@@ -409,6 +444,22 @@ app.delete('/admin/acl/permission/remove/:id', (req, res) => {
   res.json({ code: 200, message: '删除成功', data: null, ok: true })
 })
 
+// ==================== 文件上传接口 ====================
+app.post('/admin/product/fileUpload', upload.single('file'), (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  try {
+    if (!req.file) {
+      return res.json({ code: 400, message: '没有上传文件', data: null, ok: false })
+    }
+    const fileUrl = `http://localhost:${PORT}/uploads/${req.file.filename}`
+    res.json({ code: 200, message: '上传成功', data: fileUrl, ok: true })
+  } catch (error) {
+    res.json({ code: 500, message: '上传失败: ' + error.message, data: null, ok: false })
+  }
+})
+
 // ==================== 品牌管理接口 ====================
 // 获取品牌列表
 app.get('/admin/product/baseTrademark/:page/:limit', (req, res) => {
@@ -456,9 +507,10 @@ app.put('/admin/product/baseTrademark/update', (req, res) => {
   const { valid, message } = verifyToken(req)
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
-  const index = trademarks.findIndex((t) => t.id === req.body.id)
+  const id = parseInt(req.body.id)
+  const index = trademarks.findIndex((t) => t.id === id)
   if (index !== -1) {
-    trademarks[index] = { ...trademarks[index], ...req.body, updateTime: new Date().toISOString().split('T')[0] }
+    trademarks[index] = { ...trademarks[index], ...req.body, id: id, updateTime: new Date().toISOString().split('T')[0] }
     res.json({ code: 200, message: '更新成功', data: null, ok: true })
   } else {
     res.json({ code: 404, message: '品牌不存在', data: null, ok: false })

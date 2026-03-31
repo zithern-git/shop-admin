@@ -17,6 +17,7 @@
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
+            ref="uploadRef"
           >
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
             <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
@@ -27,7 +28,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false"> 确定 </el-button>
+          <el-button type="primary" @click="confirm()"> 确定 </el-button>
         </div>
       </template>
     </el-dialog>
@@ -137,12 +138,15 @@
   })
 
   // 添加或修改品牌的接口封装为一个函数：在任何情况下添加或修改品牌，调用函数即可
-  const addOrUpdateTrademark = async () => {
+  const confirm = async () => {
     const result = await reqAddOrUpdateTrademark(trademarkForm)
     if (result.code === 200) {
       ElMessage.success('添加品牌成功')
       dialogFormVisible.value = false
       getHasTrademark()
+    } else {
+      ElMessage.error('添加品牌失败')
+      dialogFormVisible.value = false
     }
   }
 
@@ -163,6 +167,15 @@
     },
     { immediate: false }
   )
+
+  watch(dialogFormVisible, nVal => {
+    if (!nVal) {
+      // 当对话框关闭时，清空表单数据
+      trademarkForm.tmName = ''
+      trademarkForm.logoUrl = ''
+      imageUrl.value = ''
+    }
+  })
 </script>
 
 <style scoped>
