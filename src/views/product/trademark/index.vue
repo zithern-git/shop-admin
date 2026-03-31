@@ -47,8 +47,6 @@
       :background="background"
       layout=" prev, pager, next, jumper, ->, sizes, total "
       :total="total"
-      @size-change="trademarkSizeChange"
-      @current-change="trademarkCurrentChange"
     />
   </el-card>
 </template>
@@ -71,6 +69,7 @@ const total = ref<number>(0)
 const trademarkArr = ref<Records>([])
 // 获取已有品牌的接口封装为一个函数：在任何情况下获取数据，调用函数即可
 const getHasTrademark = async () => {
+  // pageNo.value = pager;
   const result: TrademarkResponseData = await reqHasTrademark(pageNo.value, limit.value);
   if (result.code === 200) {
     // 存储已有品牌的总数
@@ -81,6 +80,11 @@ const getHasTrademark = async () => {
 // 组件挂载完毕钩子————发一次请求，获取第一页，一页三个已有品牌数据
 onMounted(() => {
   getHasTrademark();
+})
+
+// 监听 limit 变化 → 切回第1页
+watch(limit, () => {
+  pageNo.value = 1 // ✅ 切换每页条数时，强制回到第1页
 })
 
 watch(

@@ -75,6 +75,12 @@ let trademarks = [
   { id: 4, tmName: '三星', logoUrl: 'https://img.samsung.com/logo.png', createTime: '2024-01-04', updateTime: '2024-01-04' },
   { id: 5, tmName: 'OPPO', logoUrl: 'https://img.oppo.com/logo.png', createTime: '2024-01-05', updateTime: '2024-01-05' },
   { id: 6, tmName: 'vivo', logoUrl: 'https://img.vivo.com/logo.png', createTime: '2024-01-06', updateTime: '2024-01-06' },
+  { id: 7, tmName: '华为', logoUrl: 'https://img1.baidu.com/it/u=4068546577,3295632343&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=500', createTime: '2024-01-01', updateTime: '2024-01-01' },
+  { id: 8, tmName: '小米', logoUrl: 'https://img1.baidu.com/it/u=521293053,2652660591&fm=253&fmt=auto&app=120&f=PNG?w=800&h=800', createTime: '2024-01-02', updateTime: '2024-01-02' },
+  { id: 9, tmName: '苹果', logoUrl: 'https://img2.baidu.com/it/u=97948109,3373219309&fm=253&fmt=auto&app=138&f=PNG?w=408&h=500', createTime: '2024-01-03', updateTime: '2024-01-03' },
+  { id: 10, tmName: '三星', logoUrl: 'https://img.samsung.com/logo.png', createTime: '2024-01-04', updateTime: '2024-01-04' },
+  { id:11, tmName: 'OPPO', logoUrl: 'https://img.oppo.com/logo.png', createTime: '2024-01-05', updateTime: '2024-01-05' },
+  { id:12, tmName: 'vivo', logoUrl: 'https://img.vivo.com/logo.png', createTime: '2024-01-06', updateTime: '2024-01-06' },
 ]
 
 let spus = [
