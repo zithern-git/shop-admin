@@ -47,13 +47,15 @@
       :background="background"
       layout=" prev, pager, next, jumper, ->, sizes, total "
       :total="total"
+      @size-change="trademarkSizeChange"
+      @current-change="trademarkCurrentChange"
     />
   </el-card>
 </template>
 
 <script setup lang='ts'>
 // 引入组合式API函数ref
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import type { ComponentSize } from 'element-plus'
 import { reqHasTrademark } from '@/api/product/trademark'
 import type {Records, TrademarkResponseData} from '@/api/product/trademark/type'
@@ -80,6 +82,14 @@ const getHasTrademark = async () => {
 onMounted(() => {
   getHasTrademark();
 })
+
+watch(
+  [pageNo, limit], // 监听两个变量
+  () => {
+    getHasTrademark() // 只要变了，就重新请求数据
+  },
+  { immediate: false }
+)
 </script>
 
 <style scoped>
