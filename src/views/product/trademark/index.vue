@@ -4,11 +4,12 @@
     <el-button type="primary" @click="addTrademark"
       ><el-icon><Plus /></el-icon> 添加品牌</el-button
     >
-    <el-dialog v-model="dialogFormVisible" :title="trademarkForm.id? '修改品牌': '添加品牌'" width="500">
-      <el-form
-        ref="formRef"
-        :model="trademarkForm"
-        :rules="rules">
+    <el-dialog
+      v-model="dialogFormVisible"
+      :title="trademarkForm.id ? '修改品牌' : '添加品牌'"
+      width="500"
+    >
+      <el-form ref="formRef" :model="trademarkForm" :rules="rules">
         <el-form-item label="品牌名称" :label-width="formLabelWidth" prop="tmName">
           <el-input placeholder="请输入品牌名称" v-model="trademarkForm.tmName" />
         </el-form-item>
@@ -32,23 +33,6 @@
         <div class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取消</el-button>
           <el-button type="primary" @click="confirm()"> 确定 </el-button>
-        </div>
-      </template>
-    </el-dialog>
-    <!-- 警告提示框 -->
-    <el-dialog
-      v-model="dialogVisible"
-      title="Warning"
-      width="500"
-      center
-    >
-      <span>确认删除品牌吗？</span>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="confirmDelete()">
-            确认
-          </el-button>
         </div>
       </template>
     </el-dialog>
@@ -78,9 +62,17 @@
             column → 当前列配置
             $index → 当前行下标
         -->
-        <template #default="{ row, $index }">
+        <template #default="{ row }">
           <el-button type="primary" icon="Edit" @click="updateTrademark(row)" />
-          <el-button type="danger" icon="Delete" @click="deleteTrademark(row)" />
+          <el-popconfirm
+            :title="`确认删除${row.tmName}吗？`"
+            width="200px"
+            @confirm="confirmDelete(row.id)"
+          >
+            <template #reference>
+              <el-button type="danger" icon="Delete" />
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -109,7 +101,11 @@
   // 引入组合式API函数ref
   import { ref, onMounted, watch, reactive, nextTick } from 'vue'
   import type { ComponentSize } from 'element-plus'
-  import { reqHasTrademark, reqAddOrUpdateTrademark, reqDeleteTrademark } from '@/api/product/trademark'
+  import {
+    reqHasTrademark,
+    reqAddOrUpdateTrademark,
+    reqDeleteTrademark,
+  } from '@/api/product/trademark'
   import type { Records, TrademarkResponseData, Trademark } from '@/api/product/trademark/type'
   import { ElMessage } from 'element-plus'
   import { Plus } from '@element-plus/icons-vue'
@@ -132,23 +128,23 @@
   const beforeAvatarUpload: UploadProps['beforeUpload'] = rawFile => {
     // 1. 定义支持的图片格式（MIME类型）
     const allowedTypes = [
-      'image/jpeg',  // jpg/jpeg 格式
-      'image/png',   // png 格式
-      'image/webp',  // webp 格式（可选，可自行增删）
-      'image/gif'    // gif 格式（可选）
-    ];
+      'image/jpeg', // jpg/jpeg 格式
+      'image/png', // png 格式
+      'image/webp', // webp 格式（可选，可自行增删）
+      'image/gif', // gif 格式（可选）
+    ]
     // 2. 判断文件格式是否在允许列表中
     if (!allowedTypes.includes(rawFile.type)) {
-      ElMessage.error('头像图片仅支持 JPG、PNG、WebP、GIF 格式！');
-      return false;
+      ElMessage.error('头像图片仅支持 JPG、PNG、WebP、GIF 格式！')
+      return false
     }
     // 3. 判断文件大小不超过4MB
     else if (rawFile.size / 1024 / 1024 > 4) {
-      ElMessage.error('头像图片大小不能超过 4MB！');
-      return false;
+      ElMessage.error('头像图片大小不能超过 4MB！')
+      return false
     }
-    return true;
-};
+    return true
+  }
 
   // 图片上传成功钩子
   const handleAvatarSuccess: UploadProps['onSuccess'] = response => {
@@ -184,7 +180,6 @@
   }
 
   const dialogFormVisible = ref(false)
-  const dialogVisible = ref(false)
   const formLabelWidth = '100px'
 
   // 定义收集品牌表单数据
@@ -218,17 +213,9 @@
     tmName: [
       // required：这个字段务必校验，表单项前面出来五角星
       // trigger：代表触发校验规则时机[blur/change]
-      { required: true,
-        trigger: 'blur',
-        validator: validateTmName,
-       }
+      { required: true, trigger: 'blur', validator: validateTmName },
     ],
-    logoUrl: [
-      { required: true,
-        trigger: 'change',
-        validator: validateLogoUrl,
-
-      }],
+    logoUrl: [{ required: true, trigger: 'change', validator: validateLogoUrl }],
   })
 
   // 点击添加按钮：清空表单 + 打开弹窗
@@ -247,23 +234,23 @@
     })
   }
 
-    // 修改已有品牌数据
+  // 修改已有品牌数据
   const updateTrademark = async (row: Trademark) => {
     // 对话框显示
     dialogFormVisible.value = true
     // 展示已有品牌的数据
-    Object.assign(trademarkForm, row); //与下面三行等效
+    Object.assign(trademarkForm, row) //与下面三行等效
     // trademarkForm.id = row.id;
     // trademarkForm.tmName = row.tmName;
     // trademarkForm.logoUrl = row.logoUrl;
-    imageUrl.value = row.logoUrl;
+    imageUrl.value = row.logoUrl
     formRef.value.clearValidate()
   }
 
   // 添加品牌的接口封装为一个函数：在任何情况下添加品牌，调用函数即可
   const confirm = async () => {
     // 调用这个方法进行全部表单校验，如果校验全部通过，再执行后面的语法
-    await formRef.value.validate();
+    await formRef.value.validate()
     // 发请求（接口自动判断：有id修改，无id新增）
     const result = await reqAddOrUpdateTrademark(trademarkForm)
     // 添加|修改品牌
@@ -282,24 +269,14 @@
   }
 
   // 删除已有品牌数据
-  const deleteTrademark = (row: Trademark) => {
-    currentDeleteRow.value = row  // 把当前行存起来
-    dialogVisible.value = true
-  }
-
-  const confirmDelete = async () => {
-    // 从存储的变量里拿
-    const row = currentDeleteRow.value
-    // 安全判断
-    if (!row?.id) return;
-    const result = await reqDeleteTrademark(row.id) as any;
+  const confirmDelete = async (id: number) => {
+    const result = await reqDeleteTrademark(id)
     if (result.code === 200) {
       ElMessage.success('删除品牌成功')
-      dialogVisible.value = false
+      // 删除成功后刷新列表
       getHasTrademark()
     } else {
       ElMessage.error('删除品牌失败')
-      dialogVisible.value = false
     }
   }
 

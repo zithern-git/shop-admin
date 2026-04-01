@@ -118,6 +118,16 @@ export const constantRoutes = [
         },
       },
       {
+        path: '/product/attr',
+        component: () => import('@/views/product/attr/index.vue'),
+        name: 'Attr',
+        meta: {
+          title: '属性管理',
+          hidden: false,
+          icon: 'ChromeFilled',
+        },
+      },
+      {
         path: '/product/spu',
         component: () => import('@/views/product/spu/index.vue'),
         name: 'Spu',
@@ -135,16 +145,6 @@ export const constantRoutes = [
           title: 'Sku管理',
           hidden: false,
           icon: 'Orange',
-        },
-      },
-      {
-        path: '/product/attr',
-        component: () => import('@/views/product/attr/index.vue'),
-        name: 'Attr',
-        meta: {
-          title: '属性管理',
-          hidden: false,
-          icon: 'ChromeFilled',
         },
       },
     ],
