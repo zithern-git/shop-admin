@@ -7,7 +7,9 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import WindiCSS from 'vite-plugin-windicss'
 // mock插件提供方法
 import { viteMockServe } from 'vite-plugin-mock'
-import { resolve } from 'path' // 核心：引入path模块
+// 引入svg需要引用的插件
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -42,6 +44,13 @@ export default defineConfig(({ mode }) => {
         // enable: true,
         enable: false, //关闭mock
         mockPath: 'mock',
+      }),
+      // 配置 svg 插件
+      createSvgIconsPlugin({
+        // 指定你的 SVG 图标存放文件夹
+        iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
+        //  symbolId 格式
+        symbolId: 'icon-[dir]-[name]',
       }),
     ],
     resolve: {

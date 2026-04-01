@@ -1,16 +1,18 @@
 <template>
   <div id="app">
     <RouterView></RouterView>
+    <!-- <SvgIcon name="phone" color="pink" width="100px" height="100px"></SvgIcon> -->
   </div>
 </template>
 
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
-// import request from './utils/request';
-// import { onMounted } from 'vue';
-// import { reqLogin } from '@/api/user/index'
+  import { RouterView } from 'vue-router'
+  // import SvgIcon from '@/components/SvgIcon/index.vue'
+  // import request from './utils/request';
+  // import { onMounted } from 'vue';
+  // import { reqLogin } from '@/api/user/index'
 
-/* // 测试axios的二次封装
+  /* // 测试axios的二次封装
 onMounted(() => {
   request({
     url: '/user/login',
@@ -24,16 +26,16 @@ onMounted(() => {
   })
 }) */
 
-/* // 测试登录接口
+  /* // 测试登录接口
 onMounted(() => {
   reqLogin({username: 'admin', password:'111111'});
 }) */
 </script>
 
 <style scoped lang="scss">
-#id {
-  margin: 0 auto;
-  padding: 0;
-  background-color: #abdbf1;
-}
+  #id {
+    margin: 0 auto;
+    padding: 0;
+    background-color: #abdbf1;
+  }
 </style>

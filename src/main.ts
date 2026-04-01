@@ -12,6 +12,8 @@ import router from './router'
 import '@/styles/index.scss'
 // 引入路由鉴权文件
 import './permission'
+// 引入虚拟 SVG 图标注册脚本
+import 'virtual:svg-icons-register'
 
 const app = createApp(App)
 
