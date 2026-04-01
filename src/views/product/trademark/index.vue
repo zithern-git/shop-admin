@@ -1,10 +1,10 @@
 <template>
   <!-- 卡片顶部添加品牌按钮 -->
   <el-card>
-    <el-button type="primary" @click="dialogFormVisible = true"
+    <el-button type="primary" @click="addTrademark"
       ><el-icon><Plus /></el-icon> 添加品牌</el-button
     >
-    <el-dialog v-model="dialogFormVisible" title="添加品牌" width="500">
+    <el-dialog v-model="dialogFormVisible" :title="dialogTitle" width="500">
       <el-form :model="trademarkForm">
         <el-form-item label="品牌名称" :label-width="formLabelWidth" required>
           <el-input placeholder="请输入品牌名称" v-model="trademarkForm.tmName" />
@@ -54,9 +54,13 @@
         </template>
       </el-table-column>
       <el-table-column prop="option" label="品牌操作">
+        <!-- row → 当前行数据
+            column → 当前列配置
+            $index → 当前行下标
+        -->
         <template #default="{ row, $index }">
-          <el-button type="primary" icon="Edit" @click="dialogFormVisible = true" />
-          <el-button type="danger" icon="Delete" @click="dialogFormVisible = true" />
+          <el-button type="primary" icon="Edit" @click="updateTrademark(row)" />
+          <el-button type="danger" icon="Delete" @click="deleteTrademark(row)" />
         </template>
       </el-table-column>
     </el-table>
@@ -85,7 +89,7 @@
   // 引入组合式API函数ref
   import { ref, onMounted, watch, reactive } from 'vue'
   import type { ComponentSize } from 'element-plus'
-  import { reqHasTrademark, reqAddOrUpdateTrademark } from '@/api/product/trademark'
+  import { reqHasTrademark, reqAddOrUpdateTrademark, reqDeleteTrademark } from '@/api/product/trademark'
   import type { Records, TrademarkResponseData, Trademark } from '@/api/product/trademark/type'
   import { ElMessage } from 'element-plus'
   import { Plus } from '@element-plus/icons-vue'
@@ -95,7 +99,7 @@
 
   const userStore = useUserStore()
   const imageUrl = ref('')
-
+  const dialogTitle = ref('添加品牌')
   // 上传请求头 - 携带token
   const uploadHeaders = {
     token: userStore.token,
@@ -111,15 +115,26 @@
   }
 
   const beforeAvatarUpload: UploadProps['beforeUpload'] = rawFile => {
-    if (rawFile.type !== 'image/jpeg') {
-      ElMessage.error('Avatar picture must be JPG format!')
-      return false
-    } else if (rawFile.size / 1024 / 1024 > 2) {
-      ElMessage.error('Avatar picture size can not exceed 2MB!')
-      return false
+    // 1. 定义支持的图片格式（MIME类型）
+    const allowedTypes = [
+      'image/jpeg',  // jpg/jpeg 格式
+      'image/png',   // png 格式
+      'image/webp',  // webp 格式（可选，可自行增删）
+      'image/gif'    // gif 格式（可选）
+    ];
+    // 2. 判断文件格式是否在允许列表中
+    if (!allowedTypes.includes(rawFile.type)) {
+      ElMessage.error('头像图片仅支持 JPG、PNG、WebP、GIF 格式！');
+      return false;
     }
-    return true
-  }
+    // 3. 判断文件大小不超过4MB
+    else if (rawFile.size / 1024 / 1024 > 4) {
+      ElMessage.error('头像图片大小不能超过 4MB！');
+      return false;
+    }
+    return true;
+};
+
   // 当前页码
   const pageNo = ref<number>(1)
   // 每一页展示多少条数据
@@ -149,18 +164,68 @@
     logoUrl: '',
   })
 
-  // 添加或修改品牌的接口封装为一个函数：在任何情况下添加或修改品牌，调用函数即可
+  // 点击添加按钮：清空表单 + 打开弹窗
+  const addTrademark = () => {
+    dialogTitle.value = '添加品牌'
+    dialogFormVisible.value = true
+    // 清空表单（重要！）
+    trademarkForm.id = undefined // //这里不能写0
+    trademarkForm.tmName = ''
+    trademarkForm.logoUrl = ''
+    imageUrl.value = ''
+  }
+
+    // 修改已有品牌数据
+  const updateTrademark = async (row: Trademark) => {
+    dialogTitle.value = '修改品牌'
+    // 对话框显示
+    dialogFormVisible.value = true
+    // 展示已有品牌的数据
+    trademarkForm.id = row.id;
+    trademarkForm.tmName = row.tmName;
+    trademarkForm.logoUrl = row.logoUrl;
+    imageUrl.value = row.logoUrl;
+  }
+
+  // 添加品牌的接口封装为一个函数：在任何情况下添加品牌，调用函数即可
   const confirm = async () => {
+    // 发请求（接口自动判断：有id修改，无id新增）
     const result = await reqAddOrUpdateTrademark(trademarkForm)
     if (result.code === 200) {
-      ElMessage.success('添加品牌成功')
-      dialogFormVisible.value = false
-      getHasTrademark()
+      // 判断提示文字
+      if (trademarkForm.id) {
+        ElMessage.success('修改品牌成功')
+      } else {
+        ElMessage.success('添加品牌成功')
+      }
+      dialogFormVisible.value = false // 关闭弹窗
+      getHasTrademark() // 刷新列表
     } else {
-      ElMessage.error('添加品牌失败')
-      dialogFormVisible.value = false
+      ElMessage.error('操作失败')
     }
   }
+
+  // // 删除已有品牌数据
+  // const deleteTrademark = async (row: Trademark) => {
+  //   dialogTitle.value = '删除品牌'
+  //   // 对话框显示
+  //   dialogFormVisible.value = true
+  //   // 展示已有品牌的数据
+  //   trademarkForm.id = row.id;
+  //   trademarkForm.tmName = row.tmName;
+  //   trademarkForm.logoUrl = row.logoUrl;
+  //   imageUrl.value = row.logoUrl;
+  //   const result = await reqDeleteTrademark(trademarkForm.id)
+  //   // console.log('result', result);
+  //   if (result.code === 200) {
+  //     ElMessage.success('删除品牌成功')
+  //     dialogFormVisible.value = false
+  //     getHasTrademark()
+  //   } else {
+  //     ElMessage.error('删除品牌失败')
+  //     dialogFormVisible.value = false
+  //   }
+  // }
 
   // 组件挂载完毕钩子————发一次请求，获取第一页，一页三个已有品牌数据
   onMounted(() => {

@@ -29,3 +29,11 @@ export const reqAddOrUpdateTrademark = (data: Trademark) => {
     return request.post<any, any>(API.ADDTRADEMARK_URL, data)
   }
 }
+
+// 删除已有品牌的接口方法，删除接口：必须传入 id
+export const reqDeleteTrademark = (id: number) => {
+  return request({
+    method: 'DELETE',
+    url: `/admin/product/baseTrademark/remove/${id}` // 拼接 id
+  })
+}
