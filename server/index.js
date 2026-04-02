@@ -135,6 +135,29 @@ let attrs = [
   { id: 3, attrName: '尺寸', categoryId: 61, categoryLevel: 3, attrValueList: [{ id: 7, valueName: '6.1英寸' }, { id: 8, valueName: '6.7英寸' }] },
 ]
 
+// 三级分类数据结构示例
+const categories = [
+  // 一级分类 (categoryLevel: 1, categoryId: 0 或 null)
+  { id: 1, name: '手机数码', categoryId: 0, categoryLevel: 1 },
+  { id: 2, name: '服装鞋包', categoryId: 0, categoryLevel: 1 },
+  { id: 3, name: '家用电器', categoryId: 0, categoryLevel: 1 },
+
+  // 二级分类 (categoryId: 对应一级分类的 id, categoryLevel: 2)
+  { id: 11, name: '手机', categoryId: 1, categoryLevel: 2 },
+  { id: 12, name: '电脑', categoryId: 1, categoryLevel: 2 },
+  { id: 21, name: '男装', categoryId: 2, categoryLevel: 2 },
+  { id: 22, name: '女装', categoryId: 2, categoryLevel: 2 },
+  { id: 31, name: '大家电', categoryId: 3, categoryLevel: 2 },
+
+  // 三级分类 (categoryId: 对应二级分类的 id, categoryLevel: 3)
+  { id: 111, name: '智能手机', categoryId: 11, categoryLevel: 3 },
+  { id: 112, name: '老人机', categoryId: 11, categoryLevel: 3 },
+  { id: 121, name: '笔记本', categoryId: 12, categoryLevel: 3 },
+  { id: 211, name: 'T恤', categoryId: 21, categoryLevel: 3 },
+  { id: 212, name: '衬衫', categoryId: 21, categoryLevel: 3 },
+  { id: 311, name: '电视', categoryId: 31, categoryLevel: 3 },
+]
+
 // ==================== 数据大屏数据 ====================
 const screenData = {
   // 访问数据
@@ -670,6 +693,69 @@ app.get('/admin/product/attrInfoList/:category1Id/:category2Id/:category3Id', (r
     code: 200,
     message: '获取成功',
     data: list,
+    ok: true,
+  })
+})
+
+// 1. 获取一级分类列表
+// 接口：GET /admin/product/getCategory1
+app.get('/admin/product/getCategory1', (req, res) => {
+  // Token 验证（保留原有逻辑）
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  // 过滤出一级分类（categoryLevel === 1）
+  const category1List = categories.filter(item => item.categoryLevel === 1)
+
+  // 返回统一格式
+  res.json({
+    code: 200,
+    message: '获取一级分类成功',
+    data: category1List,
+    ok: true,
+  })
+})
+
+// 2. 根据一级分类 ID 获取二级分类列表
+// 接口：GET /admin/product/getCategory2/:category1Id
+app.get('/admin/product/getCategory2/:category1Id', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  // 获取路径参数中的一级分类 ID
+  const category1Id = parseInt(req.params.category1Id)
+
+  // 过滤出二级分类（categoryLevel === 2 且 categoryId === 一级分类 ID）
+  const category2List = categories.filter(
+    item => item.categoryLevel === 2 && item.categoryId === category1Id
+  )
+
+  res.json({
+    code: 200,
+    message: '获取二级分类成功',
+    data: category2List,
+    ok: true,
+  })
+})
+
+// 3. 根据二级分类 ID 获取三级分类列表
+// 接口：GET /admin/product/getCategory3/:category2Id
+app.get('/admin/product/getCategory3/:category2Id', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  // 获取路径参数中的二级分类 ID
+  const category2Id = parseInt(req.params.category2Id)
+
+  // 过滤出三级分类（categoryLevel === 3 且 categoryId === 二级分类 ID）
+  const category3List = categories.filter(
+    item => item.categoryLevel === 3 && item.categoryId === category2Id
+  )
+
+  res.json({
+    code: 200,
+    message: '获取三级分类成功',
+    data: category3List,
     ok: true,
   })
 })

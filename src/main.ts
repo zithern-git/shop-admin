@@ -12,20 +12,16 @@ import router from './router'
 import '@/styles/index.scss'
 // 引入路由鉴权文件
 import './permission'
-// 1. 引入 SVG 图标注册脚本（必须）
+// 引入 SVG 图标注册脚本（必须）
 import 'virtual:svg-icons-register'
-// 2. 引入 SvgIcon 组件
-// import SvgIcon from '@/components/SvgIcon/index.vue'
-import allGlobalComponent from './components'
+import globalComponent from './components'
 
 const app = createApp(App)
 
 app.use(pinia)
 app.use(router)
 app.use(ElementPlus)
-// 3. 全局注册 SvgIcon 组件（补全第二个参数）
-// app.component('SvgIcon', SvgIcon)
-app.use(allGlobalComponent)
+app.use(globalComponent)
 
 // 全局注册所有图标
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {

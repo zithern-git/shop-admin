@@ -6,3 +6,10 @@ export interface UserState {
   username: string
   avatar: string
 }
+
+export interface CategoryItem {
+  id: number
+  name: string
+  categoryId?: number
+  categoryLevel?: number
+}

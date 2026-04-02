@@ -115,7 +115,6 @@
 
   const userStore = useUserStore()
   const imageUrl = ref('')
-  const currentDeleteRow = ref<Trademark | null>(null)
   // 获取el-form组件实例
   const formRef = ref()
 
@@ -170,7 +169,6 @@
   const trademarkArr = ref<Records>([])
   // 获取已有品牌的接口封装为一个函数：在任何情况下获取数据，调用函数即可
   const getHasTrademark = async () => {
-    // pageNo.value = pager;
     const result: TrademarkResponseData = await reqHasTrademark(pageNo.value, limit.value)
     if (result.code === 200) {
       // 存储已有品牌的总数

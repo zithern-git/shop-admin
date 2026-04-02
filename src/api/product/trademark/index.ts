@@ -1,6 +1,6 @@
 // 书写品牌管理模块接口
 import request from '@/utils/request'
-import type { TrademarkResponseData, Trademark, ResponseData } from './type' // 因为 TrademarkResponseData 是 TypeScript 类型（interface），不是 JS 变量 / 函数 / 组件！所以必须加上 'type'
+import type { TrademarkResponseData, Trademark } from './type' // 因为 TrademarkResponseData 是 TypeScript 类型（interface），不是 JS 变量 / 函数 / 组件！所以必须加上 'type'
 // 品牌管理模块接口地址
 enum API {
   // 获取已有品牌接口

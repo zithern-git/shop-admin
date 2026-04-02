@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <RouterView></RouterView>
-    <!-- <SvgIcon name="phone" color="pink" width="100px" height="100px"></SvgIcon> -->
   </div>
 </template>
 
