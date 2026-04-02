@@ -129,11 +129,11 @@ let skus = [
   { id: 2, skuName: '华为 Mate 60 Pro 512GB 白沙银', price: 6999, weight: 220, skuDefaultImg: 'https://img.huawei.com/mate60pro.jpg', skuDesc: '白沙银配色', category3Id: 61, spuId: 2, tmId: 1, skuAttrValueList: [], skuSaleAttrValueList: [], createTime: '2024-01-02', updateTime: '2024-01-02' },
 ]
 
-let attrs = [
-  { id: 1, attrName: '颜色', categoryId: 61, categoryLevel: 3, attrValueList: [{ id: 1, valueName: '黑色' }, { id: 2, valueName: '白色' }, { id: 3, valueName: '金色' }] },
-  { id: 2, attrName: '内存', categoryId: 61, categoryLevel: 3, attrValueList: [{ id: 4, valueName: '128GB' }, { id: 5, valueName: '256GB' }, { id: 6, valueName: '512GB' }] },
-  { id: 3, attrName: '尺寸', categoryId: 61, categoryLevel: 3, attrValueList: [{ id: 7, valueName: '6.1英寸' }, { id: 8, valueName: '6.7英寸' }] },
-]
+// let attrs = [
+//   { id: 1, attrName: '颜色', categoryId: 61, categoryLevel: 3, attrValueList: [{ id: 1, valueName: '黑色' }, { id: 2, valueName: '白色' }, { id: 3, valueName: '金色' }] },
+//   { id: 2, attrName: '内存', categoryId: 61, categoryLevel: 3, attrValueList: [{ id: 4, valueName: '128GB' }, { id: 5, valueName: '256GB' }, { id: 6, valueName: '512GB' }] },
+//   { id: 3, attrName: '尺寸', categoryId: 61, categoryLevel: 3, attrValueList: [{ id: 7, valueName: '6.1英寸' }, { id: 8, valueName: '6.7英寸' }] },
+// ]
 
 // 三级分类数据结构示例
 const categories = [
@@ -145,9 +145,11 @@ const categories = [
   // 二级分类 (categoryId: 对应一级分类的 id, categoryLevel: 2)
   { id: 11, name: '手机', categoryId: 1, categoryLevel: 2 },
   { id: 12, name: '电脑', categoryId: 1, categoryLevel: 2 },
+  // { id: 13, name: '平板', categoryId: 1, categoryLevel: 2 },
   { id: 21, name: '男装', categoryId: 2, categoryLevel: 2 },
   { id: 22, name: '女装', categoryId: 2, categoryLevel: 2 },
   { id: 31, name: '大家电', categoryId: 3, categoryLevel: 2 },
+  { id: 32, name: '小家电', categoryId: 3, categoryLevel: 2 },
 
   // 三级分类 (categoryId: 对应二级分类的 id, categoryLevel: 3)
   { id: 111, name: '智能手机', categoryId: 11, categoryLevel: 3 },
@@ -155,7 +157,9 @@ const categories = [
   { id: 121, name: '笔记本', categoryId: 12, categoryLevel: 3 },
   { id: 211, name: 'T恤', categoryId: 21, categoryLevel: 3 },
   { id: 212, name: '衬衫', categoryId: 21, categoryLevel: 3 },
+  { id: 221, name: '裙子', categoryId: 22, categoryLevel: 3 },
   { id: 311, name: '电视', categoryId: 31, categoryLevel: 3 },
+  { id: 321, name: '夜灯', categoryId: 32, categoryLevel: 3 },
 ]
 
 // ==================== 数据大屏数据 ====================
@@ -718,7 +722,7 @@ app.get('/admin/product/getCategory1', (req, res) => {
 
 // 2. 根据一级分类 ID 获取二级分类列表
 // 接口：GET /admin/product/getCategory2/:category1Id
-app.get('/admin/product/getCategory2/:category1Id', (req, res) => {
+app.get('/admin/my/getCategory2/:category1Id', (req, res) => {
   const { valid, message } = verifyToken(req)
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
@@ -740,7 +744,7 @@ app.get('/admin/product/getCategory2/:category1Id', (req, res) => {
 
 // 3. 根据二级分类 ID 获取三级分类列表
 // 接口：GET /admin/product/getCategory3/:category2Id
-app.get('/admin/product/getCategory3/:category2Id', (req, res) => {
+app.get('/admin/my/getCategory3/:category2Id', (req, res) => {
   const { valid, message } = verifyToken(req)
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
