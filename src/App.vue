@@ -7,7 +7,6 @@
 
 <script setup lang="ts">
   import { RouterView } from 'vue-router'
-  // import SvgIcon from '@/components/SvgIcon/index.vue'
   // import request from './utils/request';
   // import { onMounted } from 'vue';
   // import { reqLogin } from '@/api/user/index'
