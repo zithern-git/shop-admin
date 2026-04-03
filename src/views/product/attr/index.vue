@@ -53,16 +53,34 @@
         </el-form>
         <el-button
           type="primary"
+          :disabled="!attrParams.attrName"
           size="default"
           icon="Plus"
+          @click="addAttrValue()"
           >添加属性值</el-button>
         <el-button @click="cancel()">取消</el-button>
-        <el-table border style="margin: 10px 0">
+        <el-table :data="attrParams.attrValueList" border style="margin: 10px 0">
           <el-table-column label="序号" type="index" align="center" width="80px"></el-table-column>
-          <el-table-column label="属性值"></el-table-column>
-          <el-table-column label="操作" width="120px"></el-table-column>
+          <el-table-column label="属性值">
+            <!-- row即为当前属性值对象 -->
+            <template #default="{row}">
+              <el-input placeholder="请输入属性值名称" v-model="row.valueName"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="120px">
+            <!-- <template #default="{ row }">
+              <el-popconfirm
+                :title="`确认删除${row.attrName}吗？`"
+                width="200px"
+              >
+                <template #reference>
+                  <el-button type="danger" icon="Delete" />
+                </template>
+              </el-popconfirm>
+            </template> -->
+          </el-table-column>
         </el-table>
-        <el-button type="primary">保存</el-button>
+        <el-button type="primary" @click="save()">保存</el-button>
         <el-button @click="cancel()">取消</el-button>
       </div>
     </el-card>
@@ -73,8 +91,9 @@
 import { watch, ref, reactive } from 'vue'
 // 获取分类的仓库
 import useCategoryStore from '@/store/modules/category';
-import { reqAttr } from '@/api/product/attr';
+import { reqAttr, reqAddOrUpdateAttr } from '@/api/product/attr';
 import type { AttrResponseData, AttrList, Attr } from '@/api/product/attr/type';
+import { ElMessage } from 'element-plus';
 
 const categoryStore = useCategoryStore();
 // 存储已有的属性与属性值
@@ -112,6 +131,13 @@ const getAttr = async () => {
 
   // 添加属性按钮的回调
   const addAttr = () => {
+    Object.assign(attrParams, {
+      attrName: "", // 新增的属性的名字
+      attrValueList: [], // 新增的属性值数组
+      // 点击这个按钮的时候手机新增属性的三级分类的id
+      categoryId: categoryStore.c3Id, // 三级分类的ID
+      categoryLevel: 3 // 代表的是三级分类
+    })
     // 切换为添加与修改属性的结构
     scene.value = 1
   }
@@ -127,6 +153,29 @@ const getAttr = async () => {
     scene.value = 0
   }
 
+  // 添加属性值按钮的回调
+  const addAttrValue = () => {
+    attrParams.attrValueList.push({
+      valueName: ''
+    })
+  }
+
+  // 保存按钮的回调
+  const save = async () => {
+    // 发请求
+    const result:any = await reqAddOrUpdateAttr(attrParams)
+    // 添加|修改已有的属性成功
+    if (result.code === 200) {
+      // 提示信息
+      ElMessage.success(attrParams.id? '修改成功': '添加成功');
+      // 切换场景
+      scene.value = 0
+      // 获取全部已有的属性与属性值
+      getAttr()
+    } else {
+      ElMessage.error(attrParams.id? '修改失败': '添加失败');
+    }
+  }
 </script>
 
 <style scoped></style>
