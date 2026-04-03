@@ -17,3 +17,28 @@ export interface CategoryObj {
 export interface CategoryResponseData extends ResponseData {
   data: CategoryObj[]
 }
+
+// 已有属性值的ts类型
+export interface AttrValue {
+  id:number
+  valueName: string
+}
+
+// 存储每一个属性值的数组类型
+export type AttrValueList = AttrValue[]
+
+// 已有属性与属性值的ts类型
+export interface Attr {
+  id: number
+  attrName: string
+  categoryId: number
+  attrValueList: AttrValueList
+}
+
+// 存储每一个属性对象的数组ts类型
+export type AttrList = Attr[]
+
+// 属性接口返回的ts数据类型
+export interface AttrResponseData extends ResponseData {
+  data: Attr[]
+}

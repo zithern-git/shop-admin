@@ -134,6 +134,49 @@ let skus = [
 //   { id: 2, attrName: '内存', categoryId: 61, categoryLevel: 3, attrValueList: [{ id: 4, valueName: '128GB' }, { id: 5, valueName: '256GB' }, { id: 6, valueName: '512GB' }] },
 //   { id: 3, attrName: '尺寸', categoryId: 61, categoryLevel: 3, attrValueList: [{ id: 7, valueName: '6.1英寸' }, { id: 8, valueName: '6.7英寸' }] },
 // ]
+let attrs = [
+  // ==================== 1. 智能手机 (categoryId: 111) ====================
+  { id: 1, attrName: '品牌', categoryId: 111, categoryLevel: 3, attrValueList: [{ id: 1, valueName: '华为' }, { id: 2, valueName: '小米' }, { id: 3, valueName: '苹果' }, { id: 4, valueName: 'OPPO' }] },
+  { id: 2, attrName: '颜色', categoryId: 111, categoryLevel: 3, attrValueList: [{ id: 5, valueName: '黑色' }, { id: 6, valueName: '白色' }, { id: 7, valueName: '金色' }, { id: 8, valueName: '蓝色' }] },
+  { id: 3, attrName: '内存', categoryId: 111, categoryLevel: 3, attrValueList: [{ id: 9, valueName: '128GB' }, { id: 10, valueName: '256GB' }, { id: 11, valueName: '512GB' }, { id: 12, valueName: '1TB' }] },
+  { id: 4, attrName: '尺寸', categoryId: 111, categoryLevel: 3, attrValueList: [{ id: 13, valueName: '6.1英寸' }, { id: 14, valueName: '6.7英寸' }, { id: 15, valueName: '6.8英寸' }] },
+
+  // ==================== 2. 老人机 (categoryId: 112) ====================
+  { id: 5, attrName: '品牌', categoryId: 112, categoryLevel: 3, attrValueList: [{ id: 16, valueName: '诺基亚' }, { id: 17, valueName: '飞利浦' }, { id: 18, valueName: '天语' }] },
+  { id: 6, attrName: '颜色', categoryId: 112, categoryLevel: 3, attrValueList: [{ id: 19, valueName: '黑色' }, { id: 20, valueName: '红色' }, { id: 21, valueName: '金色' }] },
+  { id: 7, attrName: '续航', categoryId: 112, categoryLevel: 3, attrValueList: [{ id: 22, valueName: '3天' }, { id: 23, valueName: '7天' }, { id: 24, valueName: '15天' }] },
+
+  // ==================== 3. 笔记本 (categoryId: 121) ====================
+  { id: 8, attrName: '品牌', categoryId: 121, categoryLevel: 3, attrValueList: [{ id: 25, valueName: '联想' }, { id: 26, valueName: '戴尔' }, { id: 27, valueName: '苹果' }, { id: 28, valueName: '华为' }] },
+  { id: 9, attrName: '颜色', categoryId: 121, categoryLevel: 3, attrValueList: [{ id: 29, valueName: '银色' }, { id: 30, valueName: '黑色' }, { id: 31, valueName: '灰色' }] },
+  { id: 10, attrName: '内存', categoryId: 121, categoryLevel: 3, attrValueList: [{ id: 32, valueName: '8GB' }, { id: 33, valueName: '16GB' }, { id: 34, valueName: '32GB' }] },
+  { id: 11, attrName: '硬盘', categoryId: 121, categoryLevel: 3, attrValueList: [{ id: 35, valueName: '512GB SSD' }, { id: 36, valueName: '1TB SSD' }, { id: 37, valueName: '2TB SSD' }] },
+
+  // ==================== 4. T恤 (categoryId: 211) ====================
+  { id: 12, attrName: '颜色', categoryId: 211, categoryLevel: 3, attrValueList: [{ id: 38, valueName: '白色' }, { id: 39, valueName: '黑色' }, { id: 40, valueName: '灰色' }, { id: 41, valueName: '蓝色' }] },
+  { id: 13, attrName: '尺码', categoryId: 211, categoryLevel: 3, attrValueList: [{ id: 42, valueName: 'S' }, { id: 43, valueName: 'M' }, { id: 44, valueName: 'L' }, { id: 45, valueName: 'XL' }, { id: 46, valueName: 'XXL' }] },
+  { id: 14, attrName: '材质', categoryId: 211, categoryLevel: 3, attrValueList: [{ id: 47, valueName: '纯棉' }, { id: 48, valueName: '棉麻' }, { id: 49, valueName: '涤纶' }] },
+
+  // ==================== 5. 衬衫 (categoryId: 212) ====================
+  { id: 15, attrName: '颜色', categoryId: 212, categoryLevel: 3, attrValueList: [{ id: 50, valueName: '白色' }, { id: 51, valueName: '蓝色' }, { id: 52, valueName: '灰色' }] },
+  { id: 16, attrName: '尺码', categoryId: 212, categoryLevel: 3, attrValueList: [{ id: 53, valueName: '38' }, { id: 54, valueName: '39' }, { id: 55, valueName: '40' }, { id: 56, valueName: '41' }] },
+  { id: 17, attrName: '领型', categoryId: 212, categoryLevel: 3, attrValueList: [{ id: 57, valueName: '标准领' }, { id: 58, valueName: '尖领' }, { id: 59, valueName: '方领' }] },
+
+  // ==================== 6. 裙子 (categoryId: 221) ====================
+  { id: 18, attrName: '颜色', categoryId: 221, categoryLevel: 3, attrValueList: [{ id: 60, valueName: '黑色' }, { id: 61, valueName: '白色' }, { id: 62, valueName: '红色' }, { id: 63, valueName: '碎花' }] },
+  { id: 19, attrName: '尺码', categoryId: 221, categoryLevel: 3, attrValueList: [{ id: 64, valueName: 'S' }, { id: 65, valueName: 'M' }, { id: 66, valueName: 'L' }, { id: 67, valueName: 'XL' }] },
+  { id: 20, attrName: '款式', categoryId: 221, categoryLevel: 3, attrValueList: [{ id: 68, valueName: '连衣裙' }, { id: 69, valueName: '半身裙' }, { id: 70, valueName: 'A字裙' }] },
+
+  // ==================== 7. 电视 (categoryId: 311) ====================
+  { id: 21, attrName: '品牌', categoryId: 311, categoryLevel: 3, attrValueList: [{ id: 71, valueName: '小米' }, { id: 72, valueName: '海信' }, { id: 73, valueName: 'TCL' }, { id: 74, valueName: '索尼' }] },
+  { id: 22, attrName: '尺寸', categoryId: 311, categoryLevel: 3, attrValueList: [{ id: 75, valueName: '55英寸' }, { id: 76, valueName: '65英寸' }, { id: 77, valueName: '75英寸' }, { id: 78, valueName: '85英寸' }] },
+  { id: 23, attrName: '分辨率', categoryId: 311, categoryLevel: 3, attrValueList: [{ id: 79, valueName: '4K' }, { id: 80, valueName: '8K' }] },
+
+  // ==================== 8. 夜灯 (categoryId: 321) ====================
+  { id: 24, attrName: '品牌', categoryId: 321, categoryLevel: 3, attrValueList: [{ id: 81, valueName: '小米' }, { id: 82, valueName: '飞利浦' }, { id: 83, valueName: '欧普' }] },
+  { id: 25, attrName: '颜色', categoryId: 321, categoryLevel: 3, attrValueList: [{ id: 84, valueName: '白色' }, { id: 85, valueName: '黄色' }, { id: 86, valueName: '粉色' }] },
+  { id: 26, attrName: '亮度', categoryId: 321, categoryLevel: 3, attrValueList: [{ id: 87, valueName: '可调光' }, { id: 88, valueName: '固定亮度' }] },
+]
 
 // 三级分类数据结构示例
 const categories = [

@@ -16,6 +16,13 @@ export interface CategoryItem {
   categoryLevel?: number
 }
 
+export interface attrInfoArrInter {
+  id: string | number
+  attrName: string
+  categoryId: number
+  attrValueList: []
+}
+
 // 定义分类仓库state对象的ts类型
 export interface CategoryState {
   c1Id: string | number,
@@ -24,4 +31,7 @@ export interface CategoryState {
   c1Arr: CategoryObj[],
   c2Arr: CategoryObj[],
   c3Arr: CategoryObj[],
+  attrInfoArr: attrInfoArrInter[],
 }
+
+
