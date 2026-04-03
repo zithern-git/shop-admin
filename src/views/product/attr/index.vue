@@ -1,43 +1,67 @@
 <template>
   <div class="flex flex-wrap gap-2">
-    <Category />
+    <Category :scene="scene"/>
     <el-card style="width: 100%" shadow="always">
-      <el-button
-        type="primary"
-        size="default"
-        icon="Plus"
-        :disabled="!categoryStore.c3Id">添加属性</el-button>
-      <el-table :data="attrArr" border style="margin: 10px 0">
-        <el-table-column label="序号" type="index" align="center" width="80px"></el-table-column>
-        <el-table-column prop="attrName" label="属性名称" width="120px"></el-table-column>
-        <el-table-column
-          prop="attrValueList"
-          label="属性值名称">
-          <template #default="{row}">
-            <el-tag
-              v-for="item in row.attrValueList"
-              :key="item.id"
-              type="success"
-              style="margin: 5px;"
-              disable-transitions
-              >{{ item.valueName }}</el-tag
-            >
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="130px">
-          <template #default="{ row }">
-            <el-button type="primary" size="small" icon="Edit"/>
-            <el-popconfirm
-              :title="`确认删除${row.attrName}吗？`"
-              width="200px"
-            >
-              <template #reference>
-                <el-button type="danger" size="small" icon="Delete" />
-              </template>
-            </el-popconfirm>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div v-show="scene === 0">
+        <el-button
+          type="primary"
+          size="default"
+          icon="Plus"
+          :disabled="!categoryStore.c3Id"
+          @click="addAttr()">添加属性</el-button>
+        <el-table :data="attrArr" border style="margin: 10px 0">
+          <el-table-column label="序号" type="index" align="center" width="80px"></el-table-column>
+          <el-table-column prop="attrName" label="属性名称" width="120px"></el-table-column>
+          <el-table-column
+            prop="attrValueList"
+            label="属性值名称">
+            <template #default="{row}">
+              <el-tag
+                v-for="item in row.attrValueList"
+                :key="item.id"
+                type="success"
+                style="margin: 5px;"
+                disable-transitions
+                >{{ item.valueName }}</el-tag
+              >
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="130px">
+            <template #default="{ row }">
+              <el-button type="primary" size="small" icon="Edit" @click="updateAttr()"/>
+              <el-popconfirm
+                :title="`确认删除${row.attrName}吗？`"
+                width="200px"
+              >
+                <template #reference>
+                  <el-button type="danger" size="small" icon="Delete" />
+                </template>
+              </el-popconfirm>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div v-show="scene === 1">
+        <!-- 展示添加与修改属性结构 -->
+        <el-form :inline="true">
+          <el-form-item label="属性名称">
+            <el-input placeholder="请输入属性的名字" style="width: 200px;"/>
+          </el-form-item>
+        </el-form>
+        <el-button
+          type="primary"
+          size="default"
+          icon="Plus"
+          >添加属性值</el-button>
+        <el-button @click="cancel()">取消</el-button>
+        <el-table border style="margin: 10px 0">
+          <el-table-column label="序号" type="index" align="center" width="80px"></el-table-column>
+          <el-table-column label="属性值"></el-table-column>
+          <el-table-column label="操作" width="120px"></el-table-column>
+        </el-table>
+        <el-button type="primary">保存</el-button>
+        <el-button @click="cancel()">取消</el-button>
+      </div>
     </el-card>
   </div>
 </template>
@@ -52,6 +76,8 @@ import type { AttrResponseData, AttrList } from '@/api/product/attr/type';
 const categoryStore = useCategoryStore();
 // 存储已有的属性与属性值
 const attrArr = ref<AttrList>([])
+// 定义card组件内容切换变量
+const scene = ref<number>(0)
 
 watch(() => categoryStore.c3Id, async () => {
   // 清空生一次查询的属性与属性值
@@ -71,6 +97,24 @@ const getAttr = async () => {
       attrArr.value = result.data;
     }
   }
+
+  // 添加属性按钮的回调
+  const addAttr = () => {
+    // 切换为添加与修改属性的结构
+    scene.value = 1
+  }
+
+  // table表格修改已有属性按钮的回调
+  const updateAttr = () => {
+    // 切换为添加与修改属性的结构
+    scene.value = 1
+  }
+
+  // 取消按钮的回调
+  const cancel = () => {
+    scene.value = 0
+  }
+
 </script>
 
 <style scoped></style>
