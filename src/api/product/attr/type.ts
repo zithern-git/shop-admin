@@ -20,7 +20,8 @@ export interface CategoryResponseData extends ResponseData {
 
 // 已有属性值的ts类型
 export interface AttrValue {
-  id:number
+  attrId?: number
+  id?:number
   valueName: string
 }
 
@@ -29,9 +30,10 @@ export type AttrValueList = AttrValue[]
 
 // 已有属性与属性值的ts类型
 export interface Attr {
-  id: number
+  id?: number
   attrName: string
-  categoryId: number
+  categoryId: number | string
+  categoryLevel: number
   attrValueList: AttrValueList
 }
 
