@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-wrap gap-2">
-    <Category :scene="scene"/>
+    <Category :scene="scene" />
     <el-card style="width: 100%" shadow="always">
       <div v-show="scene === 0">
         <el-button
@@ -8,30 +8,31 @@
           size="default"
           icon="Plus"
           :disabled="!categoryStore.c3Id"
-          @click="addAttr()">添加属性</el-button>
+          @click="addAttr()"
+          >添加属性</el-button
+        >
         <el-table :data="attrArr" border style="margin: 10px 0">
           <el-table-column label="序号" type="index" align="center" width="80px"></el-table-column>
           <el-table-column prop="attrName" label="属性名称" width="120px"></el-table-column>
-          <el-table-column
-            prop="attrValueList"
-            label="属性值名称">
-            <template #default="{row}">
+          <el-table-column prop="attrValueList" label="属性值名称">
+            <template #default="{ row }">
               <el-tag
                 v-for="item in row.attrValueList"
                 :key="item.id"
                 type="success"
-                style="margin: 5px;"
+                style="margin: 5px"
                 disable-transitions
                 >{{ item.valueName }}</el-tag
               >
             </template>
           </el-table-column>
           <el-table-column label="操作" width="130px">
-            <template #default="{ row }">
-              <el-button type="primary" size="small" icon="Edit" @click="updateAttr()"/>
+            <template #default="{ row, $index }">
+              <el-button type="primary" size="small" icon="Edit" @click="updateAttr(row, $index)" />
               <el-popconfirm
                 :title="`确认删除${row.attrName}吗？`"
                 width="200px"
+                @confirm="deleteAttr(row.id)"
               >
                 <template #reference>
                   <el-button type="danger" size="small" icon="Delete" />
@@ -46,9 +47,10 @@
         <el-form :inline="true">
           <el-form-item label="属性名称">
             <el-input
-            v-model="attrParams.attrName"
+              v-model="attrParams.attrName"
               placeholder="请输入属性的名字"
-              style="width: 200px;"/>
+              style="width: 200px"
+            />
           </el-form-item>
         </el-form>
         <el-button
@@ -57,27 +59,48 @@
           size="default"
           icon="Plus"
           @click="addAttrValue()"
-          >添加属性值</el-button>
+          >添加属性值</el-button
+        >
         <el-button @click="cancel()">取消</el-button>
         <el-table :data="attrParams.attrValueList" border style="margin: 10px 0">
           <el-table-column label="序号" type="index" align="center" width="80px"></el-table-column>
           <el-table-column label="属性值">
             <!-- row即为当前属性值对象 -->
-            <template #default="{row}">
-              <el-input placeholder="请输入属性值名称" v-model="row.valueName"></el-input>
+            <template #default="{ row }">
+              <div
+                v-if="!isEditing"
+                class="view"
+                @click="toEdit()"
+                style="width: 200px; background: linear-gradient(135deg, #ffeca3 0%, #f8bbd0 100%)"
+              >
+                {{ row.valueName || '请输入属性值名称' }}
+              </div>
+
+              <!-- 编辑状态：input -->
+              <el-input
+                v-else
+                size="small"
+                v-model="row.valueName"
+                ref="inputRef"
+                @blur="toLook()"
+                @keyup.enter="isEditing = false"
+                class="edit"
+              />
+              <!-- <el-input placeholder="请输入属性值名称" v-model="row.valueName"></el-input> -->
             </template>
           </el-table-column>
           <el-table-column label="操作" width="120px">
-            <!-- <template #default="{ row }">
+            <template #default="{ row }">
               <el-popconfirm
-                :title="`确认删除${row.attrName}吗？`"
+                :title="`确认删除${row.valueName}吗？`"
                 width="200px"
+                @confirm="deleteAttrValue(row.attrId)"
               >
                 <template #reference>
                   <el-button type="danger" icon="Delete" />
                 </template>
               </el-popconfirm>
-            </template> -->
+            </template>
           </el-table-column>
         </el-table>
         <el-button type="primary" @click="save()">保存</el-button>
@@ -88,64 +111,85 @@
 </template>
 
 <script setup lang="ts">
-import { watch, ref, reactive } from 'vue'
-// 获取分类的仓库
-import useCategoryStore from '@/store/modules/category';
-import { reqAttr, reqAddOrUpdateAttr } from '@/api/product/attr';
-import type { AttrResponseData, AttrList, Attr } from '@/api/product/attr/type';
-import { ElMessage } from 'element-plus';
+  import { watch, ref, reactive, nextTick } from 'vue'
+  // 获取分类的仓库
+  import useCategoryStore from '@/store/modules/category'
+  import { reqAttr, reqAddOrUpdateAttr, reqDeleteAttr } from '@/api/product/attr'
+  import type { AttrResponseData, AttrList, Attr } from '@/api/product/attr/type'
+  import { ElMessage } from 'element-plus'
 
-const categoryStore = useCategoryStore();
-// 存储已有的属性与属性值
-const attrArr = ref<AttrList>([])
-// 定义card组件内容切换变量
-const scene = ref<number>(0)
+  const categoryStore = useCategoryStore()
+  // 存储已有的属性与属性值
+  const attrArr = ref<AttrList>([])
+  // 定义card组件内容切换变量
+  const scene = ref<number>(0)
 
-// 收集新增的属性的数据
-const attrParams = reactive<Attr>({
-  attrName: "", // 新增的属性的名字
-  attrValueList: [], // 新增的属性值数组
-  categoryId: "", // 三级分类的ID
-  categoryLevel: 3 // 代表的是三级分类
-})
+  // 定义一个响应式数据控制编辑模式与查看模式的切换
+  const isEditing = ref<boolean>(false)
+  const inputRef = ref(null)
 
-// 监听仓库三级分类ID变化
-watch(() => categoryStore.c3Id, async () => {
-  // 清空生一次查询的属性与属性值
-  attrArr.value = []
-  // 保证三级分类得有才能发请求
-  if (!categoryStore.c3Id) return;
-  // 获取分类的id
-  getAttr()
-})
+  const toLook = () => {
+    isEditing.value = false
+  }
 
-// 获取已有的属性与属性值方法
-const getAttr = async () => {
-  const {c1Id, c2Id, c3Id} = categoryStore
-  // 获取分类下已有的属性与属性值
-  const result: AttrResponseData = await reqAttr(c1Id, c2Id, c3Id)
+  const toEdit = () => {
+    isEditing.value = true
+    nextTick(() => {
+      inputRef.value?.focus()
+    })
+  }
+
+  // 收集新增的属性的数据
+  const attrParams = reactive<Attr>({
+    attrName: '', // 新增的属性的名字
+    attrValueList: [], // 新增的属性值数组
+    categoryId: '', // 三级分类的ID
+    categoryLevel: 3, // 代表的是三级分类
+  })
+
+  // 监听仓库三级分类ID变化
+  watch(
+    () => categoryStore.c3Id,
+    async () => {
+      // 清空生一次查询的属性与属性值
+      attrArr.value = []
+      // 保证三级分类得有才能发请求
+      if (!categoryStore.c3Id) return
+      // 获取分类的id
+      getAttr()
+    }
+  )
+
+  // 获取已有的属性与属性值方法
+  const getAttr = async () => {
+    const { c1Id, c2Id, c3Id } = categoryStore
+    // 获取分类下已有的属性与属性值
+    const result: AttrResponseData = await reqAttr(c1Id, c2Id, c3Id)
     if (result.code === 200) {
-      attrArr.value = result.data;
+      attrArr.value = result.data
     }
   }
 
   // 添加属性按钮的回调
   const addAttr = () => {
     Object.assign(attrParams, {
-      attrName: "", // 新增的属性的名字
+      attrName: '', // 新增的属性的名字
       attrValueList: [], // 新增的属性值数组
       // 点击这个按钮的时候手机新增属性的三级分类的id
       categoryId: categoryStore.c3Id, // 三级分类的ID
-      categoryLevel: 3 // 代表的是三级分类
+      categoryLevel: 3, // 代表的是三级分类
     })
     // 切换为添加与修改属性的结构
     scene.value = 1
   }
 
   // table表格修改已有属性按钮的回调
-  const updateAttr = () => {
+  const updateAttr = (row: Attr, $index: number) => {
+    attrParams.attrName = attrArr.value[$index]?.attrName || ''
+    attrParams.attrValueList = row.attrValueList
     // 切换为添加与修改属性的结构
     scene.value = 1
+    getAttr()
   }
 
   // 取消按钮的回调
@@ -156,25 +200,48 @@ const getAttr = async () => {
   // 添加属性值按钮的回调
   const addAttrValue = () => {
     attrParams.attrValueList.push({
-      valueName: ''
+      valueName: '',
     })
   }
 
   // 保存按钮的回调
   const save = async () => {
     // 发请求
-    const result:any = await reqAddOrUpdateAttr(attrParams)
+    const result: any = await reqAddOrUpdateAttr(attrParams)
     // 添加|修改已有的属性成功
     if (result.code === 200) {
       // 提示信息
-      ElMessage.success(attrParams.id? '修改成功': '添加成功');
+      ElMessage.success(attrParams.id ? '修改成功' : '添加成功')
       // 切换场景
       scene.value = 0
       // 获取全部已有的属性与属性值
       getAttr()
     } else {
-      ElMessage.error(attrParams.id? '修改失败': '添加失败');
+      ElMessage.error(attrParams.id ? '修改失败' : '添加失败')
     }
+  }
+
+  // 删除已有属性按钮的回调
+  const deleteAttr = async (id: number) => {
+    const result = await reqDeleteAttr(id)
+    if (result.code === 200) {
+      Object.assign(attrParams, {
+        attrName: '', // 新增的属性的名字
+        attrValueList: [], // 新增的属性值数组
+        // 点击这个按钮的时候手机新增属性的三级分类的id
+        categoryId: categoryStore.c3Id, // 三级分类的ID
+        categoryLevel: 3, // 代表的是三级分类
+      })
+      ElMessage.success('删除成功')
+      getAttr()
+    } else {
+      ElMessage.error('删除失败')
+    }
+  }
+
+  // 删除属性值按钮的回调？？？
+  const deleteAttrValue = (attrId: number) => {
+    attrParams.attrValueList = attrParams.attrValueList.filter(item => item.attrId !== attrId)
   }
 </script>
 
