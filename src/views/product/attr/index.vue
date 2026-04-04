@@ -27,7 +27,9 @@
             </template>
           </el-table-column>
           <el-table-column label="操作" width="130px">
+            <!-- row:已有的属性对象 -->
             <template #default="{ row, $index }">
+              <!-- 修改已有属性的按钮 -->
               <el-button type="primary" size="small" icon="Edit" @click="updateAttr(row, $index)" />
               <el-popconfirm
                 :title="`确认删除${row.attrName}吗？`"
@@ -81,7 +83,7 @@
                 v-else
                 class="view"
                 @click="toEdit(row, $index)"
-                style="width: 200px; background: linear-gradient(135deg, #ffeca3 0%, #f8bbd0 100%)"
+                style="background: linear-gradient(135deg, #ffeca3 0%, #f8bbd0 100%)"
               >
                 {{ row.valueName || '请输入属性值名称' }}
               </div>
@@ -89,11 +91,11 @@
             </template>
           </el-table-column>
           <el-table-column label="操作" width="120px">
-            <template #default="{ row }">
+            <template #default="{ row, $index }">
               <el-popconfirm
                 :title="`确认删除${row.valueName}吗？`"
                 width="200px"
-                @confirm="deleteAttrValue(row.attrId)"
+                @confirm="deleteAttrValue(row.attrId, $index)"
               >
                 <template #reference>
                   <el-button type="danger" icon="Delete" />
@@ -210,11 +212,10 @@
 
   // table表格修改已有属性按钮的回调
   const updateAttr = (row: Attr, $index: number) => {
-    attrParams.attrName = attrArr.value[$index]?.attrName || ''
-    attrParams.attrValueList = row.attrValueList
     // 切换为添加与修改属性的结构
     scene.value = 1
-    getAttr()
+    // ES6 -> Object.assign进行对象的合并(浅拷贝)，JSON.parse(JSON.stringify(row))用于深拷贝
+    Object.assign(attrParams, JSON.parse(JSON.stringify(row)))
   }
 
   // 取消按钮的回调
@@ -269,7 +270,7 @@
   }
 
   // 删除属性值按钮的回调？？？
-  const deleteAttrValue = (attrId: number) => {
+  const deleteAttrValue = (attrId: number, $index: number) => {
     attrParams.attrValueList = attrParams.attrValueList.filter(item => item.attrId !== attrId)
   }
 </script>
