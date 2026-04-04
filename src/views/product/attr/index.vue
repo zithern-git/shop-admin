@@ -66,26 +66,25 @@
           <el-table-column label="序号" type="index" align="center" width="80px"></el-table-column>
           <el-table-column label="属性值">
             <!-- row即为当前属性值对象 -->
-            <template #default="{ row }">
+            <template #default="{ row, $index }">
+              <!-- 编辑状态：input -->
+              <el-input
+                v-if="row.flag"
+                size="small"
+                v-model="row.valueName"
+                ref="inputRef"
+                @blur="toLook(row, $index)"
+                class="edit"
+                placeholder="请输入属性值名称"
+              />
               <div
-                v-if="!isEditing"
+                v-else
                 class="view"
-                @click="toEdit()"
+                @click="toEdit(row)"
                 style="width: 200px; background: linear-gradient(135deg, #ffeca3 0%, #f8bbd0 100%)"
               >
                 {{ row.valueName || '请输入属性值名称' }}
               </div>
-
-              <!-- 编辑状态：input -->
-              <el-input
-                v-else
-                size="small"
-                v-model="row.valueName"
-                ref="inputRef"
-                @blur="toLook()"
-                @keyup.enter="isEditing = false"
-                class="edit"
-              />
               <!-- <el-input placeholder="请输入属性值名称" v-model="row.valueName"></el-input> -->
             </template>
           </el-table-column>
@@ -103,7 +102,12 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-button type="primary" @click="save()">保存</el-button>
+        <el-button
+          :disabled="!attrParams.attrName || !attrParams.attrValueList.length"
+          type="primary"
+          @click="save()"
+          >保存</el-button
+        >
         <el-button @click="cancel()">取消</el-button>
       </div>
     </el-card>
@@ -115,7 +119,7 @@
   // 获取分类的仓库
   import useCategoryStore from '@/store/modules/category'
   import { reqAttr, reqAddOrUpdateAttr, reqDeleteAttr } from '@/api/product/attr'
-  import type { AttrResponseData, AttrList, Attr } from '@/api/product/attr/type'
+  import type { AttrResponseData, AttrList, Attr, AttrValue } from '@/api/product/attr/type'
   import { ElMessage } from 'element-plus'
 
   const categoryStore = useCategoryStore()
@@ -124,19 +128,40 @@
   // 定义card组件内容切换变量
   const scene = ref<number>(0)
 
-  // 定义一个响应式数据控制编辑模式与查看模式的切换
-  const isEditing = ref<boolean>(false)
   const inputRef = ref(null)
 
-  const toLook = () => {
-    isEditing.value = false
+  // 属性值表单元素失去焦点事件回调
+  const toLook = (row: AttrValue, $index: number) => {
+    // 非法情况判断1
+    if (!row.valueName.trim()) {
+      attrParams.attrValueList.splice($index, 1)
+      // 提示信息
+      ElMessage.error('属性值名称不能为空')
+      return
+    }
+    // 非法情况判断2
+    const isRepeat = attrParams.attrValueList.some(
+      // 切记把当前失去焦点属性值对象从当前数组排除
+      (item, index) => item.valueName === row.valueName && index !== $index
+    )
+    if (isRepeat) {
+      // 将重复的属性值对象从当前数组中移除
+      attrParams.attrValueList.splice($index, 1)
+      // 提示信息
+      ElMessage.error('属性值名称重复')
+      return
+    }
+    // 相应的属性值对象flag: 变为false，展示div
+    row.flag = false
   }
 
-  const toEdit = () => {
-    isEditing.value = true
-    nextTick(() => {
-      inputRef.value?.focus()
-    })
+  // 属性值div点击事件回调
+  const toEdit = (row: AttrValue) => {
+    // 相应的属性值对象flag: 变为true，展示input
+    row.flag = true
+    // nextTick(() => {
+    //   inputRef.value?.focus()
+    // })
   }
 
   // 收集新增的属性的数据
@@ -201,6 +226,7 @@
   const addAttrValue = () => {
     attrParams.attrValueList.push({
       valueName: '',
+      flag: true, // 控制每一个属性值编辑模式与查看模式的切换
     })
   }
 
