@@ -95,7 +95,7 @@
               <el-popconfirm
                 :title="`确认删除${row.valueName}吗？`"
                 width="200px"
-                @confirm="deleteAttrValue(row.attrId, $index)"
+                @confirm="deleteAttrValue($index)"
               >
                 <template #reference>
                   <el-button type="danger" icon="Delete" />
@@ -117,7 +117,7 @@
 </template>
 
 <script setup lang="ts">
-  import { watch, ref, reactive, nextTick } from 'vue'
+  import { watch, ref, reactive, nextTick, onBeforeUnmount } from 'vue'
   // 获取分类的仓库
   import useCategoryStore from '@/store/modules/category'
   import { reqAttr, reqAddOrUpdateAttr, reqDeleteAttr } from '@/api/product/attr'
@@ -252,16 +252,10 @@
   }
 
   // 删除已有属性按钮的回调
-  const deleteAttr = async (id: number) => {
-    const result = await reqDeleteAttr(id)
+  const deleteAttr = async (attrId: number) => {
+    // 发相应的删除已有属性的请求
+    const result: any = await reqDeleteAttr(attrId)
     if (result.code === 200) {
-      Object.assign(attrParams, {
-        attrName: '', // 新增的属性的名字
-        attrValueList: [], // 新增的属性值数组
-        // 点击这个按钮的时候手机新增属性的三级分类的id
-        categoryId: categoryStore.c3Id, // 三级分类的ID
-        categoryLevel: 3, // 代表的是三级分类
-      })
       ElMessage.success('删除成功')
       getAttr()
     } else {
@@ -269,10 +263,17 @@
     }
   }
 
-  // 删除属性值按钮的回调？？？
-  const deleteAttrValue = (attrId: number, $index: number) => {
-    attrParams.attrValueList = attrParams.attrValueList.filter(item => item.attrId !== attrId)
+  // 删除属性值按钮的回调
+  const deleteAttrValue = ($index: number) => {
+    // ✅ 只删除当前点击的这一行（根据索引删除）
+    attrParams.attrValueList.splice($index, 1)
   }
+
+  // 组件卸载前的清理工作
+  onBeforeUnmount(() => {
+    // 清空仓库的数据
+    categoryStore.$reset()
+  })
 </script>
 
 <style scoped></style>

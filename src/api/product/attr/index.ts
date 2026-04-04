@@ -40,5 +40,5 @@ export const reqAttr = (
 export const reqAddOrUpdateAttr = (data: Attr) =>
   request.post<any, any>(API.ADDORUPDATEATTR_URL, data)
 
-export const reqDeleteAttr = (attrId: string | number) =>
-  request.delete(`${API.DELETEATTR_URL}${attrId}`)
+// 删除已有的属性接口
+export const reqDeleteAttr = (attrId: number) => request.delete(`${API.DELETEATTR_URL}${attrId}`)
