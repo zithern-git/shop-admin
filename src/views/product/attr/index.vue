@@ -72,7 +72,7 @@
                 v-if="row.flag"
                 size="small"
                 v-model="row.valueName"
-                ref="inputRef"
+                :ref="(vc: any) => (inputArr[$index] = vc)"
                 @blur="toLook(row, $index)"
                 class="edit"
                 placeholder="请输入属性值名称"
@@ -80,7 +80,7 @@
               <div
                 v-else
                 class="view"
-                @click="toEdit(row)"
+                @click="toEdit(row, $index)"
                 style="width: 200px; background: linear-gradient(135deg, #ffeca3 0%, #f8bbd0 100%)"
               >
                 {{ row.valueName || '请输入属性值名称' }}
@@ -128,7 +128,7 @@
   // 定义card组件内容切换变量
   const scene = ref<number>(0)
 
-  const inputRef = ref(null)
+  const inputArr = ref<any>([])
 
   // 属性值表单元素失去焦点事件回调
   const toLook = (row: AttrValue, $index: number) => {
@@ -142,7 +142,7 @@
     // 非法情况判断2
     const isRepeat = attrParams.attrValueList.some(
       // 切记把当前失去焦点属性值对象从当前数组排除
-      (item, index) => item.valueName === row.valueName && index !== $index
+      (item, index) => item.valueName.trim() === row.valueName.trim() && index !== $index
     )
     if (isRepeat) {
       // 将重复的属性值对象从当前数组中移除
@@ -156,12 +156,12 @@
   }
 
   // 属性值div点击事件回调
-  const toEdit = (row: AttrValue) => {
+  const toEdit = (row: AttrValue, $index: number) => {
     // 相应的属性值对象flag: 变为true，展示input
     row.flag = true
-    // nextTick(() => {
-    //   inputRef.value?.focus()
-    // })
+    nextTick(() => {
+      inputArr.value[$index].focus()
+    })
   }
 
   // 收集新增的属性的数据
@@ -227,6 +227,9 @@
     attrParams.attrValueList.push({
       valueName: '',
       flag: true, // 控制每一个属性值编辑模式与查看模式的切换
+    })
+    nextTick(() => {
+      inputArr.value[attrParams.attrValueList.length - 1].focus()
     })
   }
 
