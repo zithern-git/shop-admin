@@ -119,7 +119,7 @@ let trademarks = [
 ]
 
 let spus = [
-  { id: 1, spuName: 'iPhone 15 Pro', description: '苹果最新旗舰手机', category3Id: 61, tmId: 3, spuSaleAttrList: [], spuImageList: [], createTime: '2024-01-01', updateTime: '2024-01-01' },
+  { id: 1, spuName: 'iPhone 15 Pro', description: '苹果最新旗舰手机苹果最新旗舰手机苹果最新旗舰手机苹果最新旗舰手机苹果最新旗舰手机苹果最新旗舰手机苹果最新旗舰手机苹果最新旗舰手机', category3Id: 61, tmId: 3, spuSaleAttrList: [], spuImageList: [], createTime: '2024-01-01', updateTime: '2024-01-01' },
   { id: 2, spuName: '华为 Mate 60 Pro', description: '华为旗舰手机', category3Id: 61, tmId: 1, spuSaleAttrList: [], spuImageList: [], createTime: '2024-01-02', updateTime: '2024-01-02' },
   { id: 3, spuName: '小米 14 Pro', description: '小米旗舰手机', category3Id: 61, tmId: 2, spuSaleAttrList: [], spuImageList: [], createTime: '2024-01-03', updateTime: '2024-01-03' },
 ]
