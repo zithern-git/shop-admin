@@ -5,8 +5,12 @@
     </el-form-item>
     <el-form-item label="SPU品牌">
       <el-select placeholder="请选择品牌" style="width: 200px">
-        <el-option label="Zone one" value="shanghai" />
-        <el-option label="Zone two" value="beijing" />
+        <el-option
+          v-for="item in props.options"
+          :key="item.id"
+          :label="item.tmName"
+          :value="item.id"
+        ></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="SPU描述">
@@ -49,50 +53,53 @@
   </el-form>
 </template>
 
-<script setup lang='ts'>
-import { ref, defineEmits } from 'vue'
-import type { UploadProps, UploadUserFile } from 'element-plus'
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import type { UploadProps, UploadUserFile } from 'element-plus'
 
-// 声明要触发的事件名
-const $emit = defineEmits(['changeScene'])
-// 点击取消按钮：通知父组件切换场景为1，展示已有的SPU数据
-const cancel = () => {
-  // 关键：emit(事件名, 要传的值)
-  $emit('changeScene', 0)
-}
+  // 声明要触发的事件名
+  const $emit = defineEmits(['changeScene'])
 
-const fileList = ref<UploadUserFile[]>([
-  {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-])
+  //
+  const props = defineProps(['options'])
 
-const dialogImageUrl = ref('')
-const dialogVisible = ref(false)
+  // 点击取消按钮：通知父组件切换场景为1，展示已有的SPU数据
+  const cancel = () => {
+    // 关键：emit(事件名, 要传的值)
+    $emit('changeScene', 0)
+  }
 
-const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
-  console.log(uploadFile, uploadFiles)
-}
+  // 以下为plus的源代码
+  const fileList = ref<UploadUserFile[]>([
+    {
+      name: 'food.jpeg',
+      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+    },
+    {
+      name: 'food.jpeg',
+      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+    },
+    {
+      name: 'food.jpeg',
+      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+    },
+    {
+      name: 'food.jpeg',
+      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+    },
+  ])
 
-const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
-  dialogImageUrl.value = uploadFile.url!
-  dialogVisible.value = true
-}
+  const dialogImageUrl = ref('')
+  const dialogVisible = ref(false)
+
+  const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
+    console.log(uploadFile, uploadFiles)
+  }
+
+  const handlePictureCardPreview: UploadProps['onPreview'] = uploadFile => {
+    dialogImageUrl.value = uploadFile.url!
+    dialogVisible.value = true
+  }
 </script>
 
-<style scoped>
-</style>
-
+<style scoped></style>

@@ -24,10 +24,10 @@ const storage = multer.diskStorage({
     cb(null, uploadDir)
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
     const ext = path.extname(file.originalname)
     cb(null, uniqueSuffix + ext)
-  }
+  },
 })
 
 const upload = multer({
@@ -40,7 +40,7 @@ const upload = multer({
       cb(new Error('只允许上传图片文件'), false)
     }
   },
-  limits: { fileSize: 5 * 1024 * 1024 }
+  limits: { fileSize: 5 * 1024 * 1024 },
 })
 
 app.use('/uploads', express.static(uploadDir))
@@ -73,60 +73,493 @@ const users = [
 
 // ==================== 权限管理数据 ====================
 let aclUsers = [
-  { id: 1, username: 'admin', name: '管理员', password: '111111', role: '管理员', createTime: '2024-01-01', updateTime: '2024-01-01' },
-  { id: 2, username: 'zhangsan', name: '张三', password: '111111', role: '运营', createTime: '2024-01-02', updateTime: '2024-01-02' },
-  { id: 3, username: 'lisi', name: '李四', password: '111111', role: '客服', createTime: '2024-01-03', updateTime: '2024-01-03' },
-  { id: 4, username: 'wangwu', name: '王五', password: '111111', role: '运营', createTime: '2024-01-04', updateTime: '2024-01-04' },
+  {
+    id: 1,
+    username: 'admin',
+    name: '管理员',
+    password: '111111',
+    role: '管理员',
+    createTime: '2024-01-01',
+    updateTime: '2024-01-01',
+  },
+  {
+    id: 2,
+    username: 'zhangsan',
+    name: '张三',
+    password: '111111',
+    role: '运营',
+    createTime: '2024-01-02',
+    updateTime: '2024-01-02',
+  },
+  {
+    id: 3,
+    username: 'lisi',
+    name: '李四',
+    password: '111111',
+    role: '客服',
+    createTime: '2024-01-03',
+    updateTime: '2024-01-03',
+  },
+  {
+    id: 4,
+    username: 'wangwu',
+    name: '王五',
+    password: '111111',
+    role: '运营',
+    createTime: '2024-01-04',
+    updateTime: '2024-01-04',
+  },
 ]
 
 let roles = [
-  { id: 1, roleName: '管理员', remark: '拥有所有权限', createTime: '2024-01-01', updateTime: '2024-01-01' },
-  { id: 2, roleName: '运营', remark: '商品管理权限', createTime: '2024-01-02', updateTime: '2024-01-02' },
-  { id: 3, roleName: '客服', remark: '查看权限', createTime: '2024-01-03', updateTime: '2024-01-03' },
+  {
+    id: 1,
+    roleName: '管理员',
+    remark: '拥有所有权限',
+    createTime: '2024-01-01',
+    updateTime: '2024-01-01',
+  },
+  {
+    id: 2,
+    roleName: '运营',
+    remark: '商品管理权限',
+    createTime: '2024-01-02',
+    updateTime: '2024-01-02',
+  },
+  {
+    id: 3,
+    roleName: '客服',
+    remark: '查看权限',
+    createTime: '2024-01-03',
+    updateTime: '2024-01-03',
+  },
 ]
 
 let permissions = [
-  { id: 1, name: '权限管理', type: 1, level: 1, pid: 0, path: '/acl', component: 'Layout', icon: 'Lock', permissionValue: '' },
-  { id: 2, name: '用户管理', type: 1, level: 2, pid: 1, path: 'user', component: 'User', icon: 'User', permissionValue: '' },
-  { id: 3, name: '角色管理', type: 1, level: 2, pid: 1, path: 'role', component: 'Role', icon: 'UserFilled', permissionValue: '' },
-  { id: 4, name: '菜单管理', type: 1, level: 2, pid: 1, path: 'permission', component: 'Permission', icon: 'Monitor', permissionValue: '' },
-  { id: 5, name: '商品管理', type: 1, level: 1, pid: 0, path: '/product', component: 'Layout', icon: 'Goods', permissionValue: '' },
-  { id: 6, name: '品牌管理', type: 1, level: 2, pid: 5, path: 'trademark', component: 'Trademark', icon: 'ShoppingCartFull', permissionValue: '' },
-  { id: 7, name: 'SPU管理', type: 1, level: 2, pid: 5, path: 'spu', component: 'Spu', icon: 'Calendar', permissionValue: '' },
-  { id: 8, name: 'SKU管理', type: 1, level: 2, pid: 5, path: 'sku', component: 'Sku', icon: 'Orange', permissionValue: '' },
-  { id: 9, name: '属性管理', type: 1, level: 2, pid: 5, path: 'attr', component: 'Attr', icon: 'ChromeFilled', permissionValue: '' },
-  { id: 10, name: '用户添加按钮', type: 2, level: 3, pid: 2, path: '', component: '', icon: '', permissionValue: 'btn.user.add' },
-  { id: 11, name: '用户删除按钮', type: 2, level: 3, pid: 2, path: '', component: '', icon: '', permissionValue: 'btn.user.delete' },
-  { id: 12, name: '用户修改按钮', type: 2, level: 3, pid: 2, path: '', component: '', icon: '', permissionValue: 'btn.user.update' },
-  { id: 13, name: '角色添加按钮', type: 2, level: 3, pid: 3, path: '', component: '', icon: '', permissionValue: 'btn.role.add' },
-  { id: 14, name: '角色删除按钮', type: 2, level: 3, pid: 3, path: '', component: '', icon: '', permissionValue: 'btn.role.delete' },
+  {
+    id: 1,
+    name: '权限管理',
+    type: 1,
+    level: 1,
+    pid: 0,
+    path: '/acl',
+    component: 'Layout',
+    icon: 'Lock',
+    permissionValue: '',
+  },
+  {
+    id: 2,
+    name: '用户管理',
+    type: 1,
+    level: 2,
+    pid: 1,
+    path: 'user',
+    component: 'User',
+    icon: 'User',
+    permissionValue: '',
+  },
+  {
+    id: 3,
+    name: '角色管理',
+    type: 1,
+    level: 2,
+    pid: 1,
+    path: 'role',
+    component: 'Role',
+    icon: 'UserFilled',
+    permissionValue: '',
+  },
+  {
+    id: 4,
+    name: '菜单管理',
+    type: 1,
+    level: 2,
+    pid: 1,
+    path: 'permission',
+    component: 'Permission',
+    icon: 'Monitor',
+    permissionValue: '',
+  },
+  {
+    id: 5,
+    name: '商品管理',
+    type: 1,
+    level: 1,
+    pid: 0,
+    path: '/product',
+    component: 'Layout',
+    icon: 'Goods',
+    permissionValue: '',
+  },
+  {
+    id: 6,
+    name: '品牌管理',
+    type: 1,
+    level: 2,
+    pid: 5,
+    path: 'trademark',
+    component: 'Trademark',
+    icon: 'ShoppingCartFull',
+    permissionValue: '',
+  },
+  {
+    id: 7,
+    name: 'SPU管理',
+    type: 1,
+    level: 2,
+    pid: 5,
+    path: 'spu',
+    component: 'Spu',
+    icon: 'Calendar',
+    permissionValue: '',
+  },
+  {
+    id: 8,
+    name: 'SKU管理',
+    type: 1,
+    level: 2,
+    pid: 5,
+    path: 'sku',
+    component: 'Sku',
+    icon: 'Orange',
+    permissionValue: '',
+  },
+  {
+    id: 9,
+    name: '属性管理',
+    type: 1,
+    level: 2,
+    pid: 5,
+    path: 'attr',
+    component: 'Attr',
+    icon: 'ChromeFilled',
+    permissionValue: '',
+  },
+  {
+    id: 10,
+    name: '用户添加按钮',
+    type: 2,
+    level: 3,
+    pid: 2,
+    path: '',
+    component: '',
+    icon: '',
+    permissionValue: 'btn.user.add',
+  },
+  {
+    id: 11,
+    name: '用户删除按钮',
+    type: 2,
+    level: 3,
+    pid: 2,
+    path: '',
+    component: '',
+    icon: '',
+    permissionValue: 'btn.user.delete',
+  },
+  {
+    id: 12,
+    name: '用户修改按钮',
+    type: 2,
+    level: 3,
+    pid: 2,
+    path: '',
+    component: '',
+    icon: '',
+    permissionValue: 'btn.user.update',
+  },
+  {
+    id: 13,
+    name: '角色添加按钮',
+    type: 2,
+    level: 3,
+    pid: 3,
+    path: '',
+    component: '',
+    icon: '',
+    permissionValue: 'btn.role.add',
+  },
+  {
+    id: 14,
+    name: '角色删除按钮',
+    type: 2,
+    level: 3,
+    pid: 3,
+    path: '',
+    component: '',
+    icon: '',
+    permissionValue: 'btn.role.delete',
+  },
 ]
 
 // ==================== 商品管理数据 ====================
 let trademarks = [
-  { id: 1, tmName: '华为', logoUrl: 'https://img1.baidu.com/it/u=4068546577,3295632343&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=500', createTime: '2024-01-01', updateTime: '2024-01-01' },
-  { id: 2, tmName: '小米', logoUrl: 'https://img1.baidu.com/it/u=521293053,2652660591&fm=253&fmt=auto&app=120&f=PNG?w=800&h=800', createTime: '2024-01-02', updateTime: '2024-01-02' },
-  { id: 3, tmName: '苹果', logoUrl: 'https://img2.baidu.com/it/u=97948109,3373219309&fm=253&fmt=auto&app=138&f=PNG?w=408&h=500', createTime: '2024-01-03', updateTime: '2024-01-03' },
-  { id: 4, tmName: '三星', logoUrl: 'https://img.samsung.com/logo.png', createTime: '2024-01-04', updateTime: '2024-01-04' },
-  { id: 5, tmName: 'OPPO', logoUrl: 'https://img.oppo.com/logo.png', createTime: '2024-01-05', updateTime: '2024-01-05' },
-  { id: 6, tmName: 'vivo', logoUrl: 'https://img.vivo.com/logo.png', createTime: '2024-01-06', updateTime: '2024-01-06' },
-  { id: 7, tmName: '华为', logoUrl: 'https://img1.baidu.com/it/u=4068546577,3295632343&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=500', createTime: '2024-01-01', updateTime: '2024-01-01' },
-  { id: 8, tmName: '小米', logoUrl: 'https://img1.baidu.com/it/u=521293053,2652660591&fm=253&fmt=auto&app=120&f=PNG?w=800&h=800', createTime: '2024-01-02', updateTime: '2024-01-02' },
-  { id: 9, tmName: '苹果', logoUrl: 'https://img2.baidu.com/it/u=97948109,3373219309&fm=253&fmt=auto&app=138&f=PNG?w=408&h=500', createTime: '2024-01-03', updateTime: '2024-01-03' },
-  { id: 10, tmName: '三星', logoUrl: 'https://img.samsung.com/logo.png', createTime: '2024-01-04', updateTime: '2024-01-04' },
-  { id:11, tmName: 'OPPO', logoUrl: 'https://img.oppo.com/logo.png', createTime: '2024-01-05', updateTime: '2024-01-05' },
-  { id:12, tmName: 'vivo', logoUrl: 'https://img.vivo.com/logo.png', createTime: '2024-01-06', updateTime: '2024-01-06' },
+  {
+    id: 1,
+    tmName: '华为',
+    logoUrl:
+      'https://img1.baidu.com/it/u=4068546577,3295632343&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=500',
+    createTime: '2024-01-01',
+    updateTime: '2024-01-01',
+  },
+  {
+    id: 2,
+    tmName: '小米',
+    logoUrl:
+      'https://img1.baidu.com/it/u=521293053,2652660591&fm=253&fmt=auto&app=120&f=PNG?w=800&h=800',
+    createTime: '2024-01-02',
+    updateTime: '2024-01-02',
+  },
+  {
+    id: 3,
+    tmName: '苹果',
+    logoUrl:
+      'https://img2.baidu.com/it/u=97948109,3373219309&fm=253&fmt=auto&app=138&f=PNG?w=408&h=500',
+    createTime: '2024-01-03',
+    updateTime: '2024-01-03',
+  },
+  {
+    id: 4,
+    tmName: '三星',
+    logoUrl: 'https://img.samsung.com/logo.png',
+    createTime: '2024-01-04',
+    updateTime: '2024-01-04',
+  },
+  {
+    id: 5,
+    tmName: 'OPPO',
+    logoUrl: 'https://img.oppo.com/logo.png',
+    createTime: '2024-01-05',
+    updateTime: '2024-01-05',
+  },
+  {
+    id: 6,
+    tmName: 'vivo',
+    logoUrl: 'https://img.vivo.com/logo.png',
+    createTime: '2024-01-06',
+    updateTime: '2024-01-06',
+  },
+  // { id: 7, tmName: '华为', logoUrl: 'https://img1.baidu.com/it/u=4068546577,3295632343&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=500', createTime: '2024-01-01', updateTime: '2024-01-01' },
+  // { id: 8, tmName: '小米', logoUrl: 'https://img1.baidu.com/it/u=521293053,2652660591&fm=253&fmt=auto&app=120&f=PNG?w=800&h=800', createTime: '2024-01-02', updateTime: '2024-01-02' },
+  // { id: 9, tmName: '苹果', logoUrl: 'https://img2.baidu.com/it/u=97948109,3373219309&fm=253&fmt=auto&app=138&f=PNG?w=408&h=500', createTime: '2024-01-03', updateTime: '2024-01-03' },
+  // { id: 10, tmName: '三星', logoUrl: 'https://img.samsung.com/logo.png', createTime: '2024-01-04', updateTime: '2024-01-04' },
+  // { id:11, tmName: 'OPPO', logoUrl: 'https://img.oppo.com/logo.png', createTime: '2024-01-05', updateTime: '2024-01-05' },
+  // { id:12, tmName: 'vivo', logoUrl: 'https://img.vivo.com/logo.png', createTime: '2024-01-06', updateTime: '2024-01-06' },
+]
+
+// SPU 图片数据
+const spuImages = [
+  {
+    id: 1,
+    spuId: 1,
+    imgName: 'iPhone15Pro-1.jpg',
+    imgUrl:
+      'https://img1.baidu.com/it/u=4068546577,3295632343&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=500',
+  },
+  {
+    id: 2,
+    spuId: 1,
+    imgName: 'iPhone15Pro-2.jpg',
+    imgUrl:
+      'https://img2.baidu.com/it/u=97948109,3373219309&fm=253&fmt=auto&app=138&f=PNG?w=408&h=500',
+  },
+  {
+    id: 3,
+    spuId: 2,
+    imgName: 'Mate60Pro-1.jpg',
+    imgUrl:
+      'https://img1.baidu.com/it/u=521293053,2652660591&fm=253&fmt=auto&app=120&f=PNG?w=800&h=800',
+  },
+  { id: 4, spuId: 2, imgName: 'Mate60Pro-2.jpg', imgUrl: 'https://img.samsung.com/logo.png' },
+  { id: 5, spuId: 3, imgName: 'Xiaomi14Pro-1.jpg', imgUrl: 'https://img.oppo.com/logo.png' },
+]
+
+// SPU 销售属性数据
+const spuSaleAttrs = [
+  {
+    id: 1,
+    spuId: 1,
+    baseSaleAttrId: 1,
+    saleAttrName: '颜色',
+    spuSaleAttrValueList: [
+      { id: 1, baseSaleAttrId: 1, saleAttrValueName: '黑色', saleAttrName: '颜色' },
+      { id: 2, baseSaleAttrId: 1, saleAttrValueName: '白色', saleAttrName: '颜色' },
+      { id: 3, baseSaleAttrId: 1, saleAttrValueName: '蓝色', saleAttrName: '颜色' },
+    ],
+  },
+  {
+    id: 2,
+    spuId: 1,
+    baseSaleAttrId: 2,
+    saleAttrName: '版本',
+    spuSaleAttrValueList: [
+      { id: 4, baseSaleAttrId: 2, saleAttrValueName: '128GB', saleAttrName: '版本' },
+      { id: 5, baseSaleAttrId: 2, saleAttrValueName: '256GB', saleAttrName: '版本' },
+      { id: 6, baseSaleAttrId: 2, saleAttrValueName: '512GB', saleAttrName: '版本' },
+    ],
+  },
+  {
+    id: 3,
+    spuId: 2,
+    baseSaleAttrId: 1,
+    saleAttrName: '颜色',
+    spuSaleAttrValueList: [
+      { id: 7, baseSaleAttrId: 1, saleAttrValueName: '黑色', saleAttrName: '颜色' },
+      { id: 8, baseSaleAttrId: 1, saleAttrValueName: '白色', saleAttrName: '颜色' },
+    ],
+  },
+  {
+    id: 4,
+    spuId: 2,
+    baseSaleAttrId: 2,
+    saleAttrName: '版本',
+    spuSaleAttrValueList: [
+      { id: 9, baseSaleAttrId: 2, saleAttrValueName: '256GB', saleAttrName: '版本' },
+      { id: 10, baseSaleAttrId: 2, saleAttrValueName: '512GB', saleAttrName: '版本' },
+    ],
+  },
+  {
+    id: 5,
+    spuId: 3,
+    baseSaleAttrId: 1,
+    saleAttrName: '颜色',
+    spuSaleAttrValueList: [
+      { id: 11, baseSaleAttrId: 1, saleAttrValueName: '黑色', saleAttrName: '颜色' },
+      { id: 12, baseSaleAttrId: 1, saleAttrValueName: '绿色', saleAttrName: '颜色' },
+    ],
+  },
+]
+
+// 基础销售属性列表（供选择）
+const baseSaleAttrList = [
+  { id: 1, name: '颜色' },
+  { id: 2, name: '版本' },
+  { id: 3, name: '套餐' },
+  { id: 4, name: '尺码' },
 ]
 
 let spus = [
-  { id: 1, spuName: 'iPhone 15 Pro', description: '苹果最新旗舰手机苹果最新旗舰手机苹果最新旗舰手机苹果最新旗舰手机苹果最新旗舰手机苹果最新旗舰手机苹果最新旗舰手机苹果最新旗舰手机', category3Id: 61, tmId: 3, spuSaleAttrList: [], spuImageList: [], createTime: '2024-01-01', updateTime: '2024-01-01' },
-  { id: 2, spuName: '华为 Mate 60 Pro', description: '华为旗舰手机', category3Id: 61, tmId: 1, spuSaleAttrList: [], spuImageList: [], createTime: '2024-01-02', updateTime: '2024-01-02' },
-  { id: 3, spuName: '小米 14 Pro', description: '小米旗舰手机', category3Id: 61, tmId: 2, spuSaleAttrList: [], spuImageList: [], createTime: '2024-01-03', updateTime: '2024-01-03' },
+  {
+    id: 1,
+    spuName: 'iPhone 15 Pro',
+    description: '苹果最新旗舰手机',
+    category3Id: 61,
+    tmId: 3,
+    spuSaleAttrList: [1, 2],
+    spuImageList: [1, 2],
+    createTime: '2024-01-01',
+    updateTime: '2024-01-01',
+  },
+  {
+    id: 2,
+    spuName: '华为 Mate 60 Pro',
+    description: '华为旗舰手机',
+    category3Id: 61,
+    tmId: 1,
+    spuSaleAttrList: [3, 4],
+    spuImageList: [3, 4],
+    createTime: '2024-01-02',
+    updateTime: '2024-01-02',
+  },
+  {
+    id: 3,
+    spuName: '小米 14 Pro',
+    description: '小米旗舰手机',
+    category3Id: 61,
+    tmId: 2,
+    spuSaleAttrList: [5],
+    spuImageList: [5],
+    createTime: '2024-01-03',
+    updateTime: '2024-01-03',
+  },
+  {
+    id: 4,
+    spuName: 'iPhone 15',
+    description: '苹果标准版',
+    category3Id: 61,
+    tmId: 3,
+    spuSaleAttrList: [],
+    spuImageList: [],
+    createTime: '2024-01-04',
+    updateTime: '2024-01-04',
+  },
+  {
+    id: 5,
+    spuName: '华为 P60 Pro',
+    description: '华为P系列旗舰',
+    category3Id: 61,
+    tmId: 1,
+    spuSaleAttrList: [],
+    spuImageList: [],
+    createTime: '2024-01-05',
+    updateTime: '2024-01-05',
+  },
+  {
+    id: 6,
+    spuName: '小米 14',
+    description: '小米标准版',
+    category3Id: 61,
+    tmId: 2,
+    spuSaleAttrList: [],
+    spuImageList: [],
+    createTime: '2024-01-06',
+    updateTime: '2024-01-06',
+  },
+  {
+    id: 7,
+    spuName: 'OPPO Find X7',
+    description: 'OPPO旗舰手机',
+    category3Id: 61,
+    tmId: 5,
+    spuSaleAttrList: [],
+    spuImageList: [],
+    createTime: '2024-01-07',
+    updateTime: '2024-01-07',
+  },
+  {
+    id: 8,
+    spuName: 'vivo X100',
+    description: 'vivo旗舰手机',
+    category3Id: 61,
+    tmId: 6,
+    spuSaleAttrList: [],
+    spuImageList: [],
+    createTime: '2024-01-08',
+    updateTime: '2024-01-08',
+  },
 ]
 
 let skus = [
-  { id: 1, skuName: 'iPhone 15 Pro 256GB 黑色', price: 8999, weight: 200, skuDefaultImg: 'https://img.apple.com/iphone15pro.jpg', skuDesc: '黑色钛金属', category3Id: 61, spuId: 1, tmId: 3, skuAttrValueList: [], skuSaleAttrValueList: [], createTime: '2024-01-01', updateTime: '2024-01-01' },
-  { id: 2, skuName: '华为 Mate 60 Pro 512GB 白沙银', price: 6999, weight: 220, skuDefaultImg: 'https://img.huawei.com/mate60pro.jpg', skuDesc: '白沙银配色', category3Id: 61, spuId: 2, tmId: 1, skuAttrValueList: [], skuSaleAttrValueList: [], createTime: '2024-01-02', updateTime: '2024-01-02' },
+  {
+    id: 1,
+    skuName: 'iPhone 15 Pro 256GB 黑色',
+    price: 8999,
+    weight: 200,
+    skuDefaultImg: 'https://img.apple.com/iphone15pro.jpg',
+    skuDesc: '黑色钛金属',
+    category3Id: 61,
+    spuId: 1,
+    tmId: 3,
+    skuAttrValueList: [],
+    skuSaleAttrValueList: [],
+    createTime: '2024-01-01',
+    updateTime: '2024-01-01',
+  },
+  {
+    id: 2,
+    skuName: '华为 Mate 60 Pro 512GB 白沙银',
+    price: 6999,
+    weight: 220,
+    skuDefaultImg: 'https://img.huawei.com/mate60pro.jpg',
+    skuDesc: '白沙银配色',
+    category3Id: 61,
+    spuId: 2,
+    tmId: 1,
+    skuAttrValueList: [],
+    skuSaleAttrValueList: [],
+    createTime: '2024-01-02',
+    updateTime: '2024-01-02',
+  },
 ]
 
 // let attrs = [
@@ -136,46 +569,316 @@ let skus = [
 // ]
 let attrs = [
   // ==================== 1. 智能手机 (categoryId: 111) ====================
-  { id: 1, attrName: '品牌', categoryId: 111, categoryLevel: 3, attrValueList: [{ attrId: 1, id: 1, valueName: '华为' }, { attrId: 1, id: 2, valueName: '小米' }, { attrId: 1, id: 3, valueName: '苹果' }, { attrId: 1, id: 4, valueName: 'OPPO' }] },
-  { id: 2, attrName: '颜色', categoryId: 111, categoryLevel: 3, attrValueList: [{ attrId: 2, id: 5, valueName: '黑色' }, { attrId: 2, id: 6, valueName: '白色' }, { attrId: 2, id: 7, valueName: '金色' }, { attrId: 2, id: 8, valueName: '蓝色' }] },
-  { id: 3, attrName: '内存', categoryId: 111, categoryLevel: 3, attrValueList: [{ attrId: 3, id: 9, valueName: '128GB' }, { attrId: 3, id: 10, valueName: '256GB' }, { attrId: 3, id: 11, valueName: '512GB' }, { attrId: 3, id: 12, valueName: '1TB' }] },
-  { id: 4, attrName: '尺寸', categoryId: 111, categoryLevel: 3, attrValueList: [{ attrId: 4, id: 13, valueName: '6.1英寸' }, { attrId: 4, id: 14, valueName: '6.7英寸' }, { attrId: 4, id: 15, valueName: '6.8英寸' }] },
+  {
+    id: 1,
+    attrName: '品牌',
+    categoryId: 111,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 1, id: 1, valueName: '华为' },
+      { attrId: 1, id: 2, valueName: '小米' },
+      { attrId: 1, id: 3, valueName: '苹果' },
+      { attrId: 1, id: 4, valueName: 'OPPO' },
+    ],
+  },
+  {
+    id: 2,
+    attrName: '颜色',
+    categoryId: 111,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 2, id: 5, valueName: '黑色' },
+      { attrId: 2, id: 6, valueName: '白色' },
+      { attrId: 2, id: 7, valueName: '金色' },
+      { attrId: 2, id: 8, valueName: '蓝色' },
+    ],
+  },
+  {
+    id: 3,
+    attrName: '内存',
+    categoryId: 111,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 3, id: 9, valueName: '128GB' },
+      { attrId: 3, id: 10, valueName: '256GB' },
+      { attrId: 3, id: 11, valueName: '512GB' },
+      { attrId: 3, id: 12, valueName: '1TB' },
+    ],
+  },
+  {
+    id: 4,
+    attrName: '尺寸',
+    categoryId: 111,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 4, id: 13, valueName: '6.1英寸' },
+      { attrId: 4, id: 14, valueName: '6.7英寸' },
+      { attrId: 4, id: 15, valueName: '6.8英寸' },
+    ],
+  },
 
   // ==================== 2. 老人机 (categoryId: 112) ====================
-  { id: 5, attrName: '品牌', categoryId: 112, categoryLevel: 3, attrValueList: [{ attrId: 5, id: 16, valueName: '诺基亚' }, { attrId: 5, id: 17, valueName: '飞利浦' }, { attrId: 5, id: 18, valueName: '天语' }] },
-  { id: 6, attrName: '颜色', categoryId: 112, categoryLevel: 3, attrValueList: [{ attrId: 6, id: 19, valueName: '黑色' }, { attrId: 6, id: 20, valueName: '红色' }, { attrId: 6, id: 21, valueName: '金色' }] },
-  { id: 7, attrName: '续航', categoryId: 112, categoryLevel: 3, attrValueList: [{ attrId: 7, id: 22, valueName: '3天' }, { attrId: 7, id: 23, valueName: '7天' }, { attrId: 7, id: 24, valueName: '15天' }] },
+  {
+    id: 5,
+    attrName: '品牌',
+    categoryId: 112,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 5, id: 16, valueName: '诺基亚' },
+      { attrId: 5, id: 17, valueName: '飞利浦' },
+      { attrId: 5, id: 18, valueName: '天语' },
+    ],
+  },
+  {
+    id: 6,
+    attrName: '颜色',
+    categoryId: 112,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 6, id: 19, valueName: '黑色' },
+      { attrId: 6, id: 20, valueName: '红色' },
+      { attrId: 6, id: 21, valueName: '金色' },
+    ],
+  },
+  {
+    id: 7,
+    attrName: '续航',
+    categoryId: 112,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 7, id: 22, valueName: '3天' },
+      { attrId: 7, id: 23, valueName: '7天' },
+      { attrId: 7, id: 24, valueName: '15天' },
+    ],
+  },
 
   // ==================== 3. 笔记本 (categoryId: 121) ====================
-  { id: 8, attrName: '品牌', categoryId: 121, categoryLevel: 3, attrValueList: [{ attrId: 8, id: 25, valueName: '联想' }, { attrId: 8, id: 26, valueName: '戴尔' }, { attrId: 8, id: 27, valueName: '苹果' }, { attrId: 8, id: 28, valueName: '华为' }] },
-  { id: 9, attrName: '颜色', categoryId: 121, categoryLevel: 3, attrValueList: [{ attrId: 9, id: 29, valueName: '银色' }, { attrId: 9, id: 30, valueName: '黑色' }, { attrId: 9, id: 31, valueName: '灰色' }] },
-  { id: 10, attrName: '内存', categoryId: 121, categoryLevel: 3, attrValueList: [{ attrId: 10, id: 32, valueName: '8GB' }, { attrId: 10, id: 33, valueName: '16GB' }, { attrId: 10, id: 34, valueName: '32GB' }] },
-  { id: 11, attrName: '硬盘', categoryId: 121, categoryLevel: 3, attrValueList: [{ attrId: 11, id: 35, valueName: '512GB SSD' }, { attrId: 11, id: 36, valueName: '1TB SSD' }, { attrId: 11, id: 37, valueName: '2TB SSD' }] },
+  {
+    id: 8,
+    attrName: '品牌',
+    categoryId: 121,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 8, id: 25, valueName: '联想' },
+      { attrId: 8, id: 26, valueName: '戴尔' },
+      { attrId: 8, id: 27, valueName: '苹果' },
+      { attrId: 8, id: 28, valueName: '华为' },
+    ],
+  },
+  {
+    id: 9,
+    attrName: '颜色',
+    categoryId: 121,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 9, id: 29, valueName: '银色' },
+      { attrId: 9, id: 30, valueName: '黑色' },
+      { attrId: 9, id: 31, valueName: '灰色' },
+    ],
+  },
+  {
+    id: 10,
+    attrName: '内存',
+    categoryId: 121,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 10, id: 32, valueName: '8GB' },
+      { attrId: 10, id: 33, valueName: '16GB' },
+      { attrId: 10, id: 34, valueName: '32GB' },
+    ],
+  },
+  {
+    id: 11,
+    attrName: '硬盘',
+    categoryId: 121,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 11, id: 35, valueName: '512GB SSD' },
+      { attrId: 11, id: 36, valueName: '1TB SSD' },
+      { attrId: 11, id: 37, valueName: '2TB SSD' },
+    ],
+  },
 
   // ==================== 4. T恤 (categoryId: 211) ====================
-  { id: 12, attrName: '颜色', categoryId: 211, categoryLevel: 3, attrValueList: [{ attrId: 12, id: 38, valueName: '白色' }, { attrId: 12, id: 39, valueName: '黑色' }, { attrId: 12, id: 40, valueName: '灰色' }, { attrId: 12, id: 41, valueName: '蓝色' }] },
-  { id: 13, attrName: '尺码', categoryId: 211, categoryLevel: 3, attrValueList: [{ attrId: 13, id: 42, valueName: 'S' }, { attrId: 13, id: 43, valueName: 'M' }, { attrId: 13, id: 44, valueName: 'L' }, { attrId: 13, id: 45, valueName: 'XL' }, { attrId: 13, id: 46, valueName: 'XXL' }] },
-  { id: 14, attrName: '材质', categoryId: 211, categoryLevel: 3, attrValueList: [{ attrId: 14, id: 47, valueName: '纯棉' }, { attrId: 14, id: 48, valueName: '棉麻' }, { attrId: 14, id: 49, valueName: '涤纶' }] },
+  {
+    id: 12,
+    attrName: '颜色',
+    categoryId: 211,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 12, id: 38, valueName: '白色' },
+      { attrId: 12, id: 39, valueName: '黑色' },
+      { attrId: 12, id: 40, valueName: '灰色' },
+      { attrId: 12, id: 41, valueName: '蓝色' },
+    ],
+  },
+  {
+    id: 13,
+    attrName: '尺码',
+    categoryId: 211,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 13, id: 42, valueName: 'S' },
+      { attrId: 13, id: 43, valueName: 'M' },
+      { attrId: 13, id: 44, valueName: 'L' },
+      { attrId: 13, id: 45, valueName: 'XL' },
+      { attrId: 13, id: 46, valueName: 'XXL' },
+    ],
+  },
+  {
+    id: 14,
+    attrName: '材质',
+    categoryId: 211,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 14, id: 47, valueName: '纯棉' },
+      { attrId: 14, id: 48, valueName: '棉麻' },
+      { attrId: 14, id: 49, valueName: '涤纶' },
+    ],
+  },
 
   // ==================== 5. 衬衫 (categoryId: 212) ====================
-  { id: 15, attrName: '颜色', categoryId: 212, categoryLevel: 3, attrValueList: [{ attrId: 15, id: 50, valueName: '白色' }, { attrId: 15, id: 51, valueName: '蓝色' }, { attrId: 15, id: 52, valueName: '灰色' }] },
-  { id: 16, attrName: '尺码', categoryId: 212, categoryLevel: 3, attrValueList: [{ attrId: 16, id: 53, valueName: '38' }, { attrId: 16, id: 54, valueName: '39' }, { attrId: 16, id: 55, valueName: '40' }, { attrId: 16, id: 56, valueName: '41' }] },
-  { id: 17, attrName: '领型', categoryId: 212, categoryLevel: 3, attrValueList: [{ attrId: 17, id: 57, valueName: '标准领' }, { attrId: 17, id: 58, valueName: '尖领' }, { attrId: 17, id: 59, valueName: '方领' }] },
+  {
+    id: 15,
+    attrName: '颜色',
+    categoryId: 212,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 15, id: 50, valueName: '白色' },
+      { attrId: 15, id: 51, valueName: '蓝色' },
+      { attrId: 15, id: 52, valueName: '灰色' },
+    ],
+  },
+  {
+    id: 16,
+    attrName: '尺码',
+    categoryId: 212,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 16, id: 53, valueName: '38' },
+      { attrId: 16, id: 54, valueName: '39' },
+      { attrId: 16, id: 55, valueName: '40' },
+      { attrId: 16, id: 56, valueName: '41' },
+    ],
+  },
+  {
+    id: 17,
+    attrName: '领型',
+    categoryId: 212,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 17, id: 57, valueName: '标准领' },
+      { attrId: 17, id: 58, valueName: '尖领' },
+      { attrId: 17, id: 59, valueName: '方领' },
+    ],
+  },
 
   // ==================== 6. 裙子 (categoryId: 221) ====================
-  { id: 18, attrName: '颜色', categoryId: 221, categoryLevel: 3, attrValueList: [{ attrId: 18, id: 60, valueName: '黑色' }, { attrId: 18, id: 61, valueName: '白色' }, { attrId: 18, id: 62, valueName: '红色' }, { attrId: 18, id: 63, valueName: '碎花' }] },
-  { id: 19, attrName: '尺码', categoryId: 221, categoryLevel: 3, attrValueList: [{ attrId: 19, id: 64, valueName: 'S' }, { attrId: 19, id: 65, valueName: 'M' }, { attrId: 19, id: 66, valueName: 'L' }, { attrId: 19, id: 67, valueName: 'XL' }] },
-  { id: 20, attrName: '款式', categoryId: 221, categoryLevel: 3, attrValueList: [{ attrId: 20, id: 68, valueName: '连衣裙' }, { attrId: 20, id: 69, valueName: '半身裙' }, { attrId: 20, id: 70, valueName: 'A字裙' }] },
+  {
+    id: 18,
+    attrName: '颜色',
+    categoryId: 221,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 18, id: 60, valueName: '黑色' },
+      { attrId: 18, id: 61, valueName: '白色' },
+      { attrId: 18, id: 62, valueName: '红色' },
+      { attrId: 18, id: 63, valueName: '碎花' },
+    ],
+  },
+  {
+    id: 19,
+    attrName: '尺码',
+    categoryId: 221,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 19, id: 64, valueName: 'S' },
+      { attrId: 19, id: 65, valueName: 'M' },
+      { attrId: 19, id: 66, valueName: 'L' },
+      { attrId: 19, id: 67, valueName: 'XL' },
+    ],
+  },
+  {
+    id: 20,
+    attrName: '款式',
+    categoryId: 221,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 20, id: 68, valueName: '连衣裙' },
+      { attrId: 20, id: 69, valueName: '半身裙' },
+      { attrId: 20, id: 70, valueName: 'A字裙' },
+    ],
+  },
 
   // ==================== 7. 电视 (categoryId: 311) ====================
-  { id: 21, attrName: '品牌', categoryId: 311, categoryLevel: 3, attrValueList: [{ attrId: 21, id: 71, valueName: '小米' }, { attrId: 21, id: 72, valueName: '海信' }, { attrId: 21, id: 73, valueName: 'TCL' }, { attrId: 21, id: 74, valueName: '索尼' }] },
-  { id: 22, attrName: '尺寸', categoryId: 311, categoryLevel: 3, attrValueList: [{ attrId: 22, id: 75, valueName: '55英寸' }, { attrId: 22, id: 76, valueName: '65英寸' }, { attrId: 22, id: 77, valueName: '75英寸' }, { attrId: 22, id: 78, valueName: '85英寸' }] },
-  { id: 23, attrName: '分辨率', categoryId: 311, categoryLevel: 3, attrValueList: [{ attrId: 23, id: 79, valueName: '4K' }, { attrId: 23, id: 80, valueName: '8K' }] },
+  {
+    id: 21,
+    attrName: '品牌',
+    categoryId: 311,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 21, id: 71, valueName: '小米' },
+      { attrId: 21, id: 72, valueName: '海信' },
+      { attrId: 21, id: 73, valueName: 'TCL' },
+      { attrId: 21, id: 74, valueName: '索尼' },
+    ],
+  },
+  {
+    id: 22,
+    attrName: '尺寸',
+    categoryId: 311,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 22, id: 75, valueName: '55英寸' },
+      { attrId: 22, id: 76, valueName: '65英寸' },
+      { attrId: 22, id: 77, valueName: '75英寸' },
+      { attrId: 22, id: 78, valueName: '85英寸' },
+    ],
+  },
+  {
+    id: 23,
+    attrName: '分辨率',
+    categoryId: 311,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 23, id: 79, valueName: '4K' },
+      { attrId: 23, id: 80, valueName: '8K' },
+    ],
+  },
 
   // ==================== 8. 夜灯 (categoryId: 321) ====================
-  { id: 24, attrName: '品牌', categoryId: 321, categoryLevel: 3, attrValueList: [{ attrId: 24, id: 81, valueName: '小米' }, { attrId: 24, id: 82, valueName: '飞利浦' }, { attrId: 24, id: 83, valueName: '欧普' }] },
-  { id: 25, attrName: '颜色', categoryId: 321, categoryLevel: 3, attrValueList: [{ attrId: 25, id: 84, valueName: '白色' }, { attrId: 25, id: 85, valueName: '黄色' }, { attrId: 25, id: 86, valueName: '粉色' }] },
-  { id: 26, attrName: '亮度', categoryId: 321, categoryLevel: 3, attrValueList: [{ attrId: 26, id: 87, valueName: '可调光' }, { attrId: 26, id: 88, valueName: '固定亮度' }] },
+  {
+    id: 24,
+    attrName: '品牌',
+    categoryId: 321,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 24, id: 81, valueName: '小米' },
+      { attrId: 24, id: 82, valueName: '飞利浦' },
+      { attrId: 24, id: 83, valueName: '欧普' },
+    ],
+  },
+  {
+    id: 25,
+    attrName: '颜色',
+    categoryId: 321,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 25, id: 84, valueName: '白色' },
+      { attrId: 25, id: 85, valueName: '黄色' },
+      { attrId: 25, id: 86, valueName: '粉色' },
+    ],
+  },
+  {
+    id: 26,
+    attrName: '亮度',
+    categoryId: 321,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 26, id: 87, valueName: '可调光' },
+      { attrId: 26, id: 88, valueName: '固定亮度' },
+    ],
+  },
 ]
 
 // 三级分类数据结构示例
@@ -252,7 +955,7 @@ const screenData = {
 
 // ==================== 工具函数 ====================
 // 验证token
-const verifyToken = (req) => {
+const verifyToken = req => {
   const token = req.headers.token
   if (!token) return { valid: false, message: 'token不能为空' }
   try {
@@ -270,7 +973,7 @@ app.post('/admin/acl/index/login', (req, res) => {
   const { username, password } = req.body
   console.log('登录请求:', { username, password })
 
-  const user = users.find((u) => u.username === username && u.password === password)
+  const user = users.find(u => u.username === username && u.password === password)
 
   if (user) {
     const token = jwt.sign({ userId: user.userId, username: user.username }, SECRET_KEY, {
@@ -299,7 +1002,7 @@ app.get('/admin/acl/index/info', (req, res) => {
     return res.json({ code: 401, message, data: null, ok: false })
   }
 
-  const userInfo = users.find((u) => u.username === user.username)
+  const userInfo = users.find(u => u.username === user.username)
   if (!userInfo) {
     return res.json({ code: 401, message: '用户不存在', data: null, ok: false })
   }
@@ -377,9 +1080,13 @@ app.put('/admin/acl/user/update', (req, res) => {
   const { valid, message } = verifyToken(req)
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
-  const index = aclUsers.findIndex((u) => u.id === req.body.id)
+  const index = aclUsers.findIndex(u => u.id === req.body.id)
   if (index !== -1) {
-    aclUsers[index] = { ...aclUsers[index], ...req.body, updateTime: new Date().toISOString().split('T')[0] }
+    aclUsers[index] = {
+      ...aclUsers[index],
+      ...req.body,
+      updateTime: new Date().toISOString().split('T')[0],
+    }
     res.json({ code: 200, message: '更新成功', data: null, ok: true })
   } else {
     res.json({ code: 404, message: '用户不存在', data: null, ok: false })
@@ -392,7 +1099,7 @@ app.delete('/admin/acl/user/remove/:id', (req, res) => {
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
   const id = parseInt(req.params.id)
-  aclUsers = aclUsers.filter((u) => u.id !== id)
+  aclUsers = aclUsers.filter(u => u.id !== id)
   res.json({ code: 200, message: '删除成功', data: null, ok: true })
 })
 
@@ -443,9 +1150,13 @@ app.put('/admin/acl/role/update', (req, res) => {
   const { valid, message } = verifyToken(req)
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
-  const index = roles.findIndex((r) => r.id === req.body.id)
+  const index = roles.findIndex(r => r.id === req.body.id)
   if (index !== -1) {
-    roles[index] = { ...roles[index], ...req.body, updateTime: new Date().toISOString().split('T')[0] }
+    roles[index] = {
+      ...roles[index],
+      ...req.body,
+      updateTime: new Date().toISOString().split('T')[0],
+    }
     res.json({ code: 200, message: '更新成功', data: null, ok: true })
   } else {
     res.json({ code: 404, message: '角色不存在', data: null, ok: false })
@@ -458,7 +1169,7 @@ app.delete('/admin/acl/role/remove/:id', (req, res) => {
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
   const id = parseInt(req.params.id)
-  roles = roles.filter((r) => r.id !== id)
+  roles = roles.filter(r => r.id !== id)
   res.json({ code: 200, message: '删除成功', data: null, ok: true })
 })
 
@@ -495,7 +1206,7 @@ app.put('/admin/acl/permission/update', (req, res) => {
   const { valid, message } = verifyToken(req)
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
-  const index = permissions.findIndex((p) => p.id === req.body.id)
+  const index = permissions.findIndex(p => p.id === req.body.id)
   if (index !== -1) {
     permissions[index] = { ...permissions[index], ...req.body }
     res.json({ code: 200, message: '更新成功', data: null, ok: true })
@@ -510,7 +1221,7 @@ app.delete('/admin/acl/permission/remove/:id', (req, res) => {
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
   const id = parseInt(req.params.id)
-  permissions = permissions.filter((p) => p.id !== id)
+  permissions = permissions.filter(p => p.id !== id)
   res.json({ code: 200, message: '删除成功', data: null, ok: true })
 })
 
@@ -585,9 +1296,14 @@ app.put('/admin/product/baseTrademark/update', (req, res) => {
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
   const id = parseInt(req.body.id)
-  const index = trademarks.findIndex((t) => t.id === id)
+  const index = trademarks.findIndex(t => t.id === id)
   if (index !== -1) {
-    trademarks[index] = { ...trademarks[index], ...req.body, id: id, updateTime: new Date().toISOString().split('T')[0] }
+    trademarks[index] = {
+      ...trademarks[index],
+      ...req.body,
+      id: id,
+      updateTime: new Date().toISOString().split('T')[0],
+    }
     res.json({ code: 200, message: '更新成功', data: null, ok: true })
   } else {
     res.json({ code: 404, message: '品牌不存在', data: null, ok: false })
@@ -600,8 +1316,41 @@ app.delete('/admin/product/baseTrademark/remove/:id', (req, res) => {
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
   const id = parseInt(req.params.id)
-  trademarks = trademarks.filter((t) => t.id !== id)
+  trademarks = trademarks.filter(t => t.id !== id)
   res.json({ code: 200, message: '删除成功', data: null, ok: true })
+})
+
+// 根据ID获取单个品牌
+app.get('/admin/product/baseTrademark/get/:id', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  const id = parseInt(req.params.id)
+  const trademark = trademarks.find(t => t.id === id)
+  if (trademark) {
+    res.json({ code: 200, message: '获取成功', data: trademark, ok: true })
+  } else {
+    res.json({ code: 404, message: '品牌不存在', data: null, ok: false })
+  }
+})
+
+// 获取全部品牌列表（不分页）
+app.get('/admin/product/baseTrademark/getTrademarkList', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  res.json({ code: 200, message: '获取成功', data: trademarks, ok: true })
+})
+
+// 根据关键词搜索品牌
+app.get('/admin/product/baseTrademark/findBaseTrademarkByKeyword/:keyword', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  const keyword = req.params.keyword.toLowerCase()
+  const list = trademarks.filter(t => t.tmName.toLowerCase().includes(keyword))
+
+  res.json({ code: 200, message: '搜索成功', data: list, ok: true })
 })
 
 // ==================== SPU管理接口 ====================
@@ -616,8 +1365,15 @@ app.get('/admin/product/:page/:limit', (req, res) => {
 
   let list = spus
   if (category3Id) {
-    list = spus.filter((s) => s.category3Id === parseInt(category3Id))
+    list = spus.filter(s => s.category3Id === parseInt(category3Id))
   }
+
+  // 填充完整的图片和销售属性数据
+  const records = list.map(spu => ({
+    ...spu,
+    spuImageList: spuImages.filter(img => img.spuId === spu.id),
+    spuSaleAttrList: spuSaleAttrs.filter(attr => attr.spuId === spu.id),
+  }))
 
   const start = (page - 1) * limit
   const end = start + limit
@@ -626,11 +1382,11 @@ app.get('/admin/product/:page/:limit', (req, res) => {
     code: 200,
     message: '获取成功',
     data: {
-      records: list.slice(start, end),
-      total: list.length,
+      records: records.slice(start, end),
+      total: records.length,
       size: limit,
       current: page,
-      pages: Math.ceil(list.length / limit),
+      pages: Math.ceil(records.length / limit),
     },
     ok: true,
   })
@@ -641,13 +1397,43 @@ app.post('/admin/product/saveSpuInfo', (req, res) => {
   const { valid, message } = verifyToken(req)
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
+  const { spuImageList, spuSaleAttrList, ...spuData } = req.body
+  const newSpuId = Date.now()
+
   const newSpu = {
-    id: Date.now(),
-    ...req.body,
+    id: newSpuId,
+    ...spuData,
+    spuImageList: [],
+    spuSaleAttrList: [],
     createTime: new Date().toISOString().split('T')[0],
     updateTime: new Date().toISOString().split('T')[0],
   }
   spus.push(newSpu)
+
+  // 保存图片
+  if (spuImageList && spuImageList.length > 0) {
+    spuImageList.forEach((img, index) => {
+      spuImages.push({
+        id: Date.now() + index,
+        spuId: newSpuId,
+        imgName: img.imgName || img.name || `image-${index}.jpg`,
+        imgUrl: img.imgUrl || img.url,
+      })
+    })
+  }
+
+  // 保存销售属性
+  if (spuSaleAttrList && spuSaleAttrList.length > 0) {
+    spuSaleAttrList.forEach((attr, index) => {
+      spuSaleAttrs.push({
+        id: Date.now() + index,
+        spuId: newSpuId,
+        baseSaleAttrId: attr.baseSaleAttrId,
+        saleAttrName: attr.saleAttrName,
+        spuSaleAttrValueList: attr.spuSaleAttrValueList || [],
+      })
+    })
+  }
 
   res.json({ code: 200, message: '添加成功', data: null, ok: true })
 })
@@ -657,9 +1443,52 @@ app.post('/admin/product/updateSpuInfo', (req, res) => {
   const { valid, message } = verifyToken(req)
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
-  const index = spus.findIndex((s) => s.id === req.body.id)
+  const { spuImageList, spuSaleAttrList, ...spuData } = req.body
+  const spuId = parseInt(spuData.id)
+  const index = spus.findIndex(s => s.id === spuId)
+
   if (index !== -1) {
-    spus[index] = { ...spus[index], ...req.body, updateTime: new Date().toISOString().split('T')[0] }
+    spus[index] = { ...spus[index], ...spuData, updateTime: new Date().toISOString().split('T')[0] }
+
+    // 更新图片：先删除旧图片，再添加新图片
+    if (spuImageList) {
+      // 删除旧图片
+      for (let i = spuImages.length - 1; i >= 0; i--) {
+        if (spuImages[i].spuId === spuId) {
+          spuImages.splice(i, 1)
+        }
+      }
+      // 添加新图片
+      spuImageList.forEach((img, idx) => {
+        spuImages.push({
+          id: Date.now() + idx,
+          spuId: spuId,
+          imgName: img.imgName || img.name || `image-${idx}.jpg`,
+          imgUrl: img.imgUrl || img.url,
+        })
+      })
+    }
+
+    // 更新销售属性：先删除旧属性，再添加新属性
+    if (spuSaleAttrList) {
+      // 删除旧属性
+      for (let i = spuSaleAttrs.length - 1; i >= 0; i--) {
+        if (spuSaleAttrs[i].spuId === spuId) {
+          spuSaleAttrs.splice(i, 1)
+        }
+      }
+      // 添加新属性
+      spuSaleAttrList.forEach((attr, idx) => {
+        spuSaleAttrs.push({
+          id: Date.now() + idx,
+          spuId: spuId,
+          baseSaleAttrId: attr.baseSaleAttrId,
+          saleAttrName: attr.saleAttrName,
+          spuSaleAttrValueList: attr.spuSaleAttrValueList || [],
+        })
+      })
+    }
+
     res.json({ code: 200, message: '更新成功', data: null, ok: true })
   } else {
     res.json({ code: 404, message: 'SPU不存在', data: null, ok: false })
@@ -672,8 +1501,38 @@ app.delete('/admin/product/deleteSpu/:spuId', (req, res) => {
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
   const spuId = parseInt(req.params.spuId)
-  spus = spus.filter((s) => s.id !== spuId)
+  spus = spus.filter(s => s.id !== spuId)
   res.json({ code: 200, message: '删除成功', data: null, ok: true })
+})
+
+// 获取SPU图片列表
+app.get('/admin/product/spuImageList/:spuId', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  const spuId = parseInt(req.params.spuId)
+  const list = spuImages.filter(img => img.spuId === spuId)
+
+  res.json({ code: 200, message: '获取成功', data: list, ok: true })
+})
+
+// 获取SPU销售属性
+app.get('/admin/product/spuSaleAttrList/:spuId', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  const spuId = parseInt(req.params.spuId)
+  const list = spuSaleAttrs.filter(attr => attr.spuId === spuId)
+
+  res.json({ code: 200, message: '获取成功', data: list, ok: true })
+})
+
+// 获取全部基础销售属性
+app.get('/admin/product/baseSaleAttrList', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  res.json({ code: 200, message: '获取成功', data: baseSaleAttrList, ok: true })
 })
 
 // ==================== SKU管理接口 ====================
@@ -723,7 +1582,7 @@ app.delete('/admin/product/deleteSku/:skuId', (req, res) => {
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
   const skuId = parseInt(req.params.skuId)
-  skus = skus.filter((s) => s.id !== skuId)
+  skus = skus.filter(s => s.id !== skuId)
   res.json({ code: 200, message: '删除成功', data: null, ok: true })
 })
 
@@ -734,7 +1593,7 @@ app.get('/admin/product/attrInfoList/:category1Id/:category2Id/:category3Id', (r
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
   const category3Id = parseInt(req.params.category3Id)
-  const list = attrs.filter((a) => a.categoryId === category3Id)
+  const list = attrs.filter(a => a.categoryId === category3Id)
 
   res.json({
     code: 200,
@@ -814,7 +1673,7 @@ app.post('/admin/product/saveAttrInfo', (req, res) => {
 
   if (req.body.id) {
     // 更新
-    const index = attrs.findIndex((a) => a.id === req.body.id)
+    const index = attrs.findIndex(a => a.id === req.body.id)
     if (index !== -1) {
       attrs[index] = { ...attrs[index], ...req.body }
       res.json({ code: 200, message: '更新成功', data: null, ok: true })
@@ -838,7 +1697,7 @@ app.delete('/admin/product/deleteAttr/:attrId', (req, res) => {
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
   const attrId = parseInt(req.params.attrId)
-  attrs = attrs.filter((a) => a.id !== attrId)
+  attrs = attrs.filter(a => a.id !== attrId)
   res.json({ code: 200, message: '删除成功', data: null, ok: true })
 })
 
@@ -880,11 +1739,19 @@ app.listen(PORT, () => {
   console.log(`  DELETE http://localhost:${PORT}/admin/acl/permission/remove/:id`)
   console.log('\n【品牌管理】')
   console.log(`  GET    http://localhost:${PORT}/admin/product/baseTrademark/:page/:limit`)
+  console.log(`  GET    http://localhost:${PORT}/admin/product/baseTrademark/get/:id`)
+  console.log(`  GET    http://localhost:${PORT}/admin/product/baseTrademark/getTrademarkList`)
+  console.log(
+    `  GET    http://localhost:${PORT}/admin/product/baseTrademark/findBaseTrademarkByKeyword/:keyword`
+  )
   console.log(`  POST   http://localhost:${PORT}/admin/product/baseTrademark/save`)
   console.log(`  PUT    http://localhost:${PORT}/admin/product/baseTrademark/update`)
   console.log(`  DELETE http://localhost:${PORT}/admin/product/baseTrademark/remove/:id`)
   console.log('\n【SPU管理】')
   console.log(`  GET    http://localhost:${PORT}/admin/product/:page/:limit?category3Id=61`)
+  console.log(`  GET    http://localhost:${PORT}/admin/product/spuImageList/:spuId`)
+  console.log(`  GET    http://localhost:${PORT}/admin/product/spuSaleAttrList/:spuId`)
+  console.log(`  GET    http://localhost:${PORT}/admin/product/baseSaleAttrList`)
   console.log(`  POST   http://localhost:${PORT}/admin/product/saveSpuInfo`)
   console.log(`  POST   http://localhost:${PORT}/admin/product/updateSpuInfo`)
   console.log(`  DELETE http://localhost:${PORT}/admin/product/deleteSpu/:spuId`)
@@ -893,7 +1760,9 @@ app.listen(PORT, () => {
   console.log(`  POST   http://localhost:${PORT}/admin/product/saveSkuInfo`)
   console.log(`  DELETE http://localhost:${PORT}/admin/product/deleteSku/:skuId`)
   console.log('\n【属性管理】')
-  console.log(`  GET    http://localhost:${PORT}/admin/product/attrInfoList/:category1Id/:category2Id/:category3Id`)
+  console.log(
+    `  GET    http://localhost:${PORT}/admin/product/attrInfoList/:category1Id/:category2Id/:category3Id`
+  )
   console.log(`  POST   http://localhost:${PORT}/admin/product/saveAttrInfo`)
   console.log(`  DELETE http://localhost:${PORT}/admin/product/deleteAttr/:attrId`)
   console.log('\n【数据大屏】')
