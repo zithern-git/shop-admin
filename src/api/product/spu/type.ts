@@ -33,13 +33,13 @@ export interface SpuSaleAttr {
 
 // SPU数据的ts类型
 export interface SpuData {
-  id: number
+  id?: number
   spuName: string
-  spuImageList?: SpuImage[]
-  spuSaleAttrList?: SpuSaleAttr[]
+  spuImageList?: null | SpuImage[]
+  spuSaleAttrList?: null | SpuSaleAttr[]
   description: string
   category3Id: number | string
-  tmId: number
+  tmId: number | string // 品牌id
   createTime?: string
   updateTime?: string
 }

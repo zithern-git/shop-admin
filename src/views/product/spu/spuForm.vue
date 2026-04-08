@@ -1,10 +1,10 @@
 <template>
   <el-form label-width="100px">
     <el-form-item label="SPU名称">
-      <el-input placeholder="请输入SPU名称" />
+      <el-input placeholder="请输入SPU名称" v-model="spuParams.spuName" />
     </el-form-item>
     <el-form-item label="SPU品牌">
-      <el-select placeholder="请选择品牌" style="width: 200px">
+      <el-select placeholder="请选择品牌" style="width: 200px" v-model="spuParams.tmId">
         <el-option
           v-for="item in AllTrademark"
           :key="item.id"
@@ -14,11 +14,11 @@
       </el-select>
     </el-form-item>
     <el-form-item label="SPU描述">
-      <el-input placeholder="请输入描述" type="textarea" />
+      <el-input placeholder="请输入描述" type="textarea" v-model="spuParams.description" />
     </el-form-item>
     <el-form-item label="SPU照片">
       <el-upload
-        v-model:file-list="fileList"
+        v-model:file-list="spuParams.spuImageList"
         action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
         list-type="picture-card"
         :on-preview="handlePictureCardPreview"
@@ -34,8 +34,11 @@
     <el-form-item label="SPU销售属性">
       <!-- 展示销售属性的下拉菜单 -->
       <el-select placeholder="还有3位选择" style="width: 200px; margin-right: 10px">
-        <el-option label="Zone 3" value="gz" />
-        <el-option label="Zone 4" value="sz" />
+        <el-option
+          v-for="item in spuParams.spuSaleAttrList"
+          :key="item.id"
+          :label="item.saleAttrName"
+          :value="item.id" />
       </el-select>
       <el-button type="primary" icon="Plus">添加销售属性</el-button>
       <!-- table：展示销售属性与属性值 -->
@@ -71,18 +74,28 @@
   const saleAttr = ref<SpuSaleAttr[]>([])
   // 全部销售属性
   const allSaleAttr = ref<HasSaleAttr[]>([])
+  // 存储
+  const spuParams = ref<SpuData>({
+    spuName: '',
+    description: '',
+    category3Id: '',
+    tmId: '', // 品牌id
+    spuImageList: [],
+    spuSaleAttrList: []
+  })
 
   const initHasSpuData = async (spu: SpuData) => {
     // spu：父组件传过来的已有的SPU对象[不完整]
+    spuParams.value = spu
     // 获取全部品牌的数据
     const result: AllTrademark = await reqAllTrademark()
 
     // 获取某一个品牌旗下的全部售卖商品图片
-    const result1: HasSpuResponseData = await reqSpuImageList(spu.id)
+    const result1: HasSpuResponseData = await reqSpuImageList(spu.id as number)
     // console.log('result1:', result1)
 
     // 获取已有的SPU销售属性的数据
-    const result2: HasSpuResponseData = await reqSpuHasSaleAttr(spu.id)
+    const result2: HasSpuResponseData = await reqSpuHasSaleAttr(spu.id as number)
     // console.log('result2:', result2)
 
     // 获取整个项目全部SPU的销售属性
@@ -112,25 +125,6 @@
 
 
   // 以下为plus的源代码
-  const fileList = ref<UploadUserFile[]>([
-    {
-      name: 'food.jpeg',
-      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    },
-    {
-      name: 'food.jpeg',
-      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    },
-    {
-      name: 'food.jpeg',
-      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    },
-    {
-      name: 'food.jpeg',
-      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    },
-  ])
-
   const dialogImageUrl = ref('')
   const dialogVisible = ref(false)
 
