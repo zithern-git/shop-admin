@@ -26,7 +26,7 @@ export interface SpuSaleAttrValue {
 export interface SpuSaleAttr {
   id?: number
   spuId?: number
-  baseSaleAttrId?: number
+  baseSaleAttrId?: number | string
   saleAttrName?: string
   spuSaleAttrValueList: SpuSaleAttrValue[]
 }
@@ -68,12 +68,6 @@ export interface SpuImageList extends ResponseData {
   data: SpuImage[]
 }
 
-// 已有的SPU销售属性值对象ts类型
-export interface SpuSaleAttrList extends ResponseData {
-  data: SpuSaleAttr[]
-}
-
-// 已有的全部SPU的返回数据ts类型
 export interface HasSaleAttr {
   id: number
   name: string
