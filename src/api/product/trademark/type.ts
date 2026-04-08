@@ -9,6 +9,8 @@ export interface Trademark {
   id?: number
   tmName: string
   logoUrl: string
+  createTime?: string
+  updateTime?: string
 }
 
 // 包含全部品牌数据的ts类型

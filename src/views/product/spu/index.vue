@@ -60,7 +60,7 @@
       </div>
       <div v-show="scene === 1">
         <!-- 添加SPU|修改SPU子组件 -->
-        <SpuForm @changeScene="changeScene" :options="options" />
+        <SpuForm ref="spu" @changeScene="changeScene" />
       </div>
       <div v-show="scene === 2">
         <!-- 添加SKU子组件 -->
@@ -74,8 +74,8 @@
   import { ref, watch } from 'vue'
   // 引入分类的仓库
   import useCategoryStore from '@/store/modules/category'
-  import { reqHasSpu, reqAllTrademark, reqSpuImageList, reqSpuHasSaleAttr } from '@/api/product/spu'
-  import type { Records, HasSpuResponseData, SpuImageList } from '@/api/product/spu/type'
+  import { reqHasSpu } from '@/api/product/spu'
+  import type { SpuData, Records, HasSpuResponseData } from '@/api/product/spu/type'
   import SpuForm from './spuForm.vue'
   import SkuForm from './skuForm.vue'
 
@@ -89,6 +89,8 @@
   // 存储已有SPU总数
   const total = ref<number>(0)
   const records = ref<Records>([])
+  // 获取子组件实例
+  const spu = ref<any>()
 
   // 此方法执行：可以获取某一个三级分类下全部已有的SPU
   const getHasSPU = async () => {
@@ -121,18 +123,12 @@
     scene.value = 1
   }
 
-  const options = ref<any>([])
   // 修改已有的SPU按钮的回调
-  const updateSpu = async (row, $index: number) => {
-    console.log('row', row)
+  const updateSpu = async (row: SpuData) => {
     // 切换为场景1：修改已有SPU结构->SpuForm
     scene.value = 1
-    const result = await reqAllTrademark()
-    options.value = result.data
-    const imgListResult = await reqSpuImageList(row.id)
-    const imgList: SpuImageList = imgListResult.data.records[0]?.spuImageList
-    const hasSaleAttrResult = await reqSpuHasSaleAttr(row.id)
-    console.log('hasSaleAttrResult', hasSaleAttrResult)
+    // 调用子组件实例方法获取完整已有的SPU数据
+    spu.value.initHasSpuData(row)
   }
 
   // 子组件SpuForm绑定自定义事件：目前是让子组件通知父组件切换场景为0

@@ -6,7 +6,7 @@
     <el-form-item label="SPU品牌">
       <el-select placeholder="请选择品牌" style="width: 200px">
         <el-option
-          v-for="item in props.options"
+          v-for="item in AllTrademark"
           :key="item.id"
           :label="item.tmName"
           :value="item.id"
@@ -56,18 +56,60 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import type { UploadProps, UploadUserFile } from 'element-plus'
+  import { reqAllTrademark, reqSpuImageList, reqSpuHasSaleAttr, reqAllSaleAttr } from '@/api/product/spu'
+  import type { HasSaleAttr, HasSpuResponseData, SpuImage, SpuSaleAttr, HasSaleAttrResponseData, AllTrademark, SpuData } from '@/api/product/spu/type'
+  import type { Trademark } from '@/api/product/trademark/type'
 
   // 声明要触发的事件名
   const $emit = defineEmits(['changeScene'])
 
-  //
-  const props = defineProps(['options'])
+  // 存储已有的SPU这些数据
+  const AllTrademark = ref<Trademark[]>([])
+  // 商品图片
+  const imageList = ref<SpuImage[]>([])
+  // 已有的SPU销售属性<
+  const saleAttr = ref<SpuSaleAttr[]>([])
+  // 全部销售属性
+  const allSaleAttr = ref<HasSaleAttr[]>([])
+
+  const initHasSpuData = async (spu: SpuData) => {
+    // spu：父组件传过来的已有的SPU对象[不完整]
+    // 获取全部品牌的数据
+    const result: AllTrademark = await reqAllTrademark()
+
+    // 获取某一个品牌旗下的全部售卖商品图片
+    const result1: HasSpuResponseData = await reqSpuImageList(spu.id)
+    // console.log('result1:', result1)
+
+    // 获取已有的SPU销售属性的数据
+    const result2: HasSpuResponseData = await reqSpuHasSaleAttr(spu.id)
+    // console.log('result2:', result2)
+
+    // 获取整个项目全部SPU的销售属性
+    const result3: HasSaleAttrResponseData = await reqAllSaleAttr()
+    // console.log('result3:', result3)
+
+    // 存储全部品牌的数据
+    AllTrademark.value = result.data
+    // SPU对应商品图片
+    imageList.value = result1.data.records[0]?.spuImageList  || []
+    // 存储已有的SPU的销售属性
+    saleAttr.value = result2.data.records[0]?.spuSaleAttrList || []
+    // 存储全部的销售属性
+    allSaleAttr.value = result3.data;
+  }
+  // 对外暴露
+  defineExpose({initHasSpuData})
+
 
   // 点击取消按钮：通知父组件切换场景为1，展示已有的SPU数据
   const cancel = () => {
     // 关键：emit(事件名, 要传的值)
     $emit('changeScene', 0)
   }
+
+
+
 
   // 以下为plus的源代码
   const fileList = ref<UploadUserFile[]>([
