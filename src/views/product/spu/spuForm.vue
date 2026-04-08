@@ -17,12 +17,20 @@
       <el-input placeholder="请输入描述" type="textarea" v-model="spuParams.description" />
     </el-form-item>
     <el-form-item label="SPU照片">
+      <!-- v-model:file-list用于展示默认图片
+           action：上传图片的接口地址
+           list-type：文件列表的类型（'text' | 'picture' | 'picture-card'）
+           on-preview：点击文件列表中已上传的文件时的钩子
+           on-remove：文件列表移除文件时的钩子
+           before-upload: 上传文件之前的钩子，参数为上传的文件， 若返回false或者返回 Promise 且被 reject，则停止上传。
+      -->
       <el-upload
-        v-model:file-list="spuParams.spuImageList"
-        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+        v-model:file-list="imageList"
+        action="/api/admin/product/fileUpload"
         list-type="picture-card"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"
+        :before-upload="beforeAvatarUpload"
       >
         <el-icon><Plus /></el-icon>
       </el-upload>
@@ -35,18 +43,40 @@
       <!-- 展示销售属性的下拉菜单 -->
       <el-select placeholder="还有3位选择" style="width: 200px; margin-right: 10px">
         <el-option
-          v-for="item in spuParams.spuSaleAttrList"
+          v-for="item in saleAttr"
           :key="item.id"
           :label="item.saleAttrName"
           :value="item.id" />
       </el-select>
       <el-button type="primary" icon="Plus">添加销售属性</el-button>
       <!-- table：展示销售属性与属性值 -->
-      <el-table border style="margin: 10px 0">
-        <el-table-column label="序号" align="center" width="80px"></el-table-column>
-        <el-table-column label="属性名" width="120px"></el-table-column>
-        <el-table-column label="属性值"></el-table-column>
-        <el-table-column label="操作" width="120px"></el-table-column>
+      <el-table :data="saleAttr" border style="margin: 10px 0">
+        <el-table-column type="index" label="序号" align="center" width="80px"></el-table-column>
+        <el-table-column prop="saleAttrName" label="属性名" width="120px"></el-table-column>
+        <el-table-column label="属性值">
+          <!-- row：当前SPU已有的销售属性对象 -->
+          <template #default="{row}">
+            <el-tag
+              style="margin: 0 5px;"
+              closable
+              type="primary"
+              v-for="item in row.spuSaleAttrValueList"
+              :key="item.id">{{ item.saleAttrValueName }}</el-tag>
+              <el-button type="success" icon="Plus" size="small"></el-button>
+          </template>
+        </el-table-column>
+        <el-table-column prop="" label="操作" width="120px">
+          <template #default="{ row, $index }">
+            <el-popconfirm
+              :title="`确认删除${row.tmName}吗？`"
+              width="200px"
+            >
+              <template #reference>
+                <el-button type="danger" icon="Delete" @click="saleAttr.splice($index, 1)"/>
+              </template>
+            </el-popconfirm>
+          </template>
+        </el-table-column>
       </el-table>
     </el-form-item>
     <el-form-item>
@@ -58,7 +88,8 @@
 
 <script setup lang="ts">
   import { ref } from 'vue'
-  import type { UploadProps, UploadUserFile } from 'element-plus'
+  import type { UploadProps } from 'element-plus'
+  import {ElMessage} from 'element-plus'
   import { reqAllTrademark, reqSpuImageList, reqSpuHasSaleAttr, reqAllSaleAttr } from '@/api/product/spu'
   import type { HasSaleAttr, HasSpuResponseData, SpuImage, SpuSaleAttr, HasSaleAttrResponseData, AllTrademark, SpuData } from '@/api/product/spu/type'
   import type { Trademark } from '@/api/product/trademark/type'
@@ -105,12 +136,16 @@
     // 存储全部品牌的数据
     AllTrademark.value = result.data
     // SPU对应商品图片
-    imageList.value = result1.data.records[0]?.spuImageList  || []
+    imageList.value = (result1.data.records[0]?.spuImageList  || []).map((item) => ({
+      name: item.imgName as string,
+      url: item.imgUrl
+    }))
     // 存储已有的SPU的销售属性
     saleAttr.value = result2.data.records[0]?.spuSaleAttrList || []
     // 存储全部的销售属性
     allSaleAttr.value = result3.data;
   }
+
   // 对外暴露
   defineExpose({initHasSpuData})
 
@@ -121,20 +156,33 @@
     $emit('changeScene', 0)
   }
 
-
-
-
-  // 以下为plus的源代码
+  // 存储预览图片地址
   const dialogImageUrl = ref('')
+  // 控制对话框的显示与隐藏
   const dialogVisible = ref(false)
 
-  const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
-    console.log(uploadFile, uploadFiles)
-  }
-
+  // 照片墙点击预览按钮时触发的钩子
   const handlePictureCardPreview: UploadProps['onPreview'] = uploadFile => {
     dialogImageUrl.value = uploadFile.url!
+    // 对话框弹出来
     dialogVisible.value = true
+  }
+
+  // 上传文件之前的钩子，参数为上传的文件， 约束文件的大小与类型
+  const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
+    if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
+      ElMessage.error('Avatar picture must be JPG/PNG format!')
+      return false
+    } else if (rawFile.size / 1024 / 1024 > 5) {
+      ElMessage.error('Avatar picture size can not exceed 5MB!')
+      return false
+    }
+    return true
+  }
+
+  // 照片墙删除文件钩子
+  const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
+    console.log(uploadFile, uploadFiles)
   }
 </script>
 
