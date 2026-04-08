@@ -1,7 +1,13 @@
 // SPU管理模块的接口
 import request from '@/utils/request'
 
-import type { HasSpuResponseData, AllTrademark, SpuImageList, HasSaleAttrResponseData, SpuData } from './type'
+import type {
+  HasSpuResponseData,
+  AllTrademark,
+  SpuImageList,
+  HasSaleAttrResponseData,
+  SpuData,
+} from './type'
 
 enum API {
   // 获取已有的SPU数据
@@ -52,4 +58,3 @@ export const reqAddOrUpdateSpu = (data: SpuData) => {
     return request.post<any, any>(API.ADDSPU_URL, data)
   }
 }
-
