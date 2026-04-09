@@ -568,6 +568,75 @@ let skus = [
 //   { id: 3, attrName: '尺寸', categoryId: 61, categoryLevel: 3, attrValueList: [{ id: 7, valueName: '6.1英寸' }, { id: 8, valueName: '6.7英寸' }] },
 // ]
 let attrs = [
+  // ==================== 0. 手机 (categoryId: 61) ====================
+  {
+    id: 106,
+    attrName: '手机一级',
+    categoryId: 2,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 106, id: 1001, valueName: '旗舰机' },
+      { attrId: 106, id: 1002, valueName: '中端机' },
+      { attrId: 106, id: 1003, valueName: '入门机' },
+    ],
+  },
+  {
+    id: 107,
+    attrName: '电池容量',
+    categoryId: 13,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 107, id: 1004, valueName: '4000mAh' },
+      { attrId: 107, id: 1005, valueName: '5000mAh' },
+      { attrId: 107, id: 1006, valueName: '5500mAh' },
+    ],
+  },
+  {
+    id: 23,
+    attrName: '运行内存',
+    categoryId: 61,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 23, id: 1007, valueName: '8GB' },
+      { attrId: 23, id: 1008, valueName: '12GB' },
+      { attrId: 23, id: 1009, valueName: '16GB' },
+    ],
+  },
+  {
+    id: 24,
+    attrName: '机身内存',
+    categoryId: 61,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 24, id: 1010, valueName: '128GB' },
+      { attrId: 24, id: 1011, valueName: '256GB' },
+      { attrId: 24, id: 1012, valueName: '512GB' },
+      { attrId: 24, id: 1013, valueName: '1TB' },
+    ],
+  },
+  {
+    id: 111,
+    attrName: 'CPU型号',
+    categoryId: 61,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 111, id: 1014, valueName: '骁龙8Gen3' },
+      { attrId: 111, id: 1015, valueName: '天玑9300' },
+      { attrId: 111, id: 1016, valueName: 'A17 Pro' },
+    ],
+  },
+  {
+    id: 112,
+    attrName: '屏幕尺寸',
+    categoryId: 61,
+    categoryLevel: 3,
+    attrValueList: [
+      { attrId: 112, id: 1017, valueName: '6.36英寸' },
+      { attrId: 112, id: 1018, valueName: '6.7英寸' },
+      { attrId: 112, id: 1019, valueName: '6.82英寸' },
+    ],
+  },
+
   // ==================== 1. 智能手机 (categoryId: 111) ====================
   {
     id: 1,

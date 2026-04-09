@@ -22,15 +22,21 @@
           ></el-table-column>
           <el-table-column label="操作" width="240px">
             <!-- row:已有的属性对象 -->
-            <template #default="{ row, $index }">
-              <el-button type="primary" size="small" icon="Plus" title="添加SKU" @click="addSku"/>
+            <template #default="{ row }">
+              <el-button
+                type="primary"
+                size="small"
+                icon="Plus"
+                title="添加SKU"
+                @click="addSku(row)"
+              />
               <!-- 修改已有属性的按钮 -->
               <el-button
                 type="warning"
                 style="background: #ff9f00; color: #fff"
                 size="small"
                 icon="Edit"
-                @click="updateSpu(row, $index)"
+                @click="updateSpu(row)"
                 title="修改SPU"
               />
               <el-button
@@ -64,7 +70,7 @@
       </div>
       <div v-show="scene === 2">
         <!-- 添加SKU子组件 -->
-        <SkuForm @changeScene="changeScene" />
+        <SkuForm ref="sku" @changeScene="changeScene" />
       </div>
     </el-card>
   </div>
@@ -89,8 +95,9 @@
   // 存储已有SPU总数
   const total = ref<number>(0)
   const records = ref<Records>([])
-  // 获取子组件实例
+  // 获取子组件实例spuForm和skuForm
   const spu = ref<any>()
+  const sku = ref<any>()
 
   // 此方法执行：可以获取某一个三级分类下全部已有的SPU
   const getHasSPU = async () => {
@@ -126,13 +133,15 @@
   }
 
   // 添加SKU按钮的回调
-  const addSku = () => {
+  const addSku = (row: SpuData) => {
     // 点击添加SKU按钮切换场景为2
     scene.value = 2
+    // 调用子组件方法初始化添加sku数据
+    sku.value.initSkuData(categoryStore.c1Id, categoryStore.c2Id, row)
   }
 
   // 修改已有的SPU按钮的回调
-  const updateSpu = async (row: SpuData) => {
+  const updateSpu = (row: SpuData) => {
     // 切换为场景1：修改已有SPU结构->SpuForm
     scene.value = 1
     // 调用子组件实例方法获取完整已有的SPU数据
@@ -152,7 +161,6 @@
       pageNo.value = 1
       getHasSPU()
     }
-
   }
 </script>
 
