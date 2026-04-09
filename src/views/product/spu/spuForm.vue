@@ -64,17 +64,30 @@
         <el-table-column prop="saleAttrName" label="属性名" width="120px"></el-table-column>
         <el-table-column label="属性值">
           <!-- row：当前SPU已有的销售属性对象 -->
-          <template #default="{ row }">
+          <template #default="{ row, $index }">
             <el-tag
               style="margin: 0 5px"
-              closable
               type="primary"
-              v-for="item in row.spuSaleAttrValueList"
+              v-for="(item, index) in row.spuSaleAttrValueList"
+              closable
+              @close="row.spuSaleAttrValueList.splice(index, 1)"
               :key="item.id"
               >{{ item.saleAttrValueName }}</el-tag
             >
-            <el-button type="success" icon="Plus" size="small"></el-button>
-          </template>
+            <el-input
+              v-model="row.saleAttrValue"
+              v-if="row.flag"
+              size="small"
+              style="width: 100px;"
+              @blur="toLook(row)"
+              placeholder="请输入内容" />
+            <el-button
+              type="success"
+              v-else
+              icon="Plus"
+              size="small"
+              @click="toEdit(row)" />
+        </template>
         </el-table-column>
         <el-table-column prop="" label="操作" width="120px">
           <template #default="{ row, $index }">
@@ -95,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
+  import { ref, computed, onMounted, nextTick } from 'vue'
   import type { UploadProps } from 'element-plus'
   import { ElMessage } from 'element-plus'
   import {
@@ -112,9 +125,9 @@
     HasSaleAttrResponseData,
     AllTrademark,
     SpuData,
+    SpuSaleAttrValue
   } from '@/api/product/spu/type'
   import type { Trademark } from '@/api/product/trademark/type'
-  import { reqAddOrUpdateSpu } from '@/api/product/spu/index'
 
   // 声明要触发的事件名
   const $emit = defineEmits(['changeScene'])
@@ -224,12 +237,49 @@
     const newSaleAttr: SpuSaleAttr = {
       baseSaleAttrId: baseSaleAttrId!,
       saleAttrName: saleAttrName!,
-      saleAttrValueList: [],
+      spuSaleAttrValueList: [],
     }
     // 追加到数组当中
     saleAttr.value.push(newSaleAttr)
     // 清空收集的数据
     saleAttrIdAndValueName.value = ''
+  }
+
+  // 属性值按钮的点击事件
+  const toEdit = (row: SpuSaleAttr) => {
+    // 点击按钮的时候，input组件显示->编辑模式
+    row.flag = true
+    row.saleAttrValue = ''
+    // nextTick(() => {
+    //   inputArr.value[row.spuSaleAttrValueList.length - 1].focus()
+    // })
+  }
+
+  // 表单元素失去焦点的事件回调：隐藏输入框，显示按钮
+  const toLook = (row: SpuSaleAttr) => {
+    console.log(row)
+    // 整理收集的属性的ID与属性值的名字
+    const {baseSaleAttrId,saleAttrValue } = row
+    // 整理成服务器需要的属性值的形式
+    const newSaleAttrValue: SpuSaleAttrValue = {
+      baseSaleAttrId,
+      saleAttrValueName: saleAttrValue
+    }
+    // 非法情况判断
+    if (!(saleAttrValue as string).trim()) {
+      ElMessage.error('属性值不能为空')
+      return
+    }
+    // 判断属性值是否在数组中存在
+    const repeat = row.spuSaleAttrValueList.find(item => item.saleAttrValueName === saleAttrValue)
+    if (repeat) {
+      ElMessage.error('属性值不能重复')
+      return
+    }
+    // 追加新的属性值对象
+    row.spuSaleAttrValueList.push(newSaleAttrValue)
+    // 切换为查看模式
+    row.flag = false
   }
   // 对外暴露
   defineExpose({ initHasSpuData })

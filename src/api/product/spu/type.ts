@@ -18,16 +18,18 @@ export interface SpuImage {
 
 export interface SpuSaleAttrValue {
   id?: number
-  saleAttrName: string
-  baseSaleAttrId?: number
+  saleAttrName?: string
+  baseSaleAttrId?: number | string
   saleAttrValueName?: string
 }
 
 export interface SpuSaleAttr {
   id?: number
   spuId?: number
+  flag?: boolean
   baseSaleAttrId?: number | string
   saleAttrName?: string
+  saleAttrValue?: string
   spuSaleAttrValueList: SpuSaleAttrValue[]
 }
 
