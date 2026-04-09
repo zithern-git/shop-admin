@@ -31,10 +31,10 @@
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"
         :before-upload="beforeAvatarUpload"
+        :headers="uploadHeaders"
       >
         <el-icon><Plus /></el-icon>
       </el-upload>
-
       <el-dialog v-model="dialogVisible">
         <img w-full :src="dialogImageUrl" alt="Preview Image" />
       </el-dialog>
@@ -101,14 +101,14 @@
       </el-table>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary">保存</el-button>
+      <el-button type="primary" @click="save" :disabled="!saleAttr.length">保存</el-button>
       <el-button @click="cancel">取消</el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, onMounted, nextTick } from 'vue'
+  import { ref, computed } from 'vue'
   import type { UploadProps } from 'element-plus'
   import { ElMessage } from 'element-plus'
   import {
@@ -116,6 +116,7 @@
     reqSpuImageList,
     reqSpuHasSaleAttr,
     reqAllSaleAttr,
+    reqAddOrUpdateSpu
   } from '@/api/product/spu'
   import type {
     HasSaleAttr,
@@ -128,6 +129,7 @@
     SpuSaleAttrValue
   } from '@/api/product/spu/type'
   import type { Trademark } from '@/api/product/trademark/type'
+  import { GET_TOKEN } from '@/utils/token'
 
   // 声明要触发的事件名
   const $emit = defineEmits(['changeScene'])
@@ -150,6 +152,11 @@
     tmId: '', // 品牌id
     spuImageList: [],
     spuSaleAttrList: [],
+  })
+
+  // ✅【核心】上传请求头：自动携带 TOKEN
+  const uploadHeaders = ref({
+    token: GET_TOKEN()  // 完全匹配后端格式
   })
 
   const initHasSpuData = async (spu: SpuData) => {
@@ -250,14 +257,10 @@
     // 点击按钮的时候，input组件显示->编辑模式
     row.flag = true
     row.saleAttrValue = ''
-    // nextTick(() => {
-    //   inputArr.value[row.spuSaleAttrValueList.length - 1].focus()
-    // })
   }
 
   // 表单元素失去焦点的事件回调：隐藏输入框，显示按钮
   const toLook = (row: SpuSaleAttr) => {
-    console.log(row)
     // 整理收集的属性的ID与属性值的名字
     const {baseSaleAttrId,saleAttrValue } = row
     // 整理成服务器需要的属性值的形式
@@ -280,6 +283,29 @@
     row.spuSaleAttrValueList.push(newSaleAttrValue)
     // 切换为查看模式
     row.flag = false
+  }
+
+  // 保存按钮的回调
+  const save = async () => {
+    // 整理参数
+    // 发请求：添加SPU|更新已有的SPU
+    // 1：照片墙的数据
+    spuParams.value.spuImageList = imageList.value.map(item => ({
+      imgName: item.name, // 图片的名字
+      imgUrl: (item.response && item.response.data) || item.url // 图片的url
+    }))
+    // 2：整理销售属性的数据
+    spuParams.value.spuSaleAttrList = saleAttr.value
+    const result = await reqAddOrUpdateSpu(spuParams.value)
+    if (result.code === 200) {
+      // 成功
+      ElMessage.success(spuParams.value.id?'更新成功': '添加成功')
+      // 通知父组件切换场景为0
+      $emit('changeScene', 0)
+    } else {
+      // 失败
+      ElMessage.error(spuParams.value.id?'更新失败':'添加失败')
+    }
   }
   // 对外暴露
   defineExpose({ initHasSpuData })

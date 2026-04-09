@@ -135,6 +135,8 @@
   const changeScene = (SceneNum: number) => {
     // 子组件SpuForm点击取消变为场景0，展示已有的SPU
     scene.value = SceneNum
+    // 再次获取全部已有的SPU
+    getHasSPU()
   }
 </script>
 

@@ -14,6 +14,7 @@ export interface SpuImage {
   imgUrl?: string
   name?: string
   url?: string
+  response?: imgResponse
 }
 
 export interface SpuSaleAttrValue {
@@ -33,6 +34,9 @@ export interface SpuSaleAttr {
   spuSaleAttrValueList: SpuSaleAttrValue[]
 }
 
+export interface imgResponse extends ResponseData{
+  data: string
+}
 // SPU数据的ts类型
 export interface SpuData {
   id?: number
