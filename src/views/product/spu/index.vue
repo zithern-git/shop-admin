@@ -23,7 +23,7 @@
           <el-table-column label="操作" width="240px">
             <!-- row:已有的属性对象 -->
             <template #default="{ row, $index }">
-              <el-button type="primary" size="small" icon="Plus" title="添加SKU" />
+              <el-button type="primary" size="small" icon="Plus" title="添加SKU" @click="addSku"/>
               <!-- 修改已有属性的按钮 -->
               <el-button
                 type="warning"
@@ -64,7 +64,7 @@
       </div>
       <div v-show="scene === 2">
         <!-- 添加SKU子组件 -->
-        <SkuForm />
+        <SkuForm @changeScene="changeScene" />
       </div>
     </el-card>
   </div>
@@ -121,6 +121,14 @@
   const addSpu = () => {
     // 切换为场景1：添加与修改已有SPU结构->SpuForm
     scene.value = 1
+    // 点击添加SPU按钮，调用子组件的方法初始化数据
+    spu.value.initAddSpu(categoryStore.c3Id)
+  }
+
+  // 添加SKU按钮的回调
+  const addSku = () => {
+    // 点击添加SKU按钮切换场景为2
+    scene.value = 2
   }
 
   // 修改已有的SPU按钮的回调
@@ -132,11 +140,19 @@
   }
 
   // 子组件SpuForm绑定自定义事件：目前是让子组件通知父组件切换场景为0
-  const changeScene = (SceneNum: number) => {
+  const changeScene = (obj: any) => {
     // 子组件SpuForm点击取消变为场景0，展示已有的SPU
-    scene.value = SceneNum
-    // 再次获取全部已有的SPU
-    getHasSPU()
+    scene.value = obj.flag
+    //
+    if (obj.params === 'update') {
+      // 更新留在当前页
+      getHasSPU()
+    } else {
+      // 添加留在第一页
+      pageNo.value = 1
+      getHasSPU()
+    }
+
   }
 </script>
 

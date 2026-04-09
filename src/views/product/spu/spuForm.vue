@@ -187,12 +187,6 @@
     allSaleAttr.value = result3.data
   }
 
-  // 点击取消按钮：通知父组件切换场景为1，展示已有的SPU数据
-  const cancel = () => {
-    // 关键：emit(事件名, 要传的值)
-    $emit('changeScene', 0)
-  }
-
   // 存储预览图片地址
   const dialogImageUrl = ref('')
   // 控制对话框的显示与隐藏
@@ -301,14 +295,51 @@
       // 成功
       ElMessage.success(spuParams.value.id?'更新成功': '添加成功')
       // 通知父组件切换场景为0
-      $emit('changeScene', 0)
+      $emit('changeScene', {flag: 0, params: spuParams.value.id? 'update' : 'add'})
     } else {
       // 失败
       ElMessage.error(spuParams.value.id?'更新失败':'添加失败')
     }
   }
+
+    // 点击取消按钮：通知父组件切换场景为0，展示已有的SPU数据
+  const cancel = () => {
+    // 关键：emit(事件名, 要传的值)
+    $emit('changeScene', {flag: 0, params: 'update'})
+  }
+
+  // 添加一个新的SPU初始化请求方法
+  const initAddSpu = async (c3Id: number | string) => {
+    // 清空数据
+    Object.assign(spuParams.value, {
+      spuName: '',
+      description: '',
+      category3Id: '',
+      tmId: '', // 品牌id
+      spuImageList: [],
+      spuSaleAttrList: [],
+    })
+    // 清空照片
+    imageList.value = []
+    // 清空销售属性
+    saleAttr.value = []
+    saleAttrIdAndValueName.value = ''
+    // 存储三级分类的id，后端数据不足，只有category3Id==61的数据
+    // spuParams.value.category3Id = c3Id
+    spuParams.value.category3Id = 61
+     // 获取全部品牌的数据
+    const result: AllTrademark = await reqAllTrademark()
+
+    // 获取整个项目全部SPU的销售属性
+    const result1: HasSaleAttrResponseData = await reqAllSaleAttr()
+
+    // 存储全部品牌的数据
+    AllTrademark.value = result.data
+    // 存储全部的销售属性
+    allSaleAttr.value = result1.data
+  }
   // 对外暴露
-  defineExpose({ initHasSpuData })
+  defineExpose({ initHasSpuData, initAddSpu })
 </script>
 
 <style scoped></style>
