@@ -15,12 +15,12 @@
     <el-form-item label="平台属性">
       <el-form :inline="true">
         <el-form-item v-for="item in attrArr" :label="item.attrName" :key="item.id">
-          <el-select placeholder="请选择" style="width: 200px">
+          <el-select v-model="item.attrIdAndValueId" placeholder="请选择" style="width: 200px">
             <el-option
               v-for="option in item.attrValueList"
               :label="option.valueName"
               :key="option.id"
-              :value="option.id"
+              :value="`${item.id}:${option.id}`"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -29,19 +29,19 @@
     <el-form-item label="销售属性">
       <el-form :inline="true">
         <el-form-item v-for="item in saleArr" :label="item.saleAttrName" :key="item.id">
-          <el-select placeholder="请选择" style="width: 200px">
+          <el-select v-model="item.saleIdAndValueId" placeholder="请选择" style="width: 200px">
             <el-option
               v-for="option in item.spuSaleAttrValueList"
               :label="option.saleAttrValueName"
               :key="option.id"
-              :value="option.id"
+              :value="`${item.id}:${option.id}`"
             ></el-option>
           </el-select>
         </el-form-item>
       </el-form>
     </el-form-item>
     <el-form-item label="图片名称">
-      <el-table :data="imageArr" border>
+      <el-table :data="imageArr" border ref="tableRef">
         <el-table-column type="selection" width="80px" align="center"></el-table-column>
         <el-table-column label="图片">
           <template #default="{ row }">
@@ -50,7 +50,9 @@
         </el-table-column>
         <el-table-column label="名称" prop="name"></el-table-column>
         <el-table-column label="操作">
-          <el-button type="warning" class="warning-solid">设置默认</el-button>
+          <template #default="{ row }">
+            <el-button type="warning" class="warning-solid" @click="handler(row)">设置默认</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </el-form-item>
@@ -67,7 +69,10 @@
   import { reqAttr } from '@/api/product/attr'
   import { reqSpuImageList, reqSpuHasSaleAttr, reqAddSku } from '@/api/product/spu'
   import type { Attr, AttrResponseData } from '@/api/product/attr/type'
+import { ElMessage } from 'element-plus'
 
+  // 获取tableRef组件实例
+  const tableRef = ref<any>()
   // 平台属性
   const attrArr = ref<Attr[]>([])
   // 商品图片
@@ -91,9 +96,9 @@
     skuDefaultImg: '',
   })
 
+
   //
   const initSkuData = async (c1Id: number | string, c2Id: number | string, spu: SpuData) => {
-    console.log('spu:', spu)
     // 收集数据
     skuParams.category3Id = spu.category3Id
     skuParams.spuId = spu.id as number
@@ -117,8 +122,50 @@
     saleArr.value = result2.data.records[0]?.spuSaleAttrList || []
   }
 
+  // 设置默认图片的方法回调
+  const handler = (row: SpuImage) => {
+    // 官方方法1：清空所有勾选（保证只有一个默认）
+    tableRef.value.clearSelection()
+    // 官方方法2：自动勾选当前行（核心！）
+    tableRef.value.toggleRowSelection(row, true)
+    // 把默认图片地址赋值给表单
+    skuParams.skuDefaultImg = row.url as string
+  }
+
+  // 保存按钮的方法
   const save = async (skuParams: SkuData) => {
-    const result = await reqAddSku(skuParams)
+    // 整理参数
+    // 平台属性
+    skuParams.skuAttrValueList = attrArr.value.reduce((prev: any, next: any) => {
+      if(next.attrIdAndValueId) {
+        const [attrId, valueId] = next.attrIdAndValueId.split(':')
+        prev.push({
+          attrId: Number(attrId),
+          valueId: Number(valueId)
+        })
+      }
+      return prev
+    }, [])
+    // 销售属性
+    skuParams.skuSaleAttrValueList = saleArr.value.reduce((prev: any, next: any) => {
+      if (next.saleIdAndValueId) {
+        const [saleAttrId, saleAttrValueId] = next.saleIdAndValueId.split(':')
+        prev.push({
+          saleAttrId: Number(saleAttrId),
+          saleAttrValueId: Number(saleAttrValueId)
+        })
+      }
+      return prev
+    }, [])
+    // 添加SKU的请求
+    const result: any = await reqAddSku(skuParams)
+    if (result.code === 200) {
+      ElMessage.success(result.message)
+      // 通知父组件切换为场景0
+      $emit('changeScene', {flag: 0, params: ''})
+    } else {
+      ElMessage.error(result.message)
+    }
   }
 
   // 自定义事件方法

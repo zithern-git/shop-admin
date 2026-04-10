@@ -32,6 +32,7 @@ export interface SpuSaleAttr {
   saleAttrName?: string
   saleAttrValue?: string
   spuSaleAttrValueList: SpuSaleAttrValue[]
+  saleIdAndValueId?: string
 }
 
 export interface imgResponse extends ResponseData{
