@@ -297,85 +297,368 @@ let trademarks = [
   {
     id: 1,
     tmName: '华为',
-    logoUrl:
-      'https://img1.baidu.com/it/u=4068546577,3295632343&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=500',
+    logoUrl: 'https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=100&h=100&fit=crop',
     createTime: '2024-01-01',
     updateTime: '2024-01-01',
   },
   {
     id: 2,
     tmName: '小米',
-    logoUrl:
-      'https://img1.baidu.com/it/u=521293053,2652660591&fm=253&fmt=auto&app=120&f=PNG?w=800&h=800',
+    logoUrl: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=100&h=100&fit=crop',
     createTime: '2024-01-02',
     updateTime: '2024-01-02',
   },
   {
     id: 3,
     tmName: '苹果',
-    logoUrl:
-      'https://img2.baidu.com/it/u=97948109,3373219309&fm=253&fmt=auto&app=138&f=PNG?w=408&h=500',
+    logoUrl: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=100&h=100&fit=crop',
     createTime: '2024-01-03',
     updateTime: '2024-01-03',
   },
   {
     id: 4,
     tmName: '三星',
-    logoUrl: 'https://img.samsung.com/logo.png',
+    logoUrl: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=100&h=100&fit=crop',
     createTime: '2024-01-04',
     updateTime: '2024-01-04',
   },
   {
     id: 5,
     tmName: 'OPPO',
-    logoUrl: 'https://img.oppo.com/logo.png',
+    logoUrl: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=100&h=100&fit=crop',
     createTime: '2024-01-05',
     updateTime: '2024-01-05',
   },
   {
     id: 6,
     tmName: 'vivo',
-    logoUrl: 'https://img.vivo.com/logo.png',
+    logoUrl: 'https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=100&h=100&fit=crop',
     createTime: '2024-01-06',
     updateTime: '2024-01-06',
   },
-  // { id: 7, tmName: '华为', logoUrl: 'https://img1.baidu.com/it/u=4068546577,3295632343&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=500', createTime: '2024-01-01', updateTime: '2024-01-01' },
-  // { id: 8, tmName: '小米', logoUrl: 'https://img1.baidu.com/it/u=521293053,2652660591&fm=253&fmt=auto&app=120&f=PNG?w=800&h=800', createTime: '2024-01-02', updateTime: '2024-01-02' },
-  // { id: 9, tmName: '苹果', logoUrl: 'https://img2.baidu.com/it/u=97948109,3373219309&fm=253&fmt=auto&app=138&f=PNG?w=408&h=500', createTime: '2024-01-03', updateTime: '2024-01-03' },
-  // { id: 10, tmName: '三星', logoUrl: 'https://img.samsung.com/logo.png', createTime: '2024-01-04', updateTime: '2024-01-04' },
-  // { id:11, tmName: 'OPPO', logoUrl: 'https://img.oppo.com/logo.png', createTime: '2024-01-05', updateTime: '2024-01-05' },
-  // { id:12, tmName: 'vivo', logoUrl: 'https://img.vivo.com/logo.png', createTime: '2024-01-06', updateTime: '2024-01-06' },
+  {
+    id: 7,
+    tmName: '耐克',
+    logoUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=100&h=100&fit=crop',
+    createTime: '2024-01-07',
+    updateTime: '2024-01-07',
+  },
+  {
+    id: 8,
+    tmName: '阿迪达斯',
+    logoUrl: 'https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?w=100&h=100&fit=crop',
+    createTime: '2024-01-08',
+    updateTime: '2024-01-08',
+  },
+  {
+    id: 9,
+    tmName: '优衣库',
+    logoUrl: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=100&h=100&fit=crop',
+    createTime: '2024-01-09',
+    updateTime: '2024-01-09',
+  },
+  {
+    id: 10,
+    tmName: 'ZARA',
+    logoUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=100&h=100&fit=crop',
+    createTime: '2024-01-10',
+    updateTime: '2024-01-10',
+  },
+  {
+    id: 11,
+    tmName: '海尔',
+    logoUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=100&h=100&fit=crop',
+    createTime: '2024-01-11',
+    updateTime: '2024-01-11',
+  },
+  {
+    id: 12,
+    tmName: '美的',
+    logoUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=100&h=100&fit=crop',
+    createTime: '2024-01-12',
+    updateTime: '2024-01-12',
+  },
+  {
+    id: 13,
+    tmName: '格力',
+    logoUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=100&h=100&fit=crop',
+    createTime: '2024-01-13',
+    updateTime: '2024-01-13',
+  },
+  {
+    id: 14,
+    tmName: '索尼',
+    logoUrl: 'https://images.unsplash.com/photo-1606244067219-542cf0845113?w=100&h=100&fit=crop',
+    createTime: '2024-01-14',
+    updateTime: '2024-01-14',
+  },
+  {
+    id: 15,
+    tmName: '联想',
+    logoUrl: 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=100&h=100&fit=crop',
+    createTime: '2024-01-15',
+    updateTime: '2024-01-15',
+  },
+  {
+    id: 16,
+    tmName: '戴尔',
+    logoUrl: 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=100&h=100&fit=crop',
+    createTime: '2024-01-16',
+    updateTime: '2024-01-16',
+  },
+  {
+    id: 17,
+    tmName: '诺基亚',
+    logoUrl: 'https://images.unsplash.com/photo-1609081219090-a6d81d3085bf?w=100&h=100&fit=crop',
+    createTime: '2024-01-17',
+    updateTime: '2024-01-17',
+  },
+  {
+    id: 18,
+    tmName: '飞利浦',
+    logoUrl: 'https://images.unsplash.com/photo-1598331668826-20cecc596b86?w=100&h=100&fit=crop',
+    createTime: '2024-01-18',
+    updateTime: '2024-01-18',
+  },
 ]
 
 // SPU 图片数据
 const spuImages = [
+  // ==================== iPhone 15 Pro (spuId: 1) ====================
   {
     id: 1,
     spuId: 1,
-    imgName: 'iPhone15Pro-1.jpg',
-    imgUrl:
-      'https://img1.baidu.com/it/u=4068546577,3295632343&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=500',
+    imgName: 'iPhone15Pro-原色钛金属.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=400&fit=crop',
   },
   {
     id: 2,
     spuId: 1,
-    imgName: 'iPhone15Pro-2.jpg',
-    imgUrl:
-      'https://img2.baidu.com/it/u=97948109,3373219309&fm=253&fmt=auto&app=138&f=PNG?w=408&h=500',
+    imgName: 'iPhone15Pro-蓝色钛金属.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=400&fit=crop',
   },
+  // ==================== 华为 Mate 60 Pro (spuId: 2) ====================
   {
     id: 3,
     spuId: 2,
-    imgName: 'Mate60Pro-1.jpg',
-    imgUrl:
-      'https://img1.baidu.com/it/u=521293053,2652660591&fm=253&fmt=auto&app=120&f=PNG?w=800&h=800',
+    imgName: 'Mate60Pro-雅川青.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop',
   },
-  { id: 4, spuId: 2, imgName: 'Mate60Pro-2.jpg', imgUrl: 'https://img.samsung.com/logo.png' },
-  { id: 5, spuId: 3, imgName: 'Xiaomi14Pro-1.jpg', imgUrl: 'https://img.oppo.com/logo.png' },
+  {
+    id: 4,
+    spuId: 2,
+    imgName: 'Mate60Pro-白沙银.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=400&h=400&fit=crop',
+  },
+  // ==================== 小米 14 Pro (spuId: 3) ====================
+  {
+    id: 5,
+    spuId: 3,
+    imgName: 'Xiaomi14Pro-黑色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1621330396173-e41b1cafd17f?w=400&h=400&fit=crop',
+  },
+  {
+    id: 6,
+    spuId: 3,
+    imgName: 'Xiaomi14Pro-白色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1605236453806-6ff36851218e?w=400&h=400&fit=crop',
+  },
+
+  // ==================== iPhone 15 (spuId: 4) ====================
+  {
+    id: 7,
+    spuId: 4,
+    imgName: 'iPhone15-粉色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1505720483508-6e8f9b7c8e47?w=400&h=400&fit=crop',
+  },
+  {
+    id: 8,
+    spuId: 4,
+    imgName: 'iPhone15-黑色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1580910051074-3eb694886571?w=400&h=400&fit=crop',
+  },
+  // ==================== 华为 P60 Pro (spuId: 5) ====================
+  {
+    id: 9,
+    spuId: 5,
+    imgName: 'P60Pro-羽砂黑.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=400&h=400&fit=crop',
+  },
+  {
+    id: 10,
+    spuId: 5,
+    imgName: 'P60Pro-羽砂白.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1556656793-08538906a9f8?w=400&h=400&fit=crop',
+  },
+
+  // ==================== 小米 14 (spuId: 6) ====================
+  {
+    id: 11,
+    spuId: 6,
+    imgName: 'Xiaomi14-黑色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1621330396173-e41b1cafd17f?w=400&h=400&fit=crop',
+  },
+  {
+    id: 12,
+    spuId: 6,
+    imgName: 'Xiaomi14-白色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1605236453806-6ff36851218e?w=400&h=400&fit=crop',
+  },
+  // ==================== OPPO Find X7 (spuId: 7) ====================
+  {
+    id: 13,
+    spuId: 7,
+    imgName: 'FindX7-黑色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=400&fit=crop',
+  },
+  {
+    id: 14,
+    spuId: 7,
+    imgName: 'FindX7-白色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=400&h=400&fit=crop',
+  },
+  // ==================== vivo X100 (spuId: 8) ====================
+  {
+    id: 15,
+    spuId: 8,
+    imgName: 'X100-蓝色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=400&h=400&fit=crop',
+  },
+  {
+    id: 16,
+    spuId: 8,
+    imgName: 'X100-白色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1556656793-08538906a9f8?w=400&h=400&fit=crop',
+  },
+
+  // ==================== 诺基亚 105 (spuId: 9) ====================
+  {
+    id: 17,
+    spuId: 9,
+    imgName: 'Nokia105-黑色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=400&h=400&fit=crop',
+  },
+  {
+    id: 18,
+    spuId: 9,
+    imgName: 'Nokia105-蓝色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop',
+  },
+  // ==================== 飞利浦 E171L (spuId: 10) ====================
+  {
+    id: 19,
+    spuId: 10,
+    imgName: 'E171L-金色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=400&h=400&fit=crop',
+  },
+
+  // ==================== 联想 ThinkPad X1 Carbon (spuId: 11) ====================
+  {
+    id: 20,
+    spuId: 11,
+    imgName: 'ThinkPad-X1C-正面.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400&h=400&fit=crop',
+  },
+  {
+    id: 21,
+    spuId: 11,
+    imgName: 'ThinkPad-X1C-侧面.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=400&fit=crop',
+  },
+  // ==================== 戴尔 XPS 15 (spuId: 12) ====================
+  {
+    id: 22,
+    spuId: 12,
+    imgName: 'XPS15-银色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=400&h=400&fit=crop',
+  },
+  {
+    id: 23,
+    spuId: 12,
+    imgName: 'XPS15-背面.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=400&h=400&fit=crop',
+  },
+
+  // ==================== 耐克 Dri-FIT T恤 (spuId: 13) ====================
+  {
+    id: 24,
+    spuId: 13,
+    imgName: 'DriFIT-黑色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop',
+  },
+  {
+    id: 25,
+    spuId: 13,
+    imgName: 'DriFIT-白色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&h=400&fit=crop',
+  },
+  // ==================== 优衣库 UT (spuId: 14) ====================
+  {
+    id: 26,
+    spuId: 14,
+    imgName: 'UT-白色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=400&h=400&fit=crop',
+  },
+  // ==================== 阿迪达斯 T恤 (spuId: 15) ====================
+  {
+    id: 27,
+    spuId: 15,
+    imgName: 'Essentials-灰色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400&h=400&fit=crop',
+  },
+  // ==================== 优衣库 衬衫 (spuId: 16) ====================
+  {
+    id: 28,
+    spuId: 16,
+    imgName: '免烫衬衫-白色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400&h=400&fit=crop',
+  },
+  {
+    id: 29,
+    spuId: 16,
+    imgName: '免烫衬衫-蓝色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&h=400&fit=crop',
+  },
+  // ==================== ZARA 裙子 (spuId: 17) ====================
+  {
+    id: 30,
+    spuId: 17,
+    imgName: '连衣裙-碎花.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400&h=400&fit=crop',
+  },
+  {
+    id: 31,
+    spuId: 17,
+    imgName: '连衣裙-红色.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=400&fit=crop',
+  },
+
+  // ==================== 海尔 智慧屏 (spuId: 18) ====================
+  {
+    id: 32,
+    spuId: 18,
+    imgName: '海尔75寸电视.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=400&fit=crop',
+  },
+  // ==================== 索尼 Bravia (spuId: 19) ====================
+  {
+    id: 33,
+    spuId: 19,
+    imgName: '索尼OLED-65.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1461151304267-38535e780c79?w=400&h=400&fit=crop',
+  },
+  // ==================== 美的 夜灯 (spuId: 20) ====================
+  {
+    id: 34,
+    spuId: 20,
+    imgName: '护眼夜灯.jpg',
+    imgUrl: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=400&h=400&fit=crop',
+  },
 ]
 
 // SPU 销售属性数据
 const spuSaleAttrs = [
+  // ==================== iPhone 15 Pro (spuId: 1) ====================
   {
     id: 1,
     spuId: 1,
@@ -396,16 +679,20 @@ const spuSaleAttrs = [
       { id: 4, baseSaleAttrId: 2, saleAttrValueName: '128GB', saleAttrName: '版本' },
       { id: 5, baseSaleAttrId: 2, saleAttrValueName: '256GB', saleAttrName: '版本' },
       { id: 6, baseSaleAttrId: 2, saleAttrValueName: '512GB', saleAttrName: '版本' },
+      { id: 7, baseSaleAttrId: 2, saleAttrValueName: '1TB', saleAttrName: '版本' },
     ],
   },
+
+  // ==================== 华为 Mate 60 Pro (spuId: 2) ====================
   {
     id: 3,
     spuId: 2,
     baseSaleAttrId: 1,
     saleAttrName: '颜色',
     spuSaleAttrValueList: [
-      { id: 7, baseSaleAttrId: 1, saleAttrValueName: '黑色', saleAttrName: '颜色' },
-      { id: 8, baseSaleAttrId: 1, saleAttrValueName: '白色', saleAttrName: '颜色' },
+      { id: 8, baseSaleAttrId: 1, saleAttrValueName: '雅川青', saleAttrName: '颜色' },
+      { id: 9, baseSaleAttrId: 1, saleAttrValueName: '白沙银', saleAttrName: '颜色' },
+      { id: 10, baseSaleAttrId: 1, saleAttrValueName: '南糯紫', saleAttrName: '颜色' },
     ],
   },
   {
@@ -414,18 +701,288 @@ const spuSaleAttrs = [
     baseSaleAttrId: 2,
     saleAttrName: '版本',
     spuSaleAttrValueList: [
-      { id: 9, baseSaleAttrId: 2, saleAttrValueName: '256GB', saleAttrName: '版本' },
-      { id: 10, baseSaleAttrId: 2, saleAttrValueName: '512GB', saleAttrName: '版本' },
+      { id: 11, baseSaleAttrId: 2, saleAttrValueName: '256GB', saleAttrName: '版本' },
+      { id: 12, baseSaleAttrId: 2, saleAttrValueName: '512GB', saleAttrName: '版本' },
+      { id: 13, baseSaleAttrId: 2, saleAttrValueName: '1TB', saleAttrName: '版本' },
     ],
   },
+
+  // ==================== 小米 14 Pro (spuId: 3) ====================
   {
     id: 5,
     spuId: 3,
     baseSaleAttrId: 1,
     saleAttrName: '颜色',
     spuSaleAttrValueList: [
-      { id: 11, baseSaleAttrId: 1, saleAttrValueName: '黑色', saleAttrName: '颜色' },
-      { id: 12, baseSaleAttrId: 1, saleAttrValueName: '绿色', saleAttrName: '颜色' },
+      { id: 14, baseSaleAttrId: 1, saleAttrValueName: '黑色', saleAttrName: '颜色' },
+      { id: 15, baseSaleAttrId: 1, saleAttrValueName: '白色', saleAttrName: '颜色' },
+      { id: 16, baseSaleAttrId: 1, saleAttrValueName: '绿色', saleAttrName: '颜色' },
+    ],
+  },
+
+  // ==================== iPhone 15 (spuId: 4) ====================
+  {
+    id: 6,
+    spuId: 4,
+    baseSaleAttrId: 1,
+    saleAttrName: '颜色',
+    spuSaleAttrValueList: [
+      { id: 17, baseSaleAttrId: 1, saleAttrValueName: '粉色', saleAttrName: '颜色' },
+      { id: 18, baseSaleAttrId: 1, saleAttrValueName: '黄色', saleAttrName: '颜色' },
+      { id: 19, baseSaleAttrId: 1, saleAttrValueName: '蓝色', saleAttrName: '颜色' },
+      { id: 20, baseSaleAttrId: 1, saleAttrValueName: '黑色', saleAttrName: '颜色' },
+    ],
+  },
+
+  // ==================== 华为 P60 Pro (spuId: 5) ====================
+  {
+    id: 7,
+    spuId: 5,
+    baseSaleAttrId: 1,
+    saleAttrName: '颜色',
+    spuSaleAttrValueList: [
+      { id: 21, baseSaleAttrId: 1, saleAttrValueName: '羽砂黑', saleAttrName: '颜色' },
+      { id: 22, baseSaleAttrId: 1, saleAttrValueName: '羽砂白', saleAttrName: '颜色' },
+      { id: 23, baseSaleAttrId: 1, saleAttrValueName: '翡冷翠', saleAttrName: '颜色' },
+    ],
+  },
+
+  // ==================== 小米 14 (spuId: 6) ====================
+  {
+    id: 8,
+    spuId: 6,
+    baseSaleAttrId: 1,
+    saleAttrName: '颜色',
+    spuSaleAttrValueList: [
+      { id: 24, baseSaleAttrId: 1, saleAttrValueName: '黑色', saleAttrName: '颜色' },
+      { id: 25, baseSaleAttrId: 1, saleAttrValueName: '白色', saleAttrName: '颜色' },
+    ],
+  },
+  {
+    id: 9,
+    spuId: 6,
+    baseSaleAttrId: 4,
+    saleAttrName: '尺码',
+    spuSaleAttrValueList: [],
+  },
+
+  // ==================== OPPO Find X7 (spuId: 7) ====================
+  {
+    id: 10,
+    spuId: 7,
+    baseSaleAttrId: 1,
+    saleAttrName: '颜色',
+    spuSaleAttrValueList: [
+      { id: 26, baseSaleAttrId: 1, saleAttrValueName: '海阔天空', saleAttrName: '颜色' },
+      { id: 27, baseSaleAttrId: 1, saleAttrValueName: '暮山紫', saleAttrName: '颜色' },
+    ],
+  },
+
+  // ==================== vivo X100 (spuId: 8) ====================
+  {
+    id: 11,
+    spuId: 8,
+    baseSaleAttrId: 1,
+    saleAttrName: '颜色',
+    spuSaleAttrValueList: [
+      { id: 28, baseSaleAttrId: 1, saleAttrValueName: '落日橙', saleAttrName: '颜色' },
+      { id: 29, baseSaleAttrId: 1, saleAttrValueName: '星迹蓝', saleAttrName: '颜色' },
+    ],
+  },
+
+  // ==================== 联想 ThinkPad X1 Carbon (spuId: 9) ====================
+  {
+    id: 12,
+    spuId: 9,
+    baseSaleAttrId: 2,
+    saleAttrName: '版本',
+    spuSaleAttrValueList: [
+      { id: 30, baseSaleAttrId: 2, saleAttrValueName: 'i7/16GB/512GB', saleAttrName: '版本' },
+      { id: 31, baseSaleAttrId: 2, saleAttrValueName: 'i7/32GB/1TB', saleAttrName: '版本' },
+    ],
+  },
+
+  // ==================== 戴尔 XPS 15 (spuId: 10) ====================
+  {
+    id: 13,
+    spuId: 10,
+    baseSaleAttrId: 2,
+    saleAttrName: '版本',
+    spuSaleAttrValueList: [
+      { id: 32, baseSaleAttrId: 2, saleAttrValueName: 'i9/32GB/1TB', saleAttrName: '版本' },
+      { id: 33, baseSaleAttrId: 2, saleAttrValueName: 'i7/16GB/512GB', saleAttrName: '版本' },
+    ],
+  },
+
+  // ==================== 诺基亚 105 (spuId: 11) ====================
+  {
+    id: 14,
+    spuId: 11,
+    baseSaleAttrId: 1,
+    saleAttrName: '颜色',
+    spuSaleAttrValueList: [
+      { id: 34, baseSaleAttrId: 1, saleAttrValueName: '黑色', saleAttrName: '颜色' },
+      { id: 35, baseSaleAttrId: 1, saleAttrValueName: '蓝色', saleAttrName: '颜色' },
+    ],
+  },
+
+  // ==================== 飞利浦 E171L (spuId: 12) ====================
+  {
+    id: 15,
+    spuId: 12,
+    baseSaleAttrId: 1,
+    saleAttrName: '颜色',
+    spuSaleAttrValueList: [
+      { id: 36, baseSaleAttrId: 1, saleAttrValueName: '金色', saleAttrName: '颜色' },
+      { id: 37, baseSaleAttrId: 1, saleAttrValueName: '黑色', saleAttrName: '颜色' },
+    ],
+  },
+
+  // ==================== 耐克 Dri-FIT T恤 (spuId: 13) ====================
+  {
+    id: 16,
+    spuId: 13,
+    baseSaleAttrId: 1,
+    saleAttrName: '颜色',
+    spuSaleAttrValueList: [
+      { id: 38, baseSaleAttrId: 1, saleAttrValueName: '黑色', saleAttrName: '颜色' },
+      { id: 39, baseSaleAttrId: 1, saleAttrValueName: '白色', saleAttrName: '颜色' },
+      { id: 40, baseSaleAttrId: 1, saleAttrValueName: '灰色', saleAttrName: '颜色' },
+    ],
+  },
+  {
+    id: 17,
+    spuId: 13,
+    baseSaleAttrId: 4,
+    saleAttrName: '尺码',
+    spuSaleAttrValueList: [
+      { id: 41, baseSaleAttrId: 4, saleAttrValueName: 'S', saleAttrName: '尺码' },
+      { id: 42, baseSaleAttrId: 4, saleAttrValueName: 'M', saleAttrName: '尺码' },
+      { id: 43, baseSaleAttrId: 4, saleAttrValueName: 'L', saleAttrName: '尺码' },
+      { id: 44, baseSaleAttrId: 4, saleAttrValueName: 'XL', saleAttrName: '尺码' },
+      { id: 45, baseSaleAttrId: 4, saleAttrValueName: 'XXL', saleAttrName: '尺码' },
+    ],
+  },
+
+  // ==================== 优衣库 UT T恤 (spuId: 14) ====================
+  {
+    id: 18,
+    spuId: 14,
+    baseSaleAttrId: 1,
+    saleAttrName: '颜色',
+    spuSaleAttrValueList: [
+      { id: 46, baseSaleAttrId: 1, saleAttrValueName: '白色', saleAttrName: '颜色' },
+      { id: 47, baseSaleAttrId: 1, saleAttrValueName: '黑色', saleAttrName: '颜色' },
+      { id: 48, baseSaleAttrId: 1, saleAttrValueName: '藏青色', saleAttrName: '颜色' },
+    ],
+  },
+  {
+    id: 19,
+    spuId: 14,
+    baseSaleAttrId: 4,
+    saleAttrName: '尺码',
+    spuSaleAttrValueList: [
+      { id: 49, baseSaleAttrId: 4, saleAttrValueName: 'S', saleAttrName: '尺码' },
+      { id: 50, baseSaleAttrId: 4, saleAttrValueName: 'M', saleAttrName: '尺码' },
+      { id: 51, baseSaleAttrId: 4, saleAttrValueName: 'L', saleAttrName: '尺码' },
+      { id: 52, baseSaleAttrId: 4, saleAttrValueName: 'XL', saleAttrName: '尺码' },
+      { id: 53, baseSaleAttrId: 4, saleAttrValueName: 'XXL', saleAttrName: '尺码' },
+    ],
+  },
+
+  // ==================== 阿迪达斯 T恤 (spuId: 15) ====================
+  {
+    id: 20,
+    spuId: 15,
+    baseSaleAttrId: 1,
+    saleAttrName: '颜色',
+    spuSaleAttrValueList: [
+      { id: 54, baseSaleAttrId: 1, saleAttrValueName: '灰色', saleAttrName: '颜色' },
+      { id: 55, baseSaleAttrId: 1, saleAttrValueName: '黑色', saleAttrName: '颜色' },
+    ],
+  },
+
+  // ==================== 优衣库 衬衫 (spuId: 16) ====================
+  {
+    id: 21,
+    spuId: 16,
+    baseSaleAttrId: 1,
+    saleAttrName: '颜色',
+    spuSaleAttrValueList: [
+      { id: 56, baseSaleAttrId: 1, saleAttrValueName: '白色', saleAttrName: '颜色' },
+      { id: 57, baseSaleAttrId: 1, saleAttrValueName: '蓝色', saleAttrName: '颜色' },
+    ],
+  },
+  {
+    id: 22,
+    spuId: 16,
+    baseSaleAttrId: 4,
+    saleAttrName: '尺码',
+    spuSaleAttrValueList: [
+      { id: 58, baseSaleAttrId: 4, saleAttrValueName: '38', saleAttrName: '尺码' },
+      { id: 59, baseSaleAttrId: 4, saleAttrValueName: '39', saleAttrName: '尺码' },
+      { id: 60, baseSaleAttrId: 4, saleAttrValueName: '40', saleAttrName: '尺码' },
+      { id: 61, baseSaleAttrId: 4, saleAttrValueName: '41', saleAttrName: '尺码' },
+    ],
+  },
+
+  // ==================== ZARA 连衣裙 (spuId: 17) ====================
+  {
+    id: 23,
+    spuId: 17,
+    baseSaleAttrId: 1,
+    saleAttrName: '颜色',
+    spuSaleAttrValueList: [
+      { id: 62, baseSaleAttrId: 1, saleAttrValueName: '碎花', saleAttrName: '颜色' },
+      { id: 63, baseSaleAttrId: 1, saleAttrValueName: '红色', saleAttrName: '颜色' },
+      { id: 64, baseSaleAttrId: 1, saleAttrValueName: '黑色', saleAttrName: '颜色' },
+    ],
+  },
+  {
+    id: 24,
+    spuId: 17,
+    baseSaleAttrId: 4,
+    saleAttrName: '尺码',
+    spuSaleAttrValueList: [
+      { id: 65, baseSaleAttrId: 4, saleAttrValueName: 'S', saleAttrName: '尺码' },
+      { id: 66, baseSaleAttrId: 4, saleAttrValueName: 'M', saleAttrName: '尺码' },
+      { id: 67, baseSaleAttrId: 4, saleAttrValueName: 'L', saleAttrName: '尺码' },
+    ],
+  },
+
+  // ==================== 海尔 智慧屏电视 (spuId: 18) ====================
+  {
+    id: 25,
+    spuId: 18,
+    baseSaleAttrId: 2,
+    saleAttrName: '版本',
+    spuSaleAttrValueList: [
+      { id: 68, baseSaleAttrId: 2, saleAttrValueName: '75英寸4K', saleAttrName: '版本' },
+      { id: 69, baseSaleAttrId: 2, saleAttrValueName: '85英寸4K', saleAttrName: '版本' },
+    ],
+  },
+
+  // ==================== 索尼 Bravia OLED (spuId: 19) ====================
+  {
+    id: 26,
+    spuId: 19,
+    baseSaleAttrId: 2,
+    saleAttrName: '版本',
+    spuSaleAttrValueList: [
+      { id: 70, baseSaleAttrId: 2, saleAttrValueName: '55英寸OLED', saleAttrName: '版本' },
+      { id: 71, baseSaleAttrId: 2, saleAttrValueName: '65英寸OLED', saleAttrName: '版本' },
+    ],
+  },
+
+  // ==================== 美的 护眼夜灯 (spuId: 20) ====================
+  {
+    id: 27,
+    spuId: 20,
+    baseSaleAttrId: 1,
+    saleAttrName: '颜色',
+    spuSaleAttrValueList: [
+      { id: 72, baseSaleAttrId: 1, saleAttrValueName: '白色', saleAttrName: '颜色' },
+      { id: 73, baseSaleAttrId: 1, saleAttrValueName: '粉色', saleAttrName: '颜色' },
     ],
   },
 ]
@@ -439,11 +996,12 @@ const baseSaleAttrList = [
 ]
 
 let spus = [
+  // ==================== 智能手机 (category3Id: 111) ====================
   {
     id: 1,
     spuName: 'iPhone 15 Pro',
     description: '苹果最新旗舰手机',
-    category3Id: 61,
+    category3Id: 111,
     tmId: 3,
     spuSaleAttrList: [1, 2],
     spuImageList: [1, 2],
@@ -454,7 +1012,7 @@ let spus = [
     id: 2,
     spuName: '华为 Mate 60 Pro',
     description: '华为旗舰手机',
-    category3Id: 61,
+    category3Id: 111,
     tmId: 1,
     spuSaleAttrList: [3, 4],
     spuImageList: [3, 4],
@@ -465,10 +1023,10 @@ let spus = [
     id: 3,
     spuName: '小米 14 Pro',
     description: '小米旗舰手机',
-    category3Id: 61,
+    category3Id: 111,
     tmId: 2,
     spuSaleAttrList: [5],
-    spuImageList: [5],
+    spuImageList: [5, 6],
     createTime: '2024-01-03',
     updateTime: '2024-01-03',
   },
@@ -476,10 +1034,10 @@ let spus = [
     id: 4,
     spuName: 'iPhone 15',
     description: '苹果标准版',
-    category3Id: 61,
+    category3Id: 111,
     tmId: 3,
-    spuSaleAttrList: [],
-    spuImageList: [],
+    spuSaleAttrList: [6],
+    spuImageList: [7, 8],
     createTime: '2024-01-04',
     updateTime: '2024-01-04',
   },
@@ -487,10 +1045,10 @@ let spus = [
     id: 5,
     spuName: '华为 P60 Pro',
     description: '华为P系列旗舰',
-    category3Id: 61,
+    category3Id: 111,
     tmId: 1,
-    spuSaleAttrList: [],
-    spuImageList: [],
+    spuSaleAttrList: [7],
+    spuImageList: [9, 10],
     createTime: '2024-01-05',
     updateTime: '2024-01-05',
   },
@@ -498,10 +1056,10 @@ let spus = [
     id: 6,
     spuName: '小米 14',
     description: '小米标准版',
-    category3Id: 61,
+    category3Id: 111,
     tmId: 2,
-    spuSaleAttrList: [],
-    spuImageList: [],
+    spuSaleAttrList: [8],
+    spuImageList: [11, 12],
     createTime: '2024-01-06',
     updateTime: '2024-01-06',
   },
@@ -509,10 +1067,10 @@ let spus = [
     id: 7,
     spuName: 'OPPO Find X7',
     description: 'OPPO旗舰手机',
-    category3Id: 61,
+    category3Id: 111,
     tmId: 5,
-    spuSaleAttrList: [],
-    spuImageList: [],
+    spuSaleAttrList: [10],
+    spuImageList: [13, 14],
     createTime: '2024-01-07',
     updateTime: '2024-01-07',
   },
@@ -520,12 +1078,158 @@ let spus = [
     id: 8,
     spuName: 'vivo X100',
     description: 'vivo旗舰手机',
-    category3Id: 61,
+    category3Id: 111,
     tmId: 6,
-    spuSaleAttrList: [],
-    spuImageList: [],
+    spuSaleAttrList: [11],
+    spuImageList: [15, 16],
     createTime: '2024-01-08',
     updateTime: '2024-01-08',
+  },
+
+  // ==================== 老人机 (category3Id: 112) ====================
+  {
+    id: 9,
+    spuName: '诺基亚 105',
+    description: '经典老人机，超长待机',
+    category3Id: 112,
+    tmId: 17,
+    spuSaleAttrList: [14],
+    spuImageList: [17, 18],
+    createTime: '2024-01-06',
+    updateTime: '2024-01-06',
+  },
+  {
+    id: 10,
+    spuName: '飞利浦 E171L',
+    description: '双卡双待老人机',
+    category3Id: 112,
+    tmId: 18,
+    spuSaleAttrList: [15],
+    spuImageList: [19],
+    createTime: '2024-01-07',
+    updateTime: '2024-01-07',
+  },
+
+  // ==================== 笔记本 (category3Id: 121) ====================
+  {
+    id: 11,
+    spuName: '联想 ThinkPad X1 Carbon',
+    description: '商务轻薄笔记本',
+    category3Id: 121,
+    tmId: 15,
+    spuSaleAttrList: [12],
+    spuImageList: [20, 21],
+    createTime: '2024-01-08',
+    updateTime: '2024-01-08',
+  },
+  {
+    id: 12,
+    spuName: '戴尔 XPS 15',
+    description: '高性能创作本',
+    category3Id: 121,
+    tmId: 16,
+    spuSaleAttrList: [13],
+    spuImageList: [22, 23],
+    createTime: '2024-01-09',
+    updateTime: '2024-01-09',
+  },
+
+  // ==================== T恤 (category3Id: 211) ====================
+  {
+    id: 13,
+    spuName: '耐克 Dri-FIT 运动T恤',
+    description: '速干透气运动T恤',
+    category3Id: 211,
+    tmId: 7,
+    spuSaleAttrList: [16, 17],
+    spuImageList: [24, 25],
+    createTime: '2024-02-01',
+    updateTime: '2024-02-01',
+  },
+  {
+    id: 14,
+    spuName: '优衣库 UT系列纯棉T恤',
+    description: '经典圆领纯棉T恤',
+    category3Id: 211,
+    tmId: 9,
+    spuSaleAttrList: [18, 19],
+    spuImageList: [26],
+    createTime: '2024-02-02',
+    updateTime: '2024-02-02',
+  },
+  {
+    id: 15,
+    spuName: '阿迪达斯 Essentials T恤',
+    description: '休闲基础款T恤',
+    category3Id: 211,
+    tmId: 8,
+    spuSaleAttrList: [20],
+    spuImageList: [27],
+    createTime: '2024-02-03',
+    updateTime: '2024-02-03',
+  },
+
+  // ==================== 衬衫 (category3Id: 212) ====================
+  {
+    id: 16,
+    spuName: '优衣库 免烫衬衫',
+    description: '商务正装免烫衬衫',
+    category3Id: 212,
+    tmId: 9,
+    spuSaleAttrList: [21, 22],
+    spuImageList: [28, 29],
+    createTime: '2024-03-01',
+    updateTime: '2024-03-01',
+  },
+
+  // ==================== 裙子 (category3Id: 221) ====================
+  {
+    id: 17,
+    spuName: 'ZARA 连衣裙',
+    description: '法式碎花连衣裙',
+    category3Id: 221,
+    tmId: 10,
+    spuSaleAttrList: [23, 24],
+    spuImageList: [30, 31],
+    createTime: '2024-04-01',
+    updateTime: '2024-04-01',
+  },
+
+  // ==================== 电视 (category3Id: 311) ====================
+  {
+    id: 18,
+    spuName: '海尔 智慧屏电视',
+    description: '75英寸4K超高清智能电视',
+    category3Id: 311,
+    tmId: 11,
+    spuSaleAttrList: [25],
+    spuImageList: [32],
+    createTime: '2024-05-01',
+    updateTime: '2024-05-01',
+  },
+  {
+    id: 19,
+    spuName: '索尼 Bravia OLED电视',
+    description: '65英寸OLED旗舰电视',
+    category3Id: 311,
+    tmId: 14,
+    spuSaleAttrList: [26],
+    spuImageList: [33],
+    createTime: '2024-05-02',
+    updateTime: '2024-05-02',
+  },
+
+  // ==================== 夜灯 (category3Id: 321) ====================
+  {
+    id: 20,
+    spuName: '美的 护眼夜灯',
+    description: '智能调光护眼台灯',
+    category3Id: 321,
+    tmId: 12,
+    spuSaleAttrList: [27],
+    spuImageList: [34],
+    createTime: '2024-06-01',
+    updateTime: '2024-06-01',
   },
 ]
 
@@ -535,9 +1239,10 @@ let skus = [
     skuName: 'iPhone 15 Pro 256GB 黑色',
     price: 8999,
     weight: 200,
-    skuDefaultImg: 'https://img.apple.com/iphone15pro.jpg',
+    skuDefaultImg:
+      'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=400&fit=crop',
     skuDesc: '黑色钛金属',
-    category3Id: 61,
+    category3Id: 111,
     spuId: 1,
     tmId: 3,
     skuAttrValueList: [],
@@ -550,9 +1255,10 @@ let skus = [
     skuName: '华为 Mate 60 Pro 512GB 白沙银',
     price: 6999,
     weight: 220,
-    skuDefaultImg: 'https://img.huawei.com/mate60pro.jpg',
+    skuDefaultImg:
+      'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop',
     skuDesc: '白沙银配色',
-    category3Id: 61,
+    category3Id: 111,
     spuId: 2,
     tmId: 1,
     skuAttrValueList: [],
@@ -568,11 +1274,11 @@ let skus = [
 //   { id: 3, attrName: '尺寸', categoryId: 61, categoryLevel: 3, attrValueList: [{ id: 7, valueName: '6.1英寸' }, { id: 8, valueName: '6.7英寸' }] },
 // ]
 let attrs = [
-  // ==================== 0. 手机 (categoryId: 61) ====================
+  // ==================== 智能手机 (category3Id: 111) ====================
   {
     id: 106,
     attrName: '手机一级',
-    categoryId: 61,
+    categoryId: 111,
     categoryLevel: 3,
     attrValueList: [
       { attrId: 106, id: 1001, valueName: '旗舰机' },
@@ -583,7 +1289,7 @@ let attrs = [
   {
     id: 107,
     attrName: '电池容量',
-    categoryId: 61,
+    categoryId: 111,
     categoryLevel: 3,
     attrValueList: [
       { attrId: 107, id: 1004, valueName: '4000mAh' },
@@ -594,7 +1300,7 @@ let attrs = [
   {
     id: 23,
     attrName: '运行内存',
-    categoryId: 61,
+    categoryId: 111,
     categoryLevel: 3,
     attrValueList: [
       { attrId: 23, id: 1007, valueName: '8GB' },
@@ -605,7 +1311,7 @@ let attrs = [
   {
     id: 24,
     attrName: '机身内存',
-    categoryId: 61,
+    categoryId: 111,
     categoryLevel: 3,
     attrValueList: [
       { attrId: 24, id: 1010, valueName: '128GB' },
@@ -617,7 +1323,7 @@ let attrs = [
   {
     id: 111,
     attrName: 'CPU型号',
-    categoryId: 61,
+    categoryId: 111,
     categoryLevel: 3,
     attrValueList: [
       { attrId: 111, id: 1014, valueName: '骁龙8Gen3' },
@@ -628,7 +1334,7 @@ let attrs = [
   {
     id: 112,
     attrName: '屏幕尺寸',
-    categoryId: 61,
+    categoryId: 111,
     categoryLevel: 3,
     attrValueList: [
       { attrId: 112, id: 1017, valueName: '6.36英寸' },
@@ -1423,7 +2129,61 @@ app.get('/admin/product/baseTrademark/findBaseTrademarkByKeyword/:keyword', (req
 })
 
 // ==================== SPU管理接口 ====================
-// 获取SPU列表
+
+// 具体路由必须放在通配路由之前，否则 /admin/product/spuImageList/17 会被 /:page/:limit 匹配
+
+// 获取SPU图片列表
+app.get('/admin/product/spuImageList/:spuId', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  const spuId = parseInt(req.params.spuId)
+  const list = spuImages.filter(img => img.spuId === spuId)
+
+  res.json({ code: 200, message: '获取成功', data: list, ok: true })
+})
+
+// 获取SPU销售属性
+app.get('/admin/product/spuSaleAttrList/:spuId', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  const spuId = parseInt(req.params.spuId)
+  const list = spuSaleAttrs.filter(attr => attr.spuId === spuId)
+
+  res.json({ code: 200, message: '获取成功', data: list, ok: true })
+})
+
+// 获取全部基础销售属性
+app.get('/admin/product/baseSaleAttrList', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  res.json({ code: 200, message: '获取成功', data: baseSaleAttrList, ok: true })
+})
+
+// 根据SPU ID获取已有的SKU列表
+app.get('/admin/product/findBySpuId/:spuId', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  const spuId = parseInt(req.params.spuId)
+  const skuList = skus.filter(sku => sku.spuId === spuId)
+
+  res.json({ code: 200, message: '获取成功', data: skuList, ok: true })
+})
+
+// 删除SPU
+app.delete('/admin/product/deleteSpu/:spuId', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  const spuId = parseInt(req.params.spuId)
+  spus = spus.filter(s => s.id !== spuId)
+  res.json({ code: 200, message: '删除成功', data: null, ok: true })
+})
+
+// 获取SPU列表（通配路由，必须放在最后）
 app.get('/admin/product/:page/:limit', (req, res) => {
   const { valid, message } = verifyToken(req)
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
@@ -1562,68 +2322,6 @@ app.post('/admin/product/updateSpuInfo', (req, res) => {
   } else {
     res.json({ code: 404, message: 'SPU不存在', data: null, ok: false })
   }
-})
-
-// 删除SPU
-app.delete('/admin/product/deleteSpu/:spuId', (req, res) => {
-  const { valid, message } = verifyToken(req)
-  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
-
-  const spuId = parseInt(req.params.spuId)
-  spus = spus.filter(s => s.id !== spuId)
-  res.json({ code: 200, message: '删除成功', data: null, ok: true })
-})
-
-// 获取SPU图片列表
-app.get('/admin/product/spuImageList/:spuId', (req, res) => {
-  const { valid, message } = verifyToken(req)
-  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
-
-  const spuId = parseInt(req.params.spuId)
-  const list = spuImages.filter(img => img.spuId === spuId)
-
-  res.json({ code: 200, message: '获取成功', data: list, ok: true })
-})
-
-// 获取SPU销售属性
-app.get('/admin/product/spuSaleAttrList/:spuId', (req, res) => {
-  const { valid, message } = verifyToken(req)
-  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
-
-  const spuId = parseInt(req.params.spuId)
-  const list = spuSaleAttrs.filter(attr => attr.spuId === spuId)
-
-  res.json({ code: 200, message: '获取成功', data: list, ok: true })
-})
-
-// 获取全部基础销售属性
-app.get('/admin/product/baseSaleAttrList', (req, res) => {
-  const { valid, message } = verifyToken(req)
-  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
-
-  res.json({ code: 200, message: '获取成功', data: baseSaleAttrList, ok: true })
-})
-
-// ！！！根据 SPU ID 获取已有的 SKU 列表及属性
-app.get('/admin/product/findBySpuId/:spuId', (req, res) => {
-  // 1. Token 验证（和你的示例保持一致）
-  const { valid, message } = verifyToken(req)
-  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
-
-  // 2. 获取路径参数 spuId
-  const spuId = parseInt(req.params.spuId)
-
-  // 3. 模拟数据库查询：从 skus 数组中过滤出该 spuId 下的所有 SKU
-  // 假设你的 skus 数据结构里包含 spuId、平台属性、销售属性等完整字段
-  const skuList = skus.filter(sku => sku.spuId === spuId)
-
-  // 4. 返回统一格式的响应（和你的示例完全一致）
-  res.json({
-    code: 200,
-    message: '获取成功',
-    data: skuList, // 直接返回 SKU 数组
-    ok: true,
-  })
 })
 
 // ==================== SKU管理接口 ====================

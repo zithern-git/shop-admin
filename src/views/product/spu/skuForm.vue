@@ -51,7 +51,9 @@
         <el-table-column label="名称" prop="name"></el-table-column>
         <el-table-column label="操作">
           <template #default="{ row }">
-            <el-button type="warning" class="warning-solid" @click="handler(row)">设置默认</el-button>
+            <el-button type="warning" class="warning-solid" @click="handler(row)"
+              >设置默认</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -65,11 +67,18 @@
 
 <script setup lang="ts">
   import { ref, reactive } from 'vue'
-  import type { SpuData, HasSpuResponseData, SpuImage, SpuSaleAttr, SkuData } from '@/api/product/spu/type'
+  import type {
+    SpuData,
+    SpuImageList,
+    SpuSaleAttrListResponseData,
+    SpuImage,
+    SpuSaleAttr,
+    SkuData,
+  } from '@/api/product/spu/type'
   import { reqAttr } from '@/api/product/attr'
   import { reqSpuImageList, reqSpuHasSaleAttr, reqAddSku } from '@/api/product/spu'
   import type { Attr, AttrResponseData } from '@/api/product/attr/type'
-import { ElMessage } from 'element-plus'
+  import { ElMessage } from 'element-plus'
 
   // 获取tableRef组件实例
   const tableRef = ref<any>()
@@ -96,7 +105,6 @@ import { ElMessage } from 'element-plus'
     skuDefaultImg: '',
   })
 
-
   //
   const initSkuData = async (c1Id: number | string, c2Id: number | string, spu: SpuData) => {
     // 收集数据
@@ -106,20 +114,20 @@ import { ElMessage } from 'element-plus'
     // 获取平台属性
     const result: AttrResponseData = await reqAttr(c1Id, c2Id, spu.category3Id)
     // 获取某一个品牌旗下的全部售卖商品图片
-    const result1: HasSpuResponseData = await reqSpuImageList(spu.id as number)
+    const result1: SpuImageList = await reqSpuImageList(spu.id as number)
 
     // 获取已有的SPU销售属性的数据
-    const result2: HasSpuResponseData = await reqSpuHasSaleAttr(spu.id as number)
+    const result2: SpuSaleAttrListResponseData = await reqSpuHasSaleAttr(spu.id as number)
 
     // 平台属性
     attrArr.value = result.data
     // SPU对应商品图片
-    imageArr.value = (result1.data.records[0]?.spuImageList || []).map(item => ({
+    imageArr.value = (result1.data || []).map(item => ({
       name: item.imgName as string,
       url: item.imgUrl,
     }))
     // 存储已有的SPU的销售属性
-    saleArr.value = result2.data.records[0]?.spuSaleAttrList || []
+    saleArr.value = result2.data || []
   }
 
   // 设置默认图片的方法回调
@@ -137,11 +145,11 @@ import { ElMessage } from 'element-plus'
     // 整理参数
     // 平台属性
     skuParams.skuAttrValueList = attrArr.value.reduce((prev: any, next: any) => {
-      if(next.attrIdAndValueId) {
+      if (next.attrIdAndValueId) {
         const [attrId, valueId] = next.attrIdAndValueId.split(':')
         prev.push({
           attrId: Number(attrId),
-          valueId: Number(valueId)
+          valueId: Number(valueId),
         })
       }
       return prev
@@ -152,7 +160,7 @@ import { ElMessage } from 'element-plus'
         const [saleAttrId, saleAttrValueId] = next.saleIdAndValueId.split(':')
         prev.push({
           saleAttrId: Number(saleAttrId),
-          saleAttrValueId: Number(saleAttrValueId)
+          saleAttrValueId: Number(saleAttrValueId),
         })
       }
       return prev
@@ -162,7 +170,7 @@ import { ElMessage } from 'element-plus'
     if (result.code === 200) {
       ElMessage.success(result.message)
       // 通知父组件切换为场景0
-      $emit('changeScene', {flag: 0, params: ''})
+      $emit('changeScene', { flag: 0, params: '' })
     } else {
       ElMessage.error(result.message)
     }

@@ -7,7 +7,9 @@ import type {
   HasSaleAttrResponseData,
   SpuData,
   SkuData,
-  SkuInfoData
+  SkuInfoData,
+  SpuImageList,
+  SpuSaleAttrListResponseData,
 } from './type'
 
 enum API {
@@ -44,11 +46,11 @@ export const reqAllTrademark = () => request.get<any, AllTrademark>(API.ALLTRADE
 
 // 获取某一个已有的SPU下全部商品的图片地址
 export const reqSpuImageList = (spuId: number) =>
-  request.get<any, HasSpuResponseData>(API.IMAGE_URL + spuId)
+  request.get<any, SpuImageList>(API.IMAGE_URL + spuId)
 
 // 获取某一个已有的SPU拥有多少个销售属性
 export const reqSpuHasSaleAttr = (spuId: number) =>
-  request.get<any, HasSpuResponseData>(API.SPUHASSALEATTR_URL + spuId)
+  request.get<any, SpuSaleAttrListResponseData>(API.SPUHASSALEATTR_URL + spuId)
 
 // 获取全部的销售属性
 export const reqAllSaleAttr = () => request.get<any, HasSaleAttrResponseData>(API.ALLSALEATTR_URL)
@@ -68,4 +70,5 @@ export const reqAddOrUpdateSpu = (data: SpuData) => {
 export const reqAddSku = (data: SkuData) => request.post<any, any>(API.ADDSKU_URL, data)
 
 // 获取SKU数据
-export const reqSkuList = (spuId: number | string) => request.get<any, SkuInfoData>(API.SKUINFO_URL + spuId)
+export const reqSkuList = (spuId: number | string) =>
+  request.get<any, SkuInfoData>(API.SKUINFO_URL + spuId)

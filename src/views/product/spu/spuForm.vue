@@ -78,16 +78,12 @@
               v-model="row.saleAttrValue"
               v-if="row.flag"
               size="small"
-              style="width: 100px;"
+              style="width: 100px"
               @blur="toLook(row)"
-              placeholder="请输入内容" />
-            <el-button
-              type="success"
-              v-else
-              icon="Plus"
-              size="small"
-              @click="toEdit(row)" />
-        </template>
+              placeholder="请输入内容"
+            />
+            <el-button type="success" v-else icon="Plus" size="small" @click="toEdit(row)" />
+          </template>
         </el-table-column>
         <el-table-column prop="" label="操作" width="120px">
           <template #default="{ row, $index }">
@@ -116,17 +112,18 @@
     reqSpuImageList,
     reqSpuHasSaleAttr,
     reqAllSaleAttr,
-    reqAddOrUpdateSpu
+    reqAddOrUpdateSpu,
   } from '@/api/product/spu'
   import type {
     HasSaleAttr,
-    HasSpuResponseData,
+    SpuImageList,
+    SpuSaleAttrListResponseData,
     SpuImage,
     SpuSaleAttr,
     HasSaleAttrResponseData,
     AllTrademark,
     SpuData,
-    SpuSaleAttrValue
+    SpuSaleAttrValue,
   } from '@/api/product/spu/type'
   import type { Trademark } from '@/api/product/trademark/type'
   import { GET_TOKEN } from '@/utils/token'
@@ -156,35 +153,40 @@
 
   // ✅【核心】上传请求头：自动携带 TOKEN
   const uploadHeaders = ref({
-    token: GET_TOKEN()  // 完全匹配后端格式
+    token: GET_TOKEN(), // 完全匹配后端格式
   })
 
   const initHasSpuData = async (spu: SpuData) => {
     // spu：父组件传过来的已有的SPU对象[不完整]
     spuParams.value = spu
-    // 获取全部品牌的数据
-    const result: AllTrademark = await reqAllTrademark()
+    try {
+      // 获取全部品牌的数据
+      const result: AllTrademark = await reqAllTrademark()
 
-    // 获取某一个品牌旗下的全部售卖商品图片
-    const result1: HasSpuResponseData = await reqSpuImageList(spu.id as number)
+      // 获取某一个品牌旗下的全部售卖商品图片
+      const result1: SpuImageList = await reqSpuImageList(spu.id as number)
 
-    // 获取已有的SPU销售属性的数据
-    const result2: HasSpuResponseData = await reqSpuHasSaleAttr(spu.id as number)
+      // 获取已有的SPU销售属性的数据
+      const result2: SpuSaleAttrListResponseData = await reqSpuHasSaleAttr(spu.id as number)
 
-    // 获取整个项目全部SPU的销售属性
-    const result3: HasSaleAttrResponseData = await reqAllSaleAttr()
+      // 获取整个项目全部SPU的销售属性
+      const result3: HasSaleAttrResponseData = await reqAllSaleAttr()
 
-    // 存储全部品牌的数据
-    AllTrademark.value = result.data
-    // SPU对应商品图片
-    imageList.value = (result1.data.records[0]?.spuImageList || []).map(item => ({
-      name: item.imgName as string,
-      url: item.imgUrl,
-    }))
-    // 存储已有的SPU的销售属性
-    saleAttr.value = result2.data.records[0]?.spuSaleAttrList || []
-    // 存储全部的销售属性
-    allSaleAttr.value = result3.data
+      // 存储全部品牌的数据
+      AllTrademark.value = result.data
+      // SPU对应商品图片
+      const imgData = result1.data
+      imageList.value = (Array.isArray(imgData) ? imgData : []).map(item => ({
+        name: item.imgName as string,
+        url: item.imgUrl,
+      }))
+      // 存储已有的SPU的销售属性
+      saleAttr.value = Array.isArray(result2.data) ? result2.data : []
+      // 存储全部的销售属性
+      allSaleAttr.value = result3.data
+    } catch (error) {
+      console.error('initHasSpuData 出错:', error)
+    }
   }
 
   // 存储预览图片地址
@@ -256,11 +258,11 @@
   // 表单元素失去焦点的事件回调：隐藏输入框，显示按钮
   const toLook = (row: SpuSaleAttr) => {
     // 整理收集的属性的ID与属性值的名字
-    const {baseSaleAttrId,saleAttrValue } = row
+    const { baseSaleAttrId, saleAttrValue } = row
     // 整理成服务器需要的属性值的形式
     const newSaleAttrValue: SpuSaleAttrValue = {
       baseSaleAttrId,
-      saleAttrValueName: saleAttrValue
+      saleAttrValueName: saleAttrValue,
     }
     // 非法情况判断
     if (!(saleAttrValue as string).trim()) {
@@ -286,26 +288,26 @@
     // 1：照片墙的数据
     spuParams.value.spuImageList = imageList.value.map(item => ({
       imgName: item.name, // 图片的名字
-      imgUrl: (item.response && item.response.data) || item.url // 图片的url
+      imgUrl: (item.response && item.response.data) || item.url, // 图片的url
     }))
     // 2：整理销售属性的数据
     spuParams.value.spuSaleAttrList = saleAttr.value
     const result = await reqAddOrUpdateSpu(spuParams.value)
     if (result.code === 200) {
       // 成功
-      ElMessage.success(spuParams.value.id?'更新成功': '添加成功')
+      ElMessage.success(spuParams.value.id ? '更新成功' : '添加成功')
       // 通知父组件切换场景为0
-      $emit('changeScene', {flag: 0, params: spuParams.value.id? 'update' : 'add'})
+      $emit('changeScene', { flag: 0, params: spuParams.value.id ? 'update' : 'add' })
     } else {
       // 失败
-      ElMessage.error(spuParams.value.id?'更新失败':'添加失败')
+      ElMessage.error(spuParams.value.id ? '更新失败' : '添加失败')
     }
   }
 
-    // 点击取消按钮：通知父组件切换场景为0，展示已有的SPU数据
+  // 点击取消按钮：通知父组件切换场景为0，展示已有的SPU数据
   const cancel = () => {
     // 关键：emit(事件名, 要传的值)
-    $emit('changeScene', {flag: 0, params: 'update'})
+    $emit('changeScene', { flag: 0, params: 'update' })
   }
 
   // 添加一个新的SPU初始化请求方法
@@ -327,7 +329,7 @@
     // 存储三级分类的id，后端数据不足，只有category3Id==61的数据
     // spuParams.value.category3Id = c3Id
     spuParams.value.category3Id = 61
-     // 获取全部品牌的数据
+    // 获取全部品牌的数据
     const result: AllTrademark = await reqAllTrademark()
 
     // 获取整个项目全部SPU的销售属性

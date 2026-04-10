@@ -112,8 +112,12 @@
 
   // 此方法执行：可以获取某一个三级分类下全部已有的SPU
   const getHasSPU = async () => {
-    // const result: HasSpuResponseData = await reqHasSpu(pageNo.value, pageSize.value, categoryStore.c3Id);
-    const result: HasSpuResponseData = await reqHasSpu(pageNo.value, pageSize.value, 61)
+    const result: HasSpuResponseData = await reqHasSpu(
+      pageNo.value,
+      pageSize.value,
+      categoryStore.c3Id
+    )
+    // const result: HasSpuResponseData = await reqHasSpu(pageNo.value, pageSize.value, 61)
     if (result.code === 200) {
       records.value = result.data.records
       total.value = result.data.total
@@ -164,7 +168,7 @@
     const result = await reqSkuList(row.id as number)
     console.log(result)
 
-     dialogTableVisible.value = true
+    dialogTableVisible.value = true
   }
   // 子组件SpuForm绑定自定义事件：目前是让子组件通知父组件切换场景为0
   const changeScene = (obj: any) => {

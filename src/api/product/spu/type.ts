@@ -35,7 +35,7 @@ export interface SpuSaleAttr {
   saleIdAndValueId?: string
 }
 
-export interface imgResponse extends ResponseData{
+export interface imgResponse extends ResponseData {
   data: string
 }
 // SPU数据的ts类型
@@ -75,6 +75,11 @@ export interface SpuImageList extends ResponseData {
   data: SpuImage[]
 }
 
+// SPU销售属性列表接口返回类型
+export interface SpuSaleAttrListResponseData extends ResponseData {
+  data: SpuSaleAttr[]
+}
+
 export interface HasSaleAttr {
   id: number
   name: string
@@ -85,12 +90,12 @@ export interface HasSaleAttrResponseData extends ResponseData {
 }
 
 export interface Attr {
-  attrId: number | string, // 平台属性的ID
+  attrId: number | string // 平台属性的ID
   valueId: number | string // 属性值的ID
 }
 
 export interface SaleAttr {
-  saleAttrId: number | string, // 属性ID
+  saleAttrId: number | string // 属性ID
   saleAttrValueId: number | string // 属性值的ID
 }
 
@@ -101,7 +106,7 @@ export interface SkuData {
   skuName: string // sku名字
   price: number | string // sku价格
   weight: number | string // sku重量
-  skuDesc: string, // sku的描述
+  skuDesc: string // sku的描述
   skuAttrValueList?: Attr[]
   skuSaleAttrValueList?: SaleAttr[]
   skuDefaultImg: string

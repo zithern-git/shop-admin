@@ -32,6 +32,11 @@ export default defineConfig(({ mode }) => {
           // 路径重写
           rewrite: path => path.replace(/^\/api/, ''),
         },
+        // 代理后端静态文件（SPU图片、品牌Logo等）
+        '/uploads': {
+          target: env.VITE_SERVER || 'http://localhost:3003',
+          changeOrigin: true,
+        },
       },
     },
     plugins: [
