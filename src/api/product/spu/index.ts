@@ -7,6 +7,7 @@ import type {
   HasSaleAttrResponseData,
   SpuData,
   SkuData,
+  SkuInfoData
 } from './type'
 
 enum API {
@@ -26,6 +27,8 @@ enum API {
   ADDSPU_URL = '/admin/product/saveSpuInfo',
   // 追加一个新的SKU
   ADDSKU_URL = '/admin/product/saveSkuInfo',
+  // 查看某一个已有的SPU下全部售卖的商品
+  SKUINFO_URL = '/admin/product/findBySpuId/',
   //
   DELETESPU_URL = '/admin/product/deleteSpu/',
 }
@@ -63,3 +66,6 @@ export const reqAddOrUpdateSpu = (data: SpuData) => {
 
 // 添加SKU的请求方法
 export const reqAddSku = (data: SkuData) => request.post<any, any>(API.ADDSKU_URL, data)
+
+// 获取SKU数据
+export const reqSkuList = (spuId: number | string) => request.get<any, SkuInfoData>(API.SKUINFO_URL + spuId)

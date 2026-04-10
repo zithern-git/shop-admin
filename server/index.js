@@ -1604,6 +1604,28 @@ app.get('/admin/product/baseSaleAttrList', (req, res) => {
   res.json({ code: 200, message: '获取成功', data: baseSaleAttrList, ok: true })
 })
 
+// ！！！根据 SPU ID 获取已有的 SKU 列表及属性
+app.get('/admin/product/findBySpuId/:spuId', (req, res) => {
+  // 1. Token 验证（和你的示例保持一致）
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  // 2. 获取路径参数 spuId
+  const spuId = parseInt(req.params.spuId)
+
+  // 3. 模拟数据库查询：从 skus 数组中过滤出该 spuId 下的所有 SKU
+  // 假设你的 skus 数据结构里包含 spuId、平台属性、销售属性等完整字段
+  const skuList = skus.filter(sku => sku.spuId === spuId)
+
+  // 4. 返回统一格式的响应（和你的示例完全一致）
+  res.json({
+    code: 200,
+    message: '获取成功',
+    data: skuList, // 直接返回 SKU 数组
+    ok: true,
+  })
+})
+
 // ==================== SKU管理接口 ====================
 // 获取SKU列表
 app.get('/admin/product/list/:page/:limit', (req, res) => {

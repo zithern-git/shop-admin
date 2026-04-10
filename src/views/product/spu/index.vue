@@ -45,6 +45,7 @@
                 size="small"
                 icon="InfoFilled"
                 title="查看SPU"
+                @click="findSku(row)"
               />
               <el-popconfirm :title="`确认删除${row.attrName}吗？`" width="200px">
                 <template #reference>
@@ -54,6 +55,14 @@
             </template>
           </el-table-column>
         </el-table>
+        <el-dialog v-model="dialogTableVisible" title="SKU列表" width="800">
+          <el-table border>
+            <el-table-column label="sku名字" />
+            <el-table-column label="sku价格" />
+            <el-table-column label="sku重量" />
+            <el-table-column label="sku图片" />
+          </el-table>
+        </el-dialog>
         <!-- 分页器 -->
         <el-pagination
           v-model:current-page="pageNo"
@@ -80,13 +89,15 @@
   import { ref, watch } from 'vue'
   // 引入分类的仓库
   import useCategoryStore from '@/store/modules/category'
-  import { reqHasSpu } from '@/api/product/spu'
+  import { reqHasSpu, reqSkuList } from '@/api/product/spu'
   import type { SpuData, Records, HasSpuResponseData } from '@/api/product/spu/type'
   import SpuForm from './spuForm.vue'
   import SkuForm from './skuForm.vue'
 
   // 场景切换和分类存储,0：显示已有SPU；1：添加或者修改已有SPU；2：添加SKU的结构
   const scene = ref<number>(0)
+  //
+  const dialogTableVisible = ref(false)
   const categoryStore = useCategoryStore()
   // 分页器默认页码
   const pageNo = ref<number>(1)
@@ -148,6 +159,13 @@
     spu.value.initHasSpuData(row)
   }
 
+  //查看SKU列表的数据
+  const findSku = async (row: SpuData) => {
+    const result = await reqSkuList(row.id as number)
+    console.log(result)
+
+     dialogTableVisible.value = true
+  }
   // 子组件SpuForm绑定自定义事件：目前是让子组件通知父组件切换场景为0
   const changeScene = (obj: any) => {
     // 子组件SpuForm点击取消变为场景0，展示已有的SPU
