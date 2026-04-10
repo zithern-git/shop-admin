@@ -4,9 +4,9 @@ import request from '@/utils/request'
 import type {
   HasSpuResponseData,
   AllTrademark,
-  SpuImageList,
   HasSaleAttrResponseData,
   SpuData,
+  SkuData,
 } from './type'
 
 enum API {
@@ -24,6 +24,8 @@ enum API {
   UPDATESPU_URL = '/admin/product/updateSpuInfo',
   // 追加一个新的SPU
   ADDSPU_URL = '/admin/product/saveSpuInfo',
+  // 追加一个新的SKU
+  ADDSKU_URL = '/admin/product/saveSkuInfo',
   //
   DELETESPU_URL = '/admin/product/deleteSpu/',
 }
@@ -58,3 +60,6 @@ export const reqAddOrUpdateSpu = (data: SpuData) => {
     return request.post<any, any>(API.ADDSPU_URL, data)
   }
 }
+
+// 添加SKU的请求方法
+export const reqAddSku = (data: SkuData) => request.post<any, any>(API.ADDSKU_URL, data)

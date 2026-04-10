@@ -1,16 +1,16 @@
 <template>
   <el-form label-width="70px">
     <el-form-item label="sku名称">
-      <el-input placeholder="SKU名称" />
+      <el-input v-model="skuParams.skuName" placeholder="SKU名称" />
     </el-form-item>
     <el-form-item label="价格(元)">
-      <el-input placeholder="价格(元)" type="number" />
+      <el-input v-model="skuParams.price" placeholder="价格(元)" type="number" />
     </el-form-item>
     <el-form-item label="重量(克)">
-      <el-input placeholder="重量(克)" type="number" />
+      <el-input v-model="skuParams.weight" placeholder="重量(克)" type="number" />
     </el-form-item>
     <el-form-item label="sku描述">
-      <el-input placeholder="SKU描述" type="textarea" />
+      <el-input v-model="skuParams.skuDesc" placeholder="SKU描述" type="textarea" />
     </el-form-item>
     <el-form-item label="平台属性">
       <el-form :inline="true">
@@ -55,17 +55,17 @@
       </el-table>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary">保存</el-button>
+      <el-button type="primary" @click="save">保存</el-button>
       <el-button @click="cancel">取消</el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
-  import type { SpuData, HasSpuResponseData, SpuImage, SpuSaleAttr } from '@/api/product/spu/type'
+  import { ref, reactive } from 'vue'
+  import type { SpuData, HasSpuResponseData, SpuImage, SpuSaleAttr, SkuData } from '@/api/product/spu/type'
   import { reqAttr } from '@/api/product/attr'
-  import { reqSpuImageList, reqSpuHasSaleAttr } from '@/api/product/spu'
+  import { reqSpuImageList, reqSpuHasSaleAttr, reqAddSku } from '@/api/product/spu'
   import type { Attr, AttrResponseData } from '@/api/product/attr/type'
 
   // 平台属性
@@ -75,8 +75,29 @@
   // 已有的SPU销售属性
   const saleArr = ref<SpuSaleAttr[]>([])
 
+  const skuParams = reactive<SkuData>({
+    // 父组件传递过来的数据
+    category3Id: '', // 三级分类的ID
+    spuId: '', // 已有的SPU的ID
+    tmId: '', // SPU品牌的ID
+    // v-model收集
+    skuName: '', // sku名字
+    price: '', // sku价格
+    weight: '', // sku重量
+    skuDesc: '', // sku的描述
+    //
+    skuAttrValueList: [],
+    skuSaleAttrValueList: [],
+    skuDefaultImg: '',
+  })
+
   //
   const initSkuData = async (c1Id: number | string, c2Id: number | string, spu: SpuData) => {
+    console.log('spu:', spu)
+    // 收集数据
+    skuParams.category3Id = spu.category3Id
+    skuParams.spuId = spu.id as number
+    skuParams.tmId = spu.tmId
     // 获取平台属性
     const result: AttrResponseData = await reqAttr(c1Id, c2Id, spu.category3Id)
     // 获取某一个品牌旗下的全部售卖商品图片
@@ -94,6 +115,10 @@
     }))
     // 存储已有的SPU的销售属性
     saleArr.value = result2.data.records[0]?.spuSaleAttrList || []
+  }
+
+  const save = async (skuParams: SkuData) => {
+    const result = await reqAddSku(skuParams)
   }
 
   // 自定义事件方法

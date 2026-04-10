@@ -572,7 +572,7 @@ let attrs = [
   {
     id: 106,
     attrName: '手机一级',
-    categoryId: 2,
+    categoryId: 61,
     categoryLevel: 3,
     attrValueList: [
       { attrId: 106, id: 1001, valueName: '旗舰机' },
@@ -583,7 +583,7 @@ let attrs = [
   {
     id: 107,
     attrName: '电池容量',
-    categoryId: 13,
+    categoryId: 61,
     categoryLevel: 3,
     attrValueList: [
       { attrId: 107, id: 1004, valueName: '4000mAh' },
