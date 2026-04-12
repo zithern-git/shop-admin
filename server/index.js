@@ -1243,6 +1243,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=400&fit=crop',
     skuDesc: '黑色钛金属',
+    isSale: 1,
     category3Id: 111,
     spuId: 1,
     tmId: 3,
@@ -1259,6 +1260,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=400&fit=crop',
     skuDesc: '蓝色钛金属',
+    isSale: 1,
     category3Id: 111,
     spuId: 1,
     tmId: 3,
@@ -1275,6 +1277,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop',
     skuDesc: '雅川青配色',
+    isSale: 1,
     category3Id: 111,
     spuId: 2,
     tmId: 1,
@@ -1291,6 +1294,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=400&h=400&fit=crop',
     skuDesc: '白沙银配色',
+    isSale: 0,
     category3Id: 111,
     spuId: 2,
     tmId: 1,
@@ -1307,6 +1311,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1621330396173-e41b1cafd17f?w=400&h=400&fit=crop',
     skuDesc: '黑色版',
+    isSale: 1,
     category3Id: 111,
     spuId: 3,
     tmId: 2,
@@ -1323,6 +1328,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1605236453806-6ff36851218e?w=400&h=400&fit=crop',
     skuDesc: '白色版',
+    isSale: 0,
     category3Id: 111,
     spuId: 3,
     tmId: 2,
@@ -1339,6 +1345,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1505720483508-6e8f9b7c8e47?w=400&h=400&fit=crop',
     skuDesc: '粉色版',
+    isSale: 1,
     category3Id: 111,
     spuId: 4,
     tmId: 3,
@@ -1355,6 +1362,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1580910051074-3eb694886571?w=400&h=400&fit=crop',
     skuDesc: '黑色版',
+    isSale: 1,
     category3Id: 111,
     spuId: 4,
     tmId: 3,
@@ -1371,6 +1379,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=400&h=400&fit=crop',
     skuDesc: '羽砂黑配色',
+    isSale: 1,
     category3Id: 111,
     spuId: 5,
     tmId: 1,
@@ -1387,6 +1396,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1556656793-08538906a9f8?w=400&h=400&fit=crop',
     skuDesc: '羽砂白配色',
+    isSale: 0,
     category3Id: 111,
     spuId: 5,
     tmId: 1,
@@ -1403,6 +1413,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=400&fit=crop',
     skuDesc: '黑色版',
+    isSale: 1,
     category3Id: 111,
     spuId: 6,
     tmId: 2,
@@ -1419,6 +1430,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop',
     skuDesc: '白色版',
+    isSale: 1,
     category3Id: 111,
     spuId: 6,
     tmId: 2,
@@ -1435,6 +1447,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=400&fit=crop',
     skuDesc: '海阔天空配色',
+    isSale: 0,
     category3Id: 111,
     spuId: 7,
     tmId: 5,
@@ -1451,6 +1464,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=400&h=400&fit=crop',
     skuDesc: '落日橙配色',
+    isSale: 1,
     category3Id: 111,
     spuId: 8,
     tmId: 6,
@@ -1468,6 +1482,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=400&h=400&fit=crop',
     skuDesc: '经典黑色',
+    isSale: 1,
     category3Id: 112,
     spuId: 9,
     tmId: 17,
@@ -1484,6 +1499,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop',
     skuDesc: '活力蓝色',
+    isSale: 0,
     category3Id: 112,
     spuId: 9,
     tmId: 17,
@@ -1500,6 +1516,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=400&h=400&fit=crop',
     skuDesc: '典雅金色',
+    isSale: 1,
     category3Id: 112,
     spuId: 10,
     tmId: 18,
@@ -1517,6 +1534,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400&h=400&fit=crop',
     skuDesc: '商务轻薄款',
+    isSale: 1,
     category3Id: 121,
     spuId: 11,
     tmId: 15,
@@ -1533,6 +1551,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=400&h=400&fit=crop',
     skuDesc: '高性能创作款',
+    isSale: 0,
     category3Id: 121,
     spuId: 12,
     tmId: 16,
@@ -1550,6 +1569,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop',
     skuDesc: '黑色M码',
+    isSale: 1,
     category3Id: 211,
     spuId: 13,
     tmId: 7,
@@ -1566,6 +1586,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop',
     skuDesc: '白色L码',
+    isSale: 1,
     category3Id: 211,
     spuId: 14,
     tmId: 9,
@@ -1582,6 +1603,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop',
     skuDesc: '黑色XL码',
+    isSale: 0,
     category3Id: 211,
     spuId: 15,
     tmId: 8,
@@ -1599,6 +1621,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&h=400&fit=crop',
     skuDesc: '白色M码',
+    isSale: 1,
     category3Id: 212,
     spuId: 16,
     tmId: 9,
@@ -1616,6 +1639,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400&h=400&fit=crop',
     skuDesc: '碎花S码',
+    isSale: 1,
     category3Id: 221,
     spuId: 17,
     tmId: 10,
@@ -1633,6 +1657,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=400&fit=crop',
     skuDesc: '75英寸4K',
+    isSale: 1,
     category3Id: 311,
     spuId: 18,
     tmId: 11,
@@ -1649,6 +1674,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=400&fit=crop',
     skuDesc: '65英寸OLED',
+    isSale: 0,
     category3Id: 311,
     spuId: 19,
     tmId: 14,
@@ -1666,6 +1692,7 @@ let skus = [
     skuDefaultImg:
       'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=400&h=400&fit=crop',
     skuDesc: '白色智能调光',
+    isSale: 1,
     category3Id: 321,
     spuId: 20,
     tmId: 12,
@@ -2783,6 +2810,52 @@ app.delete('/admin/product/deleteSku/:skuId', (req, res) => {
   res.json({ code: 200, message: '删除成功', data: null, ok: true })
 })
 
+// SKU上架
+app.get('/admin/product/onSale/:skuId', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  const skuId = parseInt(req.params.skuId)
+  const sku = skus.find(s => s.id === skuId)
+  if (sku) {
+    sku.isSale = 1
+    sku.updateTime = new Date().toISOString().split('T')[0]
+    res.json({ code: 200, message: '上架成功', data: null, ok: true })
+  } else {
+    res.json({ code: 404, message: 'SKU不存在', data: null, ok: false })
+  }
+})
+
+// SKU下架
+app.get('/admin/product/cancelSale/:skuId', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  const skuId = parseInt(req.params.skuId)
+  const sku = skus.find(s => s.id === skuId)
+  if (sku) {
+    sku.isSale = 0
+    sku.updateTime = new Date().toISOString().split('T')[0]
+    res.json({ code: 200, message: '下架成功', data: null, ok: true })
+  } else {
+    res.json({ code: 404, message: 'SKU不存在', data: null, ok: false })
+  }
+})
+
+// 获取SKU详情
+app.get('/admin/product/getSkuById/:skuId', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  const skuId = parseInt(req.params.skuId)
+  const sku = skus.find(s => s.id === skuId)
+  if (sku) {
+    res.json({ code: 200, message: '获取成功', data: sku, ok: true })
+  } else {
+    res.json({ code: 404, message: 'SKU不存在', data: null, ok: false })
+  }
+})
+
 // ==================== 属性管理接口 ====================
 // 获取属性列表
 app.get('/admin/product/attrInfoList/:category1Id/:category2Id/:category3Id', (req, res) => {
@@ -2956,6 +3029,9 @@ app.listen(PORT, () => {
   console.log(`  GET    http://localhost:${PORT}/admin/product/list/:page/:limit`)
   console.log(`  POST   http://localhost:${PORT}/admin/product/saveSkuInfo`)
   console.log(`  DELETE http://localhost:${PORT}/admin/product/deleteSku/:skuId`)
+  console.log(`  GET    http://localhost:${PORT}/admin/product/onSale/:skuId`)
+  console.log(`  GET    http://localhost:${PORT}/admin/product/cancelSale/:skuId`)
+  console.log(`  GET    http://localhost:${PORT}/admin/product/getSkuById/:skuId`)
   console.log('\n【属性管理】')
   console.log(
     `  GET    http://localhost:${PORT}/admin/product/attrInfoList/:category1Id/:category2Id/:category3Id`
