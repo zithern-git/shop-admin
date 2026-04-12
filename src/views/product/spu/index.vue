@@ -44,10 +44,14 @@
                 style="background: #909399; color: #fff"
                 size="small"
                 icon="InfoFilled"
-                title="查看SPU"
+                title="查看SKU列表"
                 @click="findSku(row)"
               />
-              <el-popconfirm :title="`确认删除${row.attrName}吗？`" width="200px">
+              <el-popconfirm
+                :title="`确认删除${row.spuName}吗？`"
+                width="200px"
+                @confirm="deleteSpu(row)"
+              >
                 <template #reference>
                   <el-button type="danger" size="small" icon="Delete" title="删除SPU" />
                 </template>
@@ -55,14 +59,6 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-dialog v-model="dialogTableVisible" title="SKU列表" width="800">
-          <el-table border>
-            <el-table-column label="sku名字" />
-            <el-table-column label="sku价格" />
-            <el-table-column label="sku重量" />
-            <el-table-column label="sku图片" />
-          </el-table>
-        </el-dialog>
         <!-- 分页器 -->
         <el-pagination
           v-model:current-page="pageNo"
@@ -81,23 +77,43 @@
         <!-- 添加SKU子组件 -->
         <SkuForm ref="sku" @changeScene="changeScene" />
       </div>
+      <!-- SKU列表对话框 -->
+      <el-dialog v-model="dialogTableVisible" title="SKU列表" width="800">
+        <el-table :data="skuArr" border>
+          <el-table-column label="sku名字" prop="skuName" />
+          <el-table-column label="sku价格" prop="price" />
+          <el-table-column label="sku重量" prop="weight" />
+          <el-table-column label="sku图片">
+            <template #default="{ row }">
+              <img :src="row.skuDefaultImg" style="width: 100px; height: 100px" />
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-dialog>
     </el-card>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { ref, watch, onBeforeUnmount } from 'vue'
   // 引入分类的仓库
   import useCategoryStore from '@/store/modules/category'
-  import { reqHasSpu, reqSkuList } from '@/api/product/spu'
-  import type { SpuData, Records, HasSpuResponseData } from '@/api/product/spu/type'
+  import { reqHasSpu, reqSkuList, reqDeleteSpu } from '@/api/product/spu'
+  import type {
+    SpuData,
+    Records,
+    HasSpuResponseData,
+    SkuInfoData,
+    SkuData,
+  } from '@/api/product/spu/type'
   import SpuForm from './spuForm.vue'
   import SkuForm from './skuForm.vue'
+  import { ElMessage } from 'element-plus'
 
   // 场景切换和分类存储,0：显示已有SPU；1：添加或者修改已有SPU；2：添加SKU的结构
   const scene = ref<number>(0)
   //
-  const dialogTableVisible = ref(false)
+  const dialogTableVisible = ref<boolean>(false)
   const categoryStore = useCategoryStore()
   // 分页器默认页码
   const pageNo = ref<number>(1)
@@ -109,6 +125,8 @@
   // 获取子组件实例spuForm和skuForm
   const spu = ref<any>()
   const sku = ref<any>()
+  // 存储全部的SKU数据
+  const skuArr = ref<SkuData[]>([])
 
   // 此方法执行：可以获取某一个三级分类下全部已有的SPU
   const getHasSPU = async () => {
@@ -165,11 +183,29 @@
 
   //查看SKU列表的数据
   const findSku = async (row: SpuData) => {
-    const result = await reqSkuList(row.id as number)
-    console.log(result)
-
+    const result: SkuInfoData = await reqSkuList(row.id as number)
+    if (result.code === 200) {
+      skuArr.value = result.data
+      ElMessage.success('查看成功')
+    } else {
+      ElMessage.error('查看失败')
+    }
+    // 显示SKU列表对话框
     dialogTableVisible.value = true
   }
+
+  // 删除已有的Spu按钮的回调
+  const deleteSpu = async (row: SpuData) => {
+    const result: HasSpuResponseData = await reqDeleteSpu(row.id as number)
+    if (result.code === 200) {
+      ElMessage.success('删除成功')
+      // 获取剩余的SPU
+      getHasSPU()
+    } else {
+      ElMessage.error('删除失败')
+    }
+  }
+
   // 子组件SpuForm绑定自定义事件：目前是让子组件通知父组件切换场景为0
   const changeScene = (obj: any) => {
     // 子组件SpuForm点击取消变为场景0，展示已有的SPU
@@ -184,6 +220,11 @@
       getHasSPU()
     }
   }
+
+  // 路由组件销毁前：清空关于仓库的数据
+  onBeforeUnmount(() => {
+    categoryStore.$reset()
+  })
 </script>
 
 <style></style>

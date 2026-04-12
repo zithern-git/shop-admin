@@ -112,14 +112,6 @@ export interface SkuData {
   skuDefaultImg: string
 }
 
-export interface SkuInfoRecords {
-  records: SkuData[]
-  current: number
-  pages: number
-  size: number
-  total: number
-}
-
 // 获取SKU数据接口的ts类型
 export interface SkuInfoData extends ResponseData {
   data: SkuData[]
