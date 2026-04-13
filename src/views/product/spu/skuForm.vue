@@ -141,15 +141,18 @@
   }
 
   // 保存按钮的方法
-  const save = async (skuParams: SkuData) => {
+  const save = async () => {
     // 整理参数
     // 平台属性
     skuParams.skuAttrValueList = attrArr.value.reduce((prev: any, next: any) => {
       if (next.attrIdAndValueId) {
         const [attrId, valueId] = next.attrIdAndValueId.split(':')
+        // 从attrValueList中找到对应的valueName
+        const attrValue = next.attrValueList.find((item: any) => item.id == valueId)
         prev.push({
           attrId: Number(attrId),
           valueId: Number(valueId),
+          valueName: attrValue?.valueName || ''
         })
       }
       return prev
@@ -158,9 +161,12 @@
     skuParams.skuSaleAttrValueList = saleArr.value.reduce((prev: any, next: any) => {
       if (next.saleIdAndValueId) {
         const [saleAttrId, saleAttrValueId] = next.saleIdAndValueId.split(':')
+        // 从spuSaleAttrValueList中找到对应的saleAttrValueName
+        const saleAttrValue = next.spuSaleAttrValueList.find((item: any) => item.id == saleAttrValueId)
         prev.push({
           saleAttrId: Number(saleAttrId),
           saleAttrValueId: Number(saleAttrValueId),
+          saleAttrValueName: saleAttrValue?.saleAttrValueName || ''
         })
       }
       return prev

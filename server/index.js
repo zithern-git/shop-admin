@@ -1247,8 +1247,21 @@ let skus = [
     category3Id: 111,
     spuId: 1,
     tmId: 3,
-    skuAttrValueList: [],
-    skuSaleAttrValueList: [],
+    skuAttrValueList: [
+      { attrId: 1, valueId: 11, valueName: '256GB' },
+      { attrId: 2, valueId: 21, valueName: '黑色' },
+      { attrId: 3, valueId: 31, valueName: '钛金属材质' }
+    ],
+    skuSaleAttrValueList: [
+      { saleAttrId: 1, saleAttrValueId: 101, saleAttrValueName: '内存版本' },
+      { saleAttrId: 2, saleAttrValueId: 102, saleAttrValueName: '颜色' }
+    ],
+    skuImageList: [
+      { id: 1, imgName: 'iPhone15Pro-black-1.jpg', imgUrl: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=400&fit=crop', spuId: 1, isDefault: '1' },
+      { id: 2, imgName: 'iPhone15Pro-black-2.jpg', imgUrl: 'https://images.unsplash.com/photo-1696446701796-da61225697cc?w=400&h=400&fit=crop', spuId: 1, isDefault: '0' },
+      { id: 3, imgName: 'iPhone15Pro-black-3.jpg', imgUrl: 'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=400&h=400&fit=crop', spuId: 1, isDefault: '0' },
+      { id: 4, imgName: 'iPhone15Pro-black-4.jpg', imgUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop', spuId: 1, isDefault: '0' }
+    ],
     createTime: '2024-01-01',
     updateTime: '2024-01-01',
   },
@@ -1264,8 +1277,20 @@ let skus = [
     category3Id: 111,
     spuId: 1,
     tmId: 3,
-    skuAttrValueList: [],
-    skuSaleAttrValueList: [],
+    skuAttrValueList: [
+      { attrId: 1, valueId: 11, valueName: '256GB' },
+      { attrId: 2, valueId: 22, valueName: '蓝色' },
+      { attrId: 3, valueId: 31, valueName: '钛金属材质' }
+    ],
+    skuSaleAttrValueList: [
+      { saleAttrId: 1, saleAttrValueId: 101, saleAttrValueName: '内存版本' },
+      { saleAttrId: 2, saleAttrValueId: 103, saleAttrValueName: '颜色' }
+    ],
+    skuImageList: [
+      { id: 5, imgName: 'iPhone15Pro-blue-1.jpg', imgUrl: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=400&fit=crop', spuId: 1, isDefault: '1' },
+      { id: 6, imgName: 'iPhone15Pro-blue-2.jpg', imgUrl: 'https://images.unsplash.com/photo-1696446701796-da61225697cc?w=400&h=400&fit=crop', spuId: 1, isDefault: '0' },
+      { id: 7, imgName: 'iPhone15Pro-blue-3.jpg', imgUrl: 'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=400&h=400&fit=crop', spuId: 1, isDefault: '0' }
+    ],
     createTime: '2024-01-01',
     updateTime: '2024-01-01',
   },
@@ -1281,8 +1306,20 @@ let skus = [
     category3Id: 111,
     spuId: 2,
     tmId: 1,
-    skuAttrValueList: [],
-    skuSaleAttrValueList: [],
+    skuAttrValueList: [
+      { attrId: 1, valueId: 12, valueName: '512GB' },
+      { attrId: 2, valueId: 23, valueName: '雅川青' },
+      { attrId: 4, valueId: 41, valueName: '麒麟芯片' }
+    ],
+    skuSaleAttrValueList: [
+      { saleAttrId: 1, saleAttrValueId: 102, saleAttrValueName: '存储容量' },
+      { saleAttrId: 2, saleAttrValueId: 104, saleAttrValueName: '颜色' }
+    ],
+    skuImageList: [
+      { id: 8, imgName: 'mate60pro-green-1.jpg', imgUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop', spuId: 2, isDefault: '1' },
+      { id: 9, imgName: 'mate60pro-green-2.jpg', imgUrl: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=400&fit=crop', spuId: 2, isDefault: '0' },
+      { id: 10, imgName: 'mate60pro-green-3.jpg', imgUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop', spuId: 2, isDefault: '0' }
+    ],
     createTime: '2024-01-02',
     updateTime: '2024-01-02',
   },
@@ -1298,8 +1335,19 @@ let skus = [
     category3Id: 111,
     spuId: 2,
     tmId: 1,
-    skuAttrValueList: [],
-    skuSaleAttrValueList: [],
+    skuAttrValueList: [
+      { attrId: 1, valueId: 12, valueName: '512GB' },
+      { attrId: 2, valueId: 24, valueName: '白沙银' },
+      { attrId: 4, valueId: 41, valueName: '麒麟芯片' }
+    ],
+    skuSaleAttrValueList: [
+      { saleAttrId: 1, saleAttrValueId: 102, saleAttrValueName: '存储容量' },
+      { saleAttrId: 2, saleAttrValueId: 105, saleAttrValueName: '颜色' }
+    ],
+    skuImageList: [
+      { id: 11, imgName: 'mate60pro-white-1.jpg', imgUrl: 'https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=400&h=400&fit=crop', spuId: 2, isDefault: '1' },
+      { id: 12, imgName: 'mate60pro-white-2.jpg', imgUrl: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=400&fit=crop', spuId: 2, isDefault: '0' }
+    ],
     createTime: '2024-01-02',
     updateTime: '2024-01-02',
   },
@@ -1315,8 +1363,20 @@ let skus = [
     category3Id: 111,
     spuId: 3,
     tmId: 2,
-    skuAttrValueList: [],
-    skuSaleAttrValueList: [],
+    skuAttrValueList: [
+      { attrId: 1, valueId: 11, valueName: '256GB' },
+      { attrId: 2, valueId: 21, valueName: '黑色' },
+      { attrId: 5, valueId: 51, valueName: '骁龙8Gen3' }
+    ],
+    skuSaleAttrValueList: [
+      { saleAttrId: 1, saleAttrValueId: 101, saleAttrValueName: '内存版本' },
+      { saleAttrId: 2, saleAttrValueId: 102, saleAttrValueName: '颜色' }
+    ],
+    skuImageList: [
+      { id: 13, imgName: 'xiaomi14pro-black-1.jpg', imgUrl: 'https://images.unsplash.com/photo-1621330396173-e41b1cafd17f?w=400&h=400&fit=crop', spuId: 3, isDefault: '1' },
+      { id: 14, imgName: 'xiaomi14pro-black-2.jpg', imgUrl: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=400&fit=crop', spuId: 3, isDefault: '0' },
+      { id: 15, imgName: 'xiaomi14pro-black-3.jpg', imgUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop', spuId: 3, isDefault: '0' }
+    ],
     createTime: '2024-01-03',
     updateTime: '2024-01-03',
   },
@@ -2843,13 +2903,37 @@ app.get('/admin/product/cancelSale/:skuId', (req, res) => {
 })
 
 // 获取SKU详情
-app.get('/admin/product/getSkuById/:skuId', (req, res) => {
+// app.get('/admin/product/getSkuById/:skuId', (req, res) => {
+//   const { valid, message } = verifyToken(req)
+//   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+//   const skuId = parseInt(req.params.skuId)
+//   const sku = skus.find(s => s.id === skuId)
+//   if (sku) {
+//     res.json({ code: 200, message: '获取成功', data: sku, ok: true })
+//   } else {
+//     res.json({ code: 404, message: 'SKU不存在', data: null, ok: false })
+//   }
+// })
+// 获取SKU详情 【修复版】
+app.get('/admin/product/sku/detail/:skuId', (req, res) => {
+    // 加这一行！！！
+  console.log('========= 我执行了！skuId =', req.params.skuId);
   const { valid, message } = verifyToken(req)
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
   const skuId = parseInt(req.params.skuId)
-  const sku = skus.find(s => s.id === skuId)
+
+  // ------------- 关键修复 -------------
+  // 如果 skus 是分页对象，先取出 records 数组
+  const skuList = skus.records || skus
+
+  // 再查找
+  const sku = skuList.find(s => s.id === skuId)
+  // ------------------------------------
+
   if (sku) {
+    // 直接返回【单个对象】
     res.json({ code: 200, message: '获取成功', data: sku, ok: true })
   } else {
     res.json({ code: 404, message: 'SKU不存在', data: null, ok: false })

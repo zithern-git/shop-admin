@@ -326,9 +326,8 @@
     // 清空销售属性
     saleAttr.value = []
     saleAttrIdAndValueName.value = ''
-    // 存储三级分类的id，后端数据不足，只有category3Id==61的数据
-    // spuParams.value.category3Id = c3Id
-    spuParams.value.category3Id = 61
+    // 存储三级分类的id
+    spuParams.value.category3Id = c3Id
     // 获取全部品牌的数据
     const result: AllTrademark = await reqAllTrademark()
 
