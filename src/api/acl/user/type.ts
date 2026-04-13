@@ -1,0 +1,31 @@
+// 账号信息的ts类型
+export interface ResponseData {
+  code: number
+  message: string
+  ok: boolean
+}
+
+// 代表一个账号信息的ts类型
+export interface User {
+  createTime?: string
+  id?: number
+  name?:string
+  password?:string
+  role?:string
+  updateTime?:string
+  username?:string
+}
+
+// 数组包含全部的用户信息
+export type Records = User[]
+
+// 获取全部用户信息接口返回的数据ts类型
+export interface UserResponseData extends ResponseData {
+  data: {
+    current:number
+    pages:number
+    size:number
+    total:number
+    records: Records
+  }
+}
