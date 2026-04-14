@@ -2388,9 +2388,11 @@ app.post('/admin/acl/user/save', (req, res) => {
   const { valid, message } = verifyToken(req)
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
+  // 生成新ID（取最大ID + 1）
+  const maxId = aclUsers.length > 0 ? Math.max(...aclUsers.map(u => u.id)) : 0
   const newUser = {
-    id: Date.now(),
     ...req.body,
+    id: maxId + 1,  // 确保ID不被前端传来的数据覆盖
     createTime: new Date().toISOString().split('T')[0],
     updateTime: new Date().toISOString().split('T')[0],
   }
@@ -2401,16 +2403,38 @@ app.post('/admin/acl/user/save', (req, res) => {
 
 // 更新用户
 app.put('/admin/acl/user/update', (req, res) => {
-  const { valid, message } = verifyToken(req)
+  const { valid, message, user } = verifyToken(req)
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
   const index = aclUsers.findIndex(u => u.id === req.body.id)
   if (index !== -1) {
+    // 保存旧用户名，用于同步更新 users 数组
+    const oldUsername = aclUsers[index].username
+    
     aclUsers[index] = {
       ...aclUsers[index],
       ...req.body,
       updateTime: new Date().toISOString().split('T')[0],
     }
+    
+    // 同步更新 users 数组（登录用的数组）
+    const userIndex = users.findIndex(u => u.username === oldUsername)
+    if (userIndex !== -1) {
+      users[userIndex].username = aclUsers[index].username
+      users[userIndex].name = aclUsers[index].name
+      users[userIndex].password = aclUsers[index].password
+    }
+    
+    // 如果修改的是当前登录用户（通过token中的username判断），返回特定状态码提示前端重新登录
+    if (user.username === oldUsername) {
+      return res.json({ 
+        code: 200, 
+        message: '更新成功，请重新登录', 
+        data: { needRelogin: true }, 
+        ok: true 
+      })
+    }
+    
     res.json({ code: 200, message: '更新成功', data: null, ok: true })
   } else {
     res.json({ code: 404, message: '用户不存在', data: null, ok: false })

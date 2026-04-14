@@ -80,22 +80,23 @@
       </el-form-item>
     </el-form>
     <!-- 抽屉结构：完成添加新的用户账号更新已有的账号信息 -->
-    <el-drawer v-model="drawer" :title="showPassword ? '添加用户' : '修改用户'">
-      <el-form>
-        <el-form-item label="用户姓名"
+    <el-drawer v-model="drawer" :title="userParams.id ? '修改用户' : '添加用户'">
+      <el-form ref="formRef" :rules="rules" :model="userParams">
+        <el-form-item label="用户姓名" prop="username"
           ><el-input v-model="userParams.username" placeholder="请填写用户名字"
         /></el-form-item>
-        <el-form-item label="用户昵称"
+        <el-form-item label="用户昵称" prop="name"
           ><el-input v-model="userParams.name" placeholder="请填写用户昵称"
         /></el-form-item>
-        <el-form-item label="用户密码" v-show="showPassword"
+        <el-form-item label="用户密码" prop="password"
+          v-if="!userParams.id"
           ><el-input v-model="userParams.password" placeholder="请填写用户密码"
         /></el-form-item>
       </el-form>
       <template #footer>
         <div style="flex: auto">
           <el-button @click="cancel">取消</el-button>
-          <el-button type="primary" @click="save">确定</el-button>
+          <el-button type="primary" @click="save()">确定</el-button>
         </div>
       </template>
     </el-drawer>
@@ -103,7 +104,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, reactive, nextTick } from 'vue'
   import { reqUserInfo, reqAddOrUpdateUser } from '@/api/acl/user'
   import type { UserResponseData, Records, User } from '@/api/acl/user/type'
   import { ElMessage } from 'element-plus'
@@ -118,7 +119,6 @@
   const userArr = ref<Records>([])
   // 定义响应式数据控制抽屉的显示与隐藏
   const drawer = ref<boolean>(false)
-  const showPassword = ref<boolean>(true)
   // 收集用户信息的响应式数据
   const userParams = ref<User>({
     name: '',
@@ -126,9 +126,47 @@
     username: '',
   })
 
+  // 获取el-form组件实例
+  const formRef = ref<any>()
+
+  // 校验用户姓名的回调函数
+  const validateUsername = (rule: any, value: any, callback: any) => {
+    if (!value || value.trim().length < 5) {
+      callback(new Error('用户姓名不能少于5位'))
+    } else {
+      callback()
+    }
+  }
+  // 校验用户昵称的回调函数
+  const validateName = (rule: any, value: any, callback: any) => {
+    if (!value || value.trim().length < 3) {
+      callback(new Error('用户昵称不能少于5位'))
+    } else {
+      callback()
+    }
+  }
+  // 校验用户密码的回调函数
+  const validatePassword = (rule: any, value: any, callback: any) => {
+    if (!value || value.trim().length < 6) {
+      callback(new Error('用户密码不能少于6位'))
+    } else {
+      callback()
+    }
+  }
+
+  //表单校验的规则对象
+  const rules = reactive({
+    // 用户姓名
+    username: [{ validator: validateUsername, trigger: 'blur', required: true }],
+    // 用户昵称
+    name: [{ validator: validateName, trigger: 'blur', required: true }],
+    // 用户密码
+    password: [{ validator: validatePassword, trigger: 'blur', required: true }],
+  })
+
   // 获取全部已有的用户信息
   const getHasUser = async (pager = 1) => {
-    // pageNo.value = pager
+    pageNo.value = pager
     const result: UserResponseData = await reqUserInfo(pageNo.value, pageSize.value)
     if (result.code === 200) {
       total.value = result.data.total
@@ -140,11 +178,15 @@
   const addUser = async () => {
     // 抽屉显示出来
     drawer.value = true
-    showPassword.value = true
     Object.assign(userParams.value, {
+      id: 0,
       name: '',
       password: '',
       username: '',
+    })
+    // 清空上一次的所有校验
+    nextTick(() => {
+      formRef.value.clearValidate()
     })
   }
 
@@ -152,8 +194,13 @@
   const updateUser = async (row: User) => {
     // 抽屉显示出来
     drawer.value = true
-    showPassword.value = false
-    userParams.value = { ...row }
+    // 存储收集已有的账号信息
+    // userParams.value = { ...row }
+    Object.assign(userParams.value, row)
+     // 清空上一次的所有校验
+    nextTick(() => {
+      formRef.value.clearValidate()
+    })
   }
 
   // 取消按钮的回调
@@ -163,6 +210,8 @@
 
   // 保存按钮的回调
   const save = async () => {
+    // 点击保存按钮的时候，务必需要保证表单全部符合条件再去发请求
+    await formRef.value.validate()
     // 保存按钮：添加新的用户|更新已有的用户账号信息
     // 抽屉显示出来
     const result = await reqAddOrUpdateUser(userParams.value)
@@ -173,9 +222,19 @@
       // 关闭抽屉
       drawer.value = false
       // 跳转到最后一页
-      pageNo.value = Math.ceil(total.value / pageSize.value)
+      // pageNo.value = Math.ceil((total.value + 1) / pageSize.value)
       // 获取最新的全部账号信息
-      getHasUser()
+      // getHasUser(userParams.value.id? pageNo.value : 1)
+      // 如果修改的是当前登录用户，需要重新登录
+      if (result.data?.needRelogin) {
+        // 清除本地存储的token
+        localStorage.removeItem('token')
+        // 跳转到登录页面
+        window.location.href = '/login'
+      } else {
+        // 浏览器自动刷新一次
+        window.location.reload()
+      }
     } else {
       // 关闭抽屉
       drawer.value = false
