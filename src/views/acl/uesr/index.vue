@@ -54,7 +54,7 @@
           ></el-table-column>
           <el-table-column label="操作" width="300px" align="center">
             <template #default="{ row }">
-              <el-button type="primary" size="small" icon="User">分配角色</el-button>
+              <el-button type="primary" size="small" icon="User" @click="setRole(row)">分配角色</el-button>
               <el-button type="primary" size="small" icon="Edit" @click="updateUser(row)"
                 >编辑</el-button
               >
@@ -100,14 +100,47 @@
         </div>
       </template>
     </el-drawer>
+     <!-- 抽屉结构：用于某一个已有的账号进行职位分配 -->
+    <el-drawer v-model="drawer1">
+      <template #header>
+        <h4>分配角色用户</h4>
+      </template>
+      <template #default>
+        <el-form>
+          <el-form-item label="用户姓名">
+            <el-input :disabled="true" v-model="userParams.username" />
+          </el-form-item>
+          <el-form-item label="角色列表">
+              <el-checkbox
+                label="全选"
+                v-model="checkAll"
+                :indeterminate="isIndeterminate"
+                @change="handleCheckAllChange"
+              />
+              <el-checkbox-group v-model="checkedRoles" @change="handleCheckedCitiesChange">
+                <el-checkbox label="管理员" value="Shanghai" />
+                <el-checkbox label="客服" value="Beijing" />
+                <el-checkbox label="运营" value="Value 2" />
+              </el-checkbox-group>
+          </el-form-item>
+        </el-form>
+      </template>
+      <template #footer>
+        <div style="flex: auto">
+          <el-button @click="drawer1 = false">取消</el-button>
+          <el-button type="primary" @click="drawer1 = false">确定</el-button>
+        </div>
+      </template>
+    </el-drawer>
   </el-card>
 </template>
 
 <script setup lang="ts">
   import { ref, onMounted, reactive, nextTick } from 'vue'
-  import { reqUserInfo, reqAddOrUpdateUser } from '@/api/acl/user'
+  import { reqUserInfo, reqAddOrUpdateUser, reqAllRole } from '@/api/acl/user'
   import type { UserResponseData, Records, User } from '@/api/acl/user/type'
   import { ElMessage } from 'element-plus'
+  import type { CheckboxValueType } from 'element-plus'
 
   // 默认页码
   const pageNo = ref<number>(1)
@@ -125,6 +158,30 @@
     password: '',
     username: '',
   })
+  // 控制分配角色抽屉显示与隐藏
+  const drawer1 = ref<boolean>(false)
+  // 全选复选框收集数据：是否全选
+  const checkAll = ref<boolean>(false)
+  // 设置不确定状态，仅负责样式控制
+  const isIndeterminate = ref<boolean>(true)
+  const checkedRoles = ref(['Shanghai', 'Beijing'])
+  const roles = ['Shanghai', 'Beijing']
+  // const roles = ref(['admin', 'front', 'back', 'test'])
+
+  // 全选复选框的change事件
+  const handleCheckAllChange = (val: CheckboxValueType) => {
+    checkedRoles.value = val ? roles : []
+    isIndeterminate.value = false
+  }
+  // 底部的复选框的change事件
+  const handleCheckedCitiesChange = (value: CheckboxValueType[]) => {
+    console.log(value)
+    // 已经勾选的这些项目的长度
+    const checkedCount = value.length
+    // 顶部的复选框不确定的样式
+    checkAll.value = checkedCount === roles.length
+    isIndeterminate.value = checkedCount > 0 && checkedCount < roles.length
+  }
 
   // 获取el-form组件实例
   const formRef = ref<any>()
@@ -188,6 +245,16 @@
     nextTick(() => {
       formRef.value.clearValidate()
     })
+  }
+
+  // 分配角色按钮的回调
+  const setRole = async (row: User) => {
+    // 显示抽屉
+    drawer1.value = true
+    // 存储已有的用户信息
+    Object.assign(userParams.value, row)
+    const result = await reqAllRole(row.id as number)
+    console.log('result:', result)
   }
 
   // 更新用户按钮的回调，row：已有用户的账号信息

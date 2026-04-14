@@ -12,7 +12,9 @@ enum API {
   // 添加一个新的用户账号
   ADDUSER_URL = '/admin/acl/user/save',
   // 更新一个已有的用户账号
-  UPDATEUSER_URL = '/admin/acl/user/update'
+  UPDATEUSER_URL = '/admin/acl/user/update',
+  //获取全部职位，当前账号拥有的职位接口
+  ALLROLE_URL = '/admin/acl/user/toAssign/'
 }
 
 // 获取用户账号信息的接口
@@ -27,3 +29,6 @@ export const reqAddOrUpdateUser = (data: User) => {
     return request.post<any, any>(API.ADDUSER_URL, data)
   }
 }
+
+// 获取全部职位以及包含当前用户的已有职位
+export const reqAllRole = (adminId: number) => request.get(API.ALLROLE_URL + adminId)

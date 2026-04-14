@@ -2358,6 +2358,60 @@ app.post('/admin/acl/index/logout', (req, res) => {
 })
 
 // ==================== 用户管理接口 ====================
+// 根据用户获取角色数据（必须放在 /:page/:limit 之前，避免路由冲突）
+app.get('/admin/acl/user/toAssign/:adminId', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  const adminId = parseInt(req.params.adminId)
+  console.log('获取用户角色数据, adminId:', adminId)
+  
+  const user = aclUsers.find(u => u.id === adminId)
+  
+  if (!user) {
+    console.log('用户不存在')
+    return res.json({ code: 404, message: '用户不存在', data: null, ok: false })
+  }
+
+  console.log('找到用户:', user.username, '角色:', user.role)
+  console.log('可用角色列表:', roles.map(r => r.roleName))
+
+  // 获取当前用户已有的角色
+  const userRole = roles.find(r => r.roleName === user.role)
+  console.log('匹配到的角色:', userRole)
+  
+  const assignRoles = userRole ? [{
+    id: userRole.id,
+    roleName: userRole.roleName,
+    remark: userRole.remark,
+    createTime: userRole.createTime,
+    updateTime: userRole.updateTime,
+  }] : []
+
+  const responseData = {
+    // 全部职位列表
+    allRolesList: roles.map(r => ({
+      id: r.id,
+      roleName: r.roleName,
+      remark: r.remark,
+      createTime: r.createTime,
+      updateTime: r.updateTime,
+    })),
+    // 当前用户已有的职位
+    assignRoles: assignRoles,
+  }
+  
+  console.log('返回数据:', JSON.stringify(responseData, null, 2))
+
+  // 返回全部职位以及当前用户的已有职位
+  res.json({
+    code: 200,
+    message: '成功',
+    data: responseData,
+    ok: true,
+  })
+})
+
 // 获取用户列表
 app.get('/admin/acl/user/:page/:limit', (req, res) => {
   const { valid, message } = verifyToken(req)
