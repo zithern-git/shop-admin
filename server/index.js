@@ -78,7 +78,7 @@ let aclUsers = [
     username: 'admin',
     name: '管理员',
     password: '111111',
-    role: '管理员',
+    role: ['管理员'],
     createTime: '2024-01-01',
     updateTime: '2024-01-01',
   },
@@ -87,7 +87,7 @@ let aclUsers = [
     username: 'zhangsan',
     name: '张三',
     password: '111111',
-    role: '运营',
+    role: ['运营'],
     createTime: '2024-01-02',
     updateTime: '2024-01-02',
   },
@@ -96,7 +96,7 @@ let aclUsers = [
     username: 'lisi',
     name: '李四',
     password: '111111',
-    role: '客服',
+    role: ['客服'],
     createTime: '2024-01-03',
     updateTime: '2024-01-03',
   },
@@ -105,7 +105,7 @@ let aclUsers = [
     username: 'wangwu',
     name: '王五',
     password: '111111',
-    role: '运营',
+    role: ['运营'],
     createTime: '2024-01-04',
     updateTime: '2024-01-04',
   },
@@ -114,7 +114,7 @@ let aclUsers = [
     username: 'zhaoliu',
     name: '赵六',
     password: '111111',
-    role: '客服',
+    role: ['客服'],
     createTime: '2024-01-05',
     updateTime: '2024-01-05',
   },
@@ -123,7 +123,7 @@ let aclUsers = [
     username: 'sunqi',
     name: '孙七',
     password: '111111',
-    role: '运营',
+    role: ['运营'],
     createTime: '2024-01-06',
     updateTime: '2024-01-06',
   },
@@ -132,7 +132,7 @@ let aclUsers = [
     username: 'zhouba',
     name: '周八',
     password: '111111',
-    role: '客服',
+    role: ['客服'],
     createTime: '2024-01-07',
     updateTime: '2024-01-07',
   },
@@ -141,7 +141,7 @@ let aclUsers = [
     username: 'wujiu',
     name: '吴九',
     password: '111111',
-    role: '运营',
+    role: ['运营'],
     createTime: '2024-01-08',
     updateTime: '2024-01-08',
   },
@@ -150,7 +150,7 @@ let aclUsers = [
     username: 'zhengshi',
     name: '郑十',
     password: '111111',
-    role: '客服',
+    role: ['客服'],
     createTime: '2024-01-09',
     updateTime: '2024-01-09',
   },
@@ -159,7 +159,7 @@ let aclUsers = [
     username: 'dongfang',
     name: '东方',
     password: '111111',
-    role: '运营',
+    role: ['运营'],
     createTime: '2024-01-10',
     updateTime: '2024-01-10',
   },
@@ -2376,17 +2376,16 @@ app.get('/admin/acl/user/toAssign/:adminId', (req, res) => {
   console.log('找到用户:', user.username, '角色:', user.role)
   console.log('可用角色列表:', roles.map(r => r.roleName))
 
-  // 获取当前用户已有的角色
-  const userRole = roles.find(r => r.roleName === user.role)
-  console.log('匹配到的角色:', userRole)
-  
-  const assignRoles = userRole ? [{
-    id: userRole.id,
-    roleName: userRole.roleName,
-    remark: userRole.remark,
-    createTime: userRole.createTime,
-    updateTime: userRole.updateTime,
-  }] : []
+  // 获取当前用户已有的角色（支持多角色）
+  const assignRoles = roles
+    .filter(r => user.role.includes(r.roleName))
+    .map(r => ({
+      id: r.id,
+      roleName: r.roleName,
+      remark: r.remark,
+      createTime: r.createTime,
+      updateTime: r.updateTime,
+    }))
 
   const responseData = {
     // 全部职位列表
@@ -2493,6 +2492,30 @@ app.put('/admin/acl/user/update', (req, res) => {
   } else {
     res.json({ code: 404, message: '用户不存在', data: null, ok: false })
   }
+})
+
+// 根据用户分配角色
+app.post('/admin/acl/user/doAssignRole', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  const { userId, roleIdList } = req.body
+  const user = aclUsers.find(u => u.id === userId)
+  if (!user) {
+    return res.json({ code: 404, message: '用户不存在', data: null, ok: false })
+  }
+
+  // 从角色列表中匹配选中的所有角色
+  const assignedRoles = roles.filter(r => roleIdList.includes(r.id))
+  if (assignedRoles.length === 0) {
+    return res.json({ code: 404, message: '角色不存在', data: null, ok: false })
+  }
+
+  // 更新用户的角色（支持多角色）
+  user.role = assignedRoles.map(r => r.roleName)
+  user.updateTime = new Date().toISOString().split('T')[0]
+
+  res.json({ code: 200, message: '分配角色成功', data: null, ok: true })
 })
 
 // 删除用户
@@ -3213,6 +3236,7 @@ app.listen(PORT, () => {
   console.log(`  POST   http://localhost:${PORT}/admin/acl/user/save`)
   console.log(`  PUT    http://localhost:${PORT}/admin/acl/user/update`)
   console.log(`  DELETE http://localhost:${PORT}/admin/acl/user/remove/:id`)
+  console.log(`  POST   http://localhost:${PORT}/admin/acl/user/doAssignRole`)
   console.log('\n【角色管理】')
   console.log(`  GET    http://localhost:${PORT}/admin/acl/role/:page/:limit`)
   console.log(`  POST   http://localhost:${PORT}/admin/acl/role/save`)

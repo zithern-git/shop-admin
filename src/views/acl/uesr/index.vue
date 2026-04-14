@@ -54,7 +54,9 @@
           ></el-table-column>
           <el-table-column label="操作" width="300px" align="center">
             <template #default="{ row }">
-              <el-button type="primary" size="small" icon="User" @click="setRole(row)">分配角色</el-button>
+              <el-button type="primary" size="small" icon="User" @click="setRole(row)"
+                >分配角色</el-button
+              >
               <el-button type="primary" size="small" icon="Edit" @click="updateUser(row)"
                 >编辑</el-button
               >
@@ -88,19 +90,18 @@
         <el-form-item label="用户昵称" prop="name"
           ><el-input v-model="userParams.name" placeholder="请填写用户昵称"
         /></el-form-item>
-        <el-form-item label="用户密码" prop="password"
-          v-if="!userParams.id"
+        <el-form-item label="用户密码" prop="password" v-if="!userParams.id"
           ><el-input v-model="userParams.password" placeholder="请填写用户密码"
         /></el-form-item>
       </el-form>
       <template #footer>
         <div style="flex: auto">
           <el-button @click="cancel">取消</el-button>
-          <el-button type="primary" @click="save()">确定</el-button>
+          <el-button type="primary" @click="save">确定</el-button>
         </div>
       </template>
     </el-drawer>
-     <!-- 抽屉结构：用于某一个已有的账号进行职位分配 -->
+    <!-- 抽屉结构：用于某一个已有的账号进行职位分配 -->
     <el-drawer v-model="drawer1">
       <template #header>
         <h4>分配角色用户</h4>
@@ -111,6 +112,7 @@
             <el-input :disabled="true" v-model="userParams.username" />
           </el-form-item>
           <el-form-item label="角色列表">
+            <div style="display: flex; flex-direction: column; gap: 8px">
               <el-checkbox
                 label="全选"
                 v-model="checkAll"
@@ -118,17 +120,18 @@
                 @change="handleCheckAllChange"
               />
               <el-checkbox-group v-model="checkedRoles" @change="handleCheckedCitiesChange">
-                <el-checkbox label="管理员" value="Shanghai" />
-                <el-checkbox label="客服" value="Beijing" />
-                <el-checkbox label="运营" value="Value 2" />
+                <el-checkbox v-for="(item, index) in allRoles" :key="item.id" :value="item">{{
+                  item.roleName
+                }}</el-checkbox>
               </el-checkbox-group>
+            </div>
           </el-form-item>
         </el-form>
       </template>
       <template #footer>
         <div style="flex: auto">
           <el-button @click="drawer1 = false">取消</el-button>
-          <el-button type="primary" @click="drawer1 = false">确定</el-button>
+          <el-button type="primary" @click="confirmClick">确定</el-button>
         </div>
       </template>
     </el-drawer>
@@ -137,8 +140,15 @@
 
 <script setup lang="ts">
   import { ref, onMounted, reactive, nextTick } from 'vue'
-  import { reqUserInfo, reqAddOrUpdateUser, reqAllRole } from '@/api/acl/user'
-  import type { UserResponseData, Records, User } from '@/api/acl/user/type'
+  import { reqUserInfo, reqAddOrUpdateUser, reqAllRole, reqSetUserRole } from '@/api/acl/user'
+  import type {
+    UserResponseData,
+    Records,
+    User,
+    AllRoleResponseData,
+    AllRole,
+    SetRoleData,
+  } from '@/api/acl/user/type'
   import { ElMessage } from 'element-plus'
   import type { CheckboxValueType } from 'element-plus'
 
@@ -154,6 +164,7 @@
   const drawer = ref<boolean>(false)
   // 收集用户信息的响应式数据
   const userParams = ref<User>({
+    id: 0,
     name: '',
     password: '',
     username: '',
@@ -164,23 +175,26 @@
   const checkAll = ref<boolean>(false)
   // 设置不确定状态，仅负责样式控制
   const isIndeterminate = ref<boolean>(true)
-  const checkedRoles = ref(['Shanghai', 'Beijing'])
-  const roles = ['Shanghai', 'Beijing']
-  // const roles = ref(['admin', 'front', 'back', 'test'])
+  // 当前用户已有的职位
+  const checkedRoles = ref<AllRole>([])
+  // 存储全部职位的数据
+  const allRoles = ref<AllRole>([])
 
   // 全选复选框的change事件
   const handleCheckAllChange = (val: CheckboxValueType) => {
-    checkedRoles.value = val ? roles : []
+    // val：true(全选)|false(没有全选)
+    checkedRoles.value = val ? allRoles.value : []
+    // 不确定的样式（确定样式）
     isIndeterminate.value = false
   }
   // 底部的复选框的change事件
   const handleCheckedCitiesChange = (value: CheckboxValueType[]) => {
-    console.log(value)
     // 已经勾选的这些项目的长度
     const checkedCount = value.length
-    // 顶部的复选框不确定的样式
-    checkAll.value = checkedCount === roles.length
-    isIndeterminate.value = checkedCount > 0 && checkedCount < roles.length
+    // 代表：勾选上的项目个数与全部的职位个数相等，顶部的复选框勾选上
+    checkAll.value = checkedCount === allRoles.value.length
+    // 不确定的样式
+    isIndeterminate.value = checkedCount > 0 && checkedCount < allRoles.value.length
   }
 
   // 获取el-form组件实例
@@ -249,12 +263,18 @@
 
   // 分配角色按钮的回调
   const setRole = async (row: User) => {
-    // 显示抽屉
-    drawer1.value = true
     // 存储已有的用户信息
     Object.assign(userParams.value, row)
-    const result = await reqAllRole(row.id as number)
-    console.log('result:', result)
+    // 获取全部的职位的数据与当前用户已有的职位的数据
+    const result: AllRoleResponseData = await reqAllRole(row.id as number)
+    if (result.code === 200) {
+      // 存储全部的职位
+      allRoles.value = result.data.allRolesList
+      // 存储当前用户已有的职位
+      checkedRoles.value = result.data.assignRoles
+      // 显示抽屉
+      drawer1.value = true
+    }
   }
 
   // 更新用户按钮的回调，row：已有用户的账号信息
@@ -264,7 +284,7 @@
     // 存储收集已有的账号信息
     // userParams.value = { ...row }
     Object.assign(userParams.value, row)
-     // 清空上一次的所有校验
+    // 清空上一次的所有校验
     nextTick(() => {
       formRef.value.clearValidate()
     })
@@ -309,6 +329,25 @@
     }
   }
 
+  const confirmClick = async () => {
+    const data: SetRoleData = {
+      roleIdList: checkedRoles.value.map(item => {
+        return item.id as number
+      }),
+      userId: userParams.value.id as number,
+    }
+    // 分配用户的职位
+    const result: any = await reqSetUserRole(data)
+    console.log(result)
+    if (result.code === 200) {
+      // 提示信息
+      ElMessage.success(result.message)
+      // 关闭抽屉
+      drawer1.value = false
+      // 获取更新完毕用户的信息，更新完毕留在当前页
+      getHasUser(pageNo.value)
+    }
+  }
   // 组件挂载完毕
   onMounted(() => {
     getHasUser()
