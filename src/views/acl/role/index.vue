@@ -21,7 +21,7 @@
       <el-table-column label="操作" align="center" width="360px">
         <!-- row: 已有的职位对象 -->
         <template #default="{row}">
-          <el-button type="primary" icon="User" @click="drawer = true">分配权限</el-button>
+          <el-button type="primary" icon="User" @click="setPermission(row)">分配权限</el-button>
           <el-button type="primary" icon="Edit" @click="updateRole(row)">编辑</el-button>
           <el-button type="primary" icon="Delete">删除</el-button>
         </template>
@@ -50,7 +50,7 @@
         <el-button :disabled="roleParams.roleName.length >= 2 ? false : true" type="primary" @click="save">确定</el-button>
       </template>
     </el-dialog>
-    <!-- 抽屉 -->
+    <!-- 分配角色的菜单权限与按钮的权限：抽屉 -->
      <el-drawer v-model="drawer">
       <template #header>
         <h3>分配权限</h3>
@@ -96,6 +96,8 @@ const roleParams = ref<RoleData>({
 const dialogVisible = ref<boolean>(false)
 // 获取组件实例
 const form = ref<any>()
+// 控制抽屉显示与隐藏
+const drawer = ref<boolean>(false)
 
 // 自定义校验规则的回调
 const validateRoleName = (rule: any, value: any, callback: any) => {
@@ -111,7 +113,6 @@ const rules = reactive({
     // 用户姓名
     roleName: [{ validator: validateRoleName, trigger: 'blur', required: true }]
   })
-const drawer = ref<boolean>(false)
 
 
 // 获取全部用户信息的方法|分页器当前页码发生变化的回调
@@ -190,6 +191,12 @@ const search = () => {
 // 重置按钮的回调
 const reset = () => {
   layoutSettingStore.refresh = !layoutSettingStore.refresh
+}
+
+// 分配权限按钮的回调
+const setPermission = (row: RoleData) => {
+  // 显示抽屉
+  drawer.value = true
 }
 </script>
 
