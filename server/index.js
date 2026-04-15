@@ -187,6 +187,69 @@ let roles = [
     createTime: '2024-01-03',
     updateTime: '2024-01-03',
   },
+  {
+    id: 4,
+    roleName: '财务',
+    remark: '财务报表权限',
+    createTime: '2024-01-04',
+    updateTime: '2024-01-04',
+  },
+  {
+    id: 5,
+    roleName: '仓库管理员',
+    remark: '库存管理权限',
+    createTime: '2024-01-05',
+    updateTime: '2024-01-05',
+  },
+  {
+    id: 6,
+    roleName: '采购员',
+    remark: '采购订单权限',
+    createTime: '2024-01-06',
+    updateTime: '2024-01-06',
+  },
+  {
+    id: 7,
+    roleName: '市场推广',
+    remark: '营销活动权限',
+    createTime: '2024-01-07',
+    updateTime: '2024-01-07',
+  },
+  {
+    id: 8,
+    roleName: '数据分析师',
+    remark: '数据分析权限',
+    createTime: '2024-01-08',
+    updateTime: '2024-01-08',
+  },
+  {
+    id: 9,
+    roleName: '产品经理',
+    remark: '产品规划权限',
+    createTime: '2024-01-09',
+    updateTime: '2024-01-09',
+  },
+  {
+    id: 10,
+    roleName: '售后专员',
+    remark: '售后服务权限',
+    createTime: '2024-01-10',
+    updateTime: '2024-01-10',
+  },
+  {
+    id: 11,
+    roleName: '物流专员',
+    remark: '物流配送权限',
+    createTime: '2024-01-11',
+    updateTime: '2024-01-11',
+  },
+  {
+    id: 12,
+    roleName: '质检员',
+    remark: '质量检测权限',
+    createTime: '2024-01-12',
+    updateTime: '2024-01-12',
+  },
 ]
 
 let permissions = [
@@ -2418,19 +2481,31 @@ app.get('/admin/acl/user/:page/:limit', (req, res) => {
 
   const page = parseInt(req.params.page) || 1
   const limit = parseInt(req.params.limit) || 10
+  const username = req.query.username
+
+  // 根据 username 过滤用户
+  let filteredUsers = aclUsers
+  if (username && username.trim() !== '') {
+    const keyword = username.toLowerCase()
+    filteredUsers = aclUsers.filter(u => 
+      u.username.toLowerCase().includes(keyword) || 
+      u.name.toLowerCase().includes(keyword)
+    )
+  }
+
   const start = (page - 1) * limit
   const end = start + limit
-  const list = aclUsers.slice(start, end)
+  const list = filteredUsers.slice(start, end)
 
   res.json({
     code: 200,
     message: '获取成功',
     data: {
       records: list,
-      total: aclUsers.length,
+      total: filteredUsers.length,
       size: limit,
       current: page,
-      pages: Math.ceil(aclUsers.length / limit),
+      pages: Math.ceil(filteredUsers.length / limit),
     },
     ok: true,
   })
@@ -2528,6 +2603,33 @@ app.delete('/admin/acl/user/remove/:id', (req, res) => {
   res.json({ code: 200, message: '删除成功', data: null, ok: true })
 })
 
+// 批量删除用户
+app.delete('/admin/acl/user/batchRemove', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  const { idList } = req.body
+  
+  if (!Array.isArray(idList) || idList.length === 0) {
+    return res.json({ code: 400, message: 'idList不能为空', data: null, ok: false })
+  }
+
+  // 将idList转换为数字数组
+  const idsToDelete = idList.map(id => parseInt(id))
+  
+  // 过滤掉要删除的用户
+  const originalLength = aclUsers.length
+  aclUsers = aclUsers.filter(u => !idsToDelete.includes(u.id))
+  const deletedCount = originalLength - aclUsers.length
+
+  res.json({ 
+    code: 200, 
+    message: `成功删除${deletedCount}个用户`, 
+    data: { deletedCount }, 
+    ok: true 
+  })
+})
+
 // ==================== 角色管理接口 ====================
 // 获取角色列表
 app.get('/admin/acl/role/:page/:limit', (req, res) => {
@@ -2536,16 +2638,28 @@ app.get('/admin/acl/role/:page/:limit', (req, res) => {
 
   const page = parseInt(req.params.page) || 1
   const limit = parseInt(req.params.limit) || 10
+  const roleName = req.query.roleName
+
+  // 根据 roleName 过滤角色
+  let filteredRoles = roles
+  if (roleName && roleName.trim() !== '') {
+    const keyword = roleName.toLowerCase()
+    filteredRoles = roles.filter(r => 
+      r.roleName.toLowerCase().includes(keyword) || 
+      r.remark.toLowerCase().includes(keyword)
+    )
+  }
+
   const start = (page - 1) * limit
   const end = start + limit
-  const list = roles.slice(start, end)
+  const list = filteredRoles.slice(start, end)
 
   res.json({
     code: 200,
     message: '获取成功',
     data: {
       records: list,
-      total: roles.length,
+      total: filteredRoles.length,
       size: limit,
       current: page,
       pages: Math.ceil(roles.length / limit),

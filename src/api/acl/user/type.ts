@@ -50,7 +50,7 @@ export interface AllRoleResponseData extends ResponseData {
   }
 }
 
-export interface data {
+export interface SetRoleData {
   roleIdList: number[]
   userId: number
 }

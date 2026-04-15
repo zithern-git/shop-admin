@@ -3,11 +3,11 @@
     <div style="display: flex; justify-content: space-between; align-items: center">
       <div>
         <span>用户名：</span>
-        <el-input placeholder="请输入用户名" style="width: 200px" />
+        <el-input v-model="keyword" placeholder="请输入用户名" style="width: 200px" />
       </div>
       <div>
-        <el-button type="primary" size="default">搜索</el-button>
-        <el-button size="default">重置</el-button>
+        <el-button type="primary" :disabled="!keyword" size="default" @click="search">搜索</el-button>
+        <el-button size="default" @click="reset">重置</el-button>
       </div>
     </div>
   </el-card>
@@ -15,10 +15,10 @@
     <el-form>
       <el-form-item>
         <el-button type="primary" @click="addUser">添加</el-button>
-        <el-button type="danger">批量删除</el-button>
+        <el-button type="danger" :disabled="!selectedIdArr.length" @click="deleteSelectUser">批量删除</el-button>
       </el-form-item>
       <el-form-item>
-        <el-table :data="userArr" border>
+        <el-table ref="tableRef" :data="userArr" border  @selection-change="selectChange">
           <el-table-column type="selection" align="center"></el-table-column>
           <el-table-column label="#" type="index" align="center"></el-table-column>
           <el-table-column label="ID" align="center" prop="id"></el-table-column>
@@ -60,7 +60,25 @@
               <el-button type="primary" size="small" icon="Edit" @click="updateUser(row)"
                 >编辑</el-button
               >
-              <el-button type="primary" size="small" icon="Delete">删除</el-button>
+              <el-popconfirm
+                width="220"
+                :title="`确认删除${row.username}吗？`"
+                @confirm="deleteUser(row.id)"
+              >
+                <template #reference>
+                  <el-button type="primary" size="small" icon="Delete">删除</el-button>
+                </template>
+                <template #actions="{ confirm, cancel }">
+                  <el-button size="small" @click="cancel">取消</el-button>
+                  <el-button
+                    type="danger"
+                    size="small"
+                    @click="confirm"
+                  >
+                    确认
+                  </el-button>
+                </template>
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -120,7 +138,7 @@
                 @change="handleCheckAllChange"
               />
               <el-checkbox-group v-model="checkedRoles" @change="handleCheckedCitiesChange">
-                <el-checkbox v-for="(item, index) in allRoles" :key="item.id" :value="item">{{
+                <el-checkbox v-for="(item, index) in allRoles" :key="index" :value="item">{{
                   item.roleName
                 }}</el-checkbox>
               </el-checkbox-group>
@@ -140,7 +158,7 @@
 
 <script setup lang="ts">
   import { ref, onMounted, reactive, nextTick } from 'vue'
-  import { reqUserInfo, reqAddOrUpdateUser, reqAllRole, reqSetUserRole } from '@/api/acl/user'
+  import { reqUserInfo, reqAddOrUpdateUser, reqAllRole, reqSetUserRole, reqRemoveUser, reqSelectUser } from '@/api/acl/user'
   import type {
     UserResponseData,
     Records,
@@ -149,8 +167,9 @@
     AllRole,
     SetRoleData,
   } from '@/api/acl/user/type'
-  import { ElMessage } from 'element-plus'
+  import { ElMessage, ElMessageBox  } from 'element-plus'
   import type { CheckboxValueType } from 'element-plus'
+  import useLayoutSettingStore from '@/store/modules/setting'
 
   // 默认页码
   const pageNo = ref<number>(1)
@@ -179,6 +198,34 @@
   const checkedRoles = ref<AllRole>([])
   // 存储全部职位的数据
   const allRoles = ref<AllRole>([])
+  // 获取el-form组件实例
+  const formRef = ref<any>()
+  // 获取table组件实例
+  const tableRef = ref()
+  // 准备一个数组存放选中的行
+  const selectedIdArr = ref<User[]>([])
+  // 加载状态
+  const loading = ref(false)
+  // 定义响应式数据：收集用户输入的关键字
+  const keyword = ref<string>('')
+    // 获取模板setting仓库
+  const layoutSettingStore = useLayoutSettingStore()
+
+  // 搜索按钮的回调
+  const search = () => {
+    // 根据关键字获取相应的用户
+    getHasUser()
+    // 清空关键字
+    keyword.value = ''
+  }
+
+  // 重置按钮的回调
+  const reset = () => {
+    layoutSettingStore.refresh = !layoutSettingStore.refresh
+    layoutSettingStore.refresh = true
+    keyword.value = ''
+    getHasUser()
+  }
 
   // 全选复选框的change事件
   const handleCheckAllChange = (val: CheckboxValueType) => {
@@ -196,9 +243,6 @@
     // 不确定的样式
     isIndeterminate.value = checkedCount > 0 && checkedCount < allRoles.value.length
   }
-
-  // 获取el-form组件实例
-  const formRef = ref<any>()
 
   // 校验用户姓名的回调函数
   const validateUsername = (rule: any, value: any, callback: any) => {
@@ -238,7 +282,7 @@
   // 获取全部已有的用户信息
   const getHasUser = async (pager = 1) => {
     pageNo.value = pager
-    const result: UserResponseData = await reqUserInfo(pageNo.value, pageSize.value)
+    const result: UserResponseData = await reqUserInfo(pageNo.value, pageSize.value, keyword.value)
     if (result.code === 200) {
       total.value = result.data.total
       userArr.value = result.data.records
@@ -259,6 +303,52 @@
     nextTick(() => {
       formRef.value.clearValidate()
     })
+  }
+
+
+  // table复选框勾选的时候会触发的事件
+  const selectChange = (val:any) => {
+    selectedIdArr.value = val
+  }
+  // 批量删除按钮的回调
+  const deleteSelectUser = async () => {
+    // 整理批量删除的参数
+    const idList:any = selectedIdArr.value.map(item => item.id)
+    // 未选择提示
+    if (idList.length === 0) {
+      ElMessage.warning('请选择要删除的数据')
+      return
+    }
+    // 确认删除
+    try {
+      await ElMessageBox.confirm(
+        `确定要删除选中的 ${idList.length} 条数据吗？`,
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+      )
+    } catch {
+      ElMessage.info('已取消删除')
+      return
+    }
+
+    // 开始执行删除
+    loading.value = true
+    try {
+      // 2. 调用后端删除接口（替换成你的接口）
+      const result: any = await reqSelectUser(idList)
+      ElMessage.success(result.message)
+      // 3. 刷新列表 + 清空勾选
+      getHasUser()
+      tableRef.value?.clearSelection() // 清空勾选框
+    } catch (err) {
+      console.error(err)
+    } finally {
+      loading.value = false
+    }
   }
 
   // 分配角色按钮的回调
@@ -290,6 +380,17 @@
     })
   }
 
+  // 删除某一个用户
+  const deleteUser = async (userId: number) => {
+    const result: any = await reqRemoveUser(userId)
+    console.log(result)
+    if (result.code === 200) {
+      ElMessage.success('删除成功')
+      getHasUser(userArr.value.length > 1 ? pageNo.value : pageNo.value - 1)
+    } else {
+      ElMessage.error('删除失败')
+    }
+  }
   // 取消按钮的回调
   const cancel = () => {
     drawer.value = false
