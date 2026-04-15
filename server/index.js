@@ -78,7 +78,7 @@ let aclUsers = [
     username: 'admin',
     name: '管理员',
     password: '111111',
-    role: ['管理员'],
+    role: '管理员',
     createTime: '2024-01-01',
     updateTime: '2024-01-01',
   },
@@ -87,7 +87,7 @@ let aclUsers = [
     username: 'zhangsan',
     name: '张三',
     password: '111111',
-    role: ['运营'],
+    role: '运营',
     createTime: '2024-01-02',
     updateTime: '2024-01-02',
   },
@@ -96,7 +96,7 @@ let aclUsers = [
     username: 'lisi',
     name: '李四',
     password: '111111',
-    role: ['客服'],
+    role: '客服',
     createTime: '2024-01-03',
     updateTime: '2024-01-03',
   },
@@ -105,63 +105,9 @@ let aclUsers = [
     username: 'wangwu',
     name: '王五',
     password: '111111',
-    role: ['运营'],
+    role: '运营',
     createTime: '2024-01-04',
     updateTime: '2024-01-04',
-  },
-  {
-    id: 5,
-    username: 'zhaoliu',
-    name: '赵六',
-    password: '111111',
-    role: ['客服'],
-    createTime: '2024-01-05',
-    updateTime: '2024-01-05',
-  },
-  {
-    id: 6,
-    username: 'sunqi',
-    name: '孙七',
-    password: '111111',
-    role: ['运营'],
-    createTime: '2024-01-06',
-    updateTime: '2024-01-06',
-  },
-  {
-    id: 7,
-    username: 'zhouba',
-    name: '周八',
-    password: '111111',
-    role: ['客服'],
-    createTime: '2024-01-07',
-    updateTime: '2024-01-07',
-  },
-  {
-    id: 8,
-    username: 'wujiu',
-    name: '吴九',
-    password: '111111',
-    role: ['运营'],
-    createTime: '2024-01-08',
-    updateTime: '2024-01-08',
-  },
-  {
-    id: 9,
-    username: 'zhengshi',
-    name: '郑十',
-    password: '111111',
-    role: ['客服'],
-    createTime: '2024-01-09',
-    updateTime: '2024-01-09',
-  },
-  {
-    id: 10,
-    username: 'dongfang',
-    name: '东方',
-    password: '111111',
-    role: ['运营'],
-    createTime: '2024-01-10',
-    updateTime: '2024-01-10',
   },
 ]
 
@@ -249,6 +195,13 @@ let roles = [
     remark: '质量检测权限',
     createTime: '2024-01-12',
     updateTime: '2024-01-12',
+  },
+  {
+    id: 13,
+    roleName: '人事专员',
+    remark: '人员管理权限',
+    createTime: '2024-01-13',
+    updateTime: '2024-01-13',
   },
 ]
 
@@ -1364,21 +1317,8 @@ let skus = [
     category3Id: 111,
     spuId: 1,
     tmId: 3,
-    skuAttrValueList: [
-      { attrId: 1, valueId: 11, valueName: '256GB' },
-      { attrId: 2, valueId: 21, valueName: '黑色' },
-      { attrId: 3, valueId: 31, valueName: '钛金属材质' }
-    ],
-    skuSaleAttrValueList: [
-      { saleAttrId: 1, saleAttrValueId: 101, saleAttrValueName: '内存版本' },
-      { saleAttrId: 2, saleAttrValueId: 102, saleAttrValueName: '颜色' }
-    ],
-    skuImageList: [
-      { id: 1, imgName: 'iPhone15Pro-black-1.jpg', imgUrl: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=400&fit=crop', spuId: 1, isDefault: '1' },
-      { id: 2, imgName: 'iPhone15Pro-black-2.jpg', imgUrl: 'https://images.unsplash.com/photo-1696446701796-da61225697cc?w=400&h=400&fit=crop', spuId: 1, isDefault: '0' },
-      { id: 3, imgName: 'iPhone15Pro-black-3.jpg', imgUrl: 'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=400&h=400&fit=crop', spuId: 1, isDefault: '0' },
-      { id: 4, imgName: 'iPhone15Pro-black-4.jpg', imgUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop', spuId: 1, isDefault: '0' }
-    ],
+    skuAttrValueList: [],
+    skuSaleAttrValueList: [],
     createTime: '2024-01-01',
     updateTime: '2024-01-01',
   },
@@ -1394,20 +1334,8 @@ let skus = [
     category3Id: 111,
     spuId: 1,
     tmId: 3,
-    skuAttrValueList: [
-      { attrId: 1, valueId: 11, valueName: '256GB' },
-      { attrId: 2, valueId: 22, valueName: '蓝色' },
-      { attrId: 3, valueId: 31, valueName: '钛金属材质' }
-    ],
-    skuSaleAttrValueList: [
-      { saleAttrId: 1, saleAttrValueId: 101, saleAttrValueName: '内存版本' },
-      { saleAttrId: 2, saleAttrValueId: 103, saleAttrValueName: '颜色' }
-    ],
-    skuImageList: [
-      { id: 5, imgName: 'iPhone15Pro-blue-1.jpg', imgUrl: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=400&fit=crop', spuId: 1, isDefault: '1' },
-      { id: 6, imgName: 'iPhone15Pro-blue-2.jpg', imgUrl: 'https://images.unsplash.com/photo-1696446701796-da61225697cc?w=400&h=400&fit=crop', spuId: 1, isDefault: '0' },
-      { id: 7, imgName: 'iPhone15Pro-blue-3.jpg', imgUrl: 'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=400&h=400&fit=crop', spuId: 1, isDefault: '0' }
-    ],
+    skuAttrValueList: [],
+    skuSaleAttrValueList: [],
     createTime: '2024-01-01',
     updateTime: '2024-01-01',
   },
@@ -1423,20 +1351,8 @@ let skus = [
     category3Id: 111,
     spuId: 2,
     tmId: 1,
-    skuAttrValueList: [
-      { attrId: 1, valueId: 12, valueName: '512GB' },
-      { attrId: 2, valueId: 23, valueName: '雅川青' },
-      { attrId: 4, valueId: 41, valueName: '麒麟芯片' }
-    ],
-    skuSaleAttrValueList: [
-      { saleAttrId: 1, saleAttrValueId: 102, saleAttrValueName: '存储容量' },
-      { saleAttrId: 2, saleAttrValueId: 104, saleAttrValueName: '颜色' }
-    ],
-    skuImageList: [
-      { id: 8, imgName: 'mate60pro-green-1.jpg', imgUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop', spuId: 2, isDefault: '1' },
-      { id: 9, imgName: 'mate60pro-green-2.jpg', imgUrl: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=400&fit=crop', spuId: 2, isDefault: '0' },
-      { id: 10, imgName: 'mate60pro-green-3.jpg', imgUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop', spuId: 2, isDefault: '0' }
-    ],
+    skuAttrValueList: [],
+    skuSaleAttrValueList: [],
     createTime: '2024-01-02',
     updateTime: '2024-01-02',
   },
@@ -1452,19 +1368,8 @@ let skus = [
     category3Id: 111,
     spuId: 2,
     tmId: 1,
-    skuAttrValueList: [
-      { attrId: 1, valueId: 12, valueName: '512GB' },
-      { attrId: 2, valueId: 24, valueName: '白沙银' },
-      { attrId: 4, valueId: 41, valueName: '麒麟芯片' }
-    ],
-    skuSaleAttrValueList: [
-      { saleAttrId: 1, saleAttrValueId: 102, saleAttrValueName: '存储容量' },
-      { saleAttrId: 2, saleAttrValueId: 105, saleAttrValueName: '颜色' }
-    ],
-    skuImageList: [
-      { id: 11, imgName: 'mate60pro-white-1.jpg', imgUrl: 'https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=400&h=400&fit=crop', spuId: 2, isDefault: '1' },
-      { id: 12, imgName: 'mate60pro-white-2.jpg', imgUrl: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=400&fit=crop', spuId: 2, isDefault: '0' }
-    ],
+    skuAttrValueList: [],
+    skuSaleAttrValueList: [],
     createTime: '2024-01-02',
     updateTime: '2024-01-02',
   },
@@ -1480,20 +1385,8 @@ let skus = [
     category3Id: 111,
     spuId: 3,
     tmId: 2,
-    skuAttrValueList: [
-      { attrId: 1, valueId: 11, valueName: '256GB' },
-      { attrId: 2, valueId: 21, valueName: '黑色' },
-      { attrId: 5, valueId: 51, valueName: '骁龙8Gen3' }
-    ],
-    skuSaleAttrValueList: [
-      { saleAttrId: 1, saleAttrValueId: 101, saleAttrValueName: '内存版本' },
-      { saleAttrId: 2, saleAttrValueId: 102, saleAttrValueName: '颜色' }
-    ],
-    skuImageList: [
-      { id: 13, imgName: 'xiaomi14pro-black-1.jpg', imgUrl: 'https://images.unsplash.com/photo-1621330396173-e41b1cafd17f?w=400&h=400&fit=crop', spuId: 3, isDefault: '1' },
-      { id: 14, imgName: 'xiaomi14pro-black-2.jpg', imgUrl: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=400&fit=crop', spuId: 3, isDefault: '0' },
-      { id: 15, imgName: 'xiaomi14pro-black-3.jpg', imgUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop', spuId: 3, isDefault: '0' }
-    ],
+    skuAttrValueList: [],
+    skuSaleAttrValueList: [],
     createTime: '2024-01-03',
     updateTime: '2024-01-03',
   },
@@ -2421,59 +2314,6 @@ app.post('/admin/acl/index/logout', (req, res) => {
 })
 
 // ==================== 用户管理接口 ====================
-// 根据用户获取角色数据（必须放在 /:page/:limit 之前，避免路由冲突）
-app.get('/admin/acl/user/toAssign/:adminId', (req, res) => {
-  const { valid, message } = verifyToken(req)
-  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
-
-  const adminId = parseInt(req.params.adminId)
-  console.log('获取用户角色数据, adminId:', adminId)
-  
-  const user = aclUsers.find(u => u.id === adminId)
-  
-  if (!user) {
-    console.log('用户不存在')
-    return res.json({ code: 404, message: '用户不存在', data: null, ok: false })
-  }
-
-  console.log('找到用户:', user.username, '角色:', user.role)
-  console.log('可用角色列表:', roles.map(r => r.roleName))
-
-  // 获取当前用户已有的角色（支持多角色）
-  const assignRoles = roles
-    .filter(r => user.role.includes(r.roleName))
-    .map(r => ({
-      id: r.id,
-      roleName: r.roleName,
-      remark: r.remark,
-      createTime: r.createTime,
-      updateTime: r.updateTime,
-    }))
-
-  const responseData = {
-    // 全部职位列表
-    allRolesList: roles.map(r => ({
-      id: r.id,
-      roleName: r.roleName,
-      remark: r.remark,
-      createTime: r.createTime,
-      updateTime: r.updateTime,
-    })),
-    // 当前用户已有的职位
-    assignRoles: assignRoles,
-  }
-  
-  console.log('返回数据:', JSON.stringify(responseData, null, 2))
-
-  // 返回全部职位以及当前用户的已有职位
-  res.json({
-    code: 200,
-    message: '成功',
-    data: responseData,
-    ok: true,
-  })
-})
-
 // 获取用户列表
 app.get('/admin/acl/user/:page/:limit', (req, res) => {
   const { valid, message } = verifyToken(req)
@@ -2481,31 +2321,19 @@ app.get('/admin/acl/user/:page/:limit', (req, res) => {
 
   const page = parseInt(req.params.page) || 1
   const limit = parseInt(req.params.limit) || 10
-  const username = req.query.username
-
-  // 根据 username 过滤用户
-  let filteredUsers = aclUsers
-  if (username && username.trim() !== '') {
-    const keyword = username.toLowerCase()
-    filteredUsers = aclUsers.filter(u => 
-      u.username.toLowerCase().includes(keyword) || 
-      u.name.toLowerCase().includes(keyword)
-    )
-  }
-
   const start = (page - 1) * limit
   const end = start + limit
-  const list = filteredUsers.slice(start, end)
+  const list = aclUsers.slice(start, end)
 
   res.json({
     code: 200,
     message: '获取成功',
     data: {
       records: list,
-      total: filteredUsers.length,
+      total: aclUsers.length,
       size: limit,
       current: page,
-      pages: Math.ceil(filteredUsers.length / limit),
+      pages: Math.ceil(aclUsers.length / limit),
     },
     ok: true,
   })
@@ -2516,11 +2344,9 @@ app.post('/admin/acl/user/save', (req, res) => {
   const { valid, message } = verifyToken(req)
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
-  // 生成新ID（取最大ID + 1）
-  const maxId = aclUsers.length > 0 ? Math.max(...aclUsers.map(u => u.id)) : 0
   const newUser = {
+    id: Date.now(),
     ...req.body,
-    id: maxId + 1,  // 确保ID不被前端传来的数据覆盖
     createTime: new Date().toISOString().split('T')[0],
     updateTime: new Date().toISOString().split('T')[0],
   }
@@ -2531,66 +2357,20 @@ app.post('/admin/acl/user/save', (req, res) => {
 
 // 更新用户
 app.put('/admin/acl/user/update', (req, res) => {
-  const { valid, message, user } = verifyToken(req)
+  const { valid, message } = verifyToken(req)
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
   const index = aclUsers.findIndex(u => u.id === req.body.id)
   if (index !== -1) {
-    // 保存旧用户名，用于同步更新 users 数组
-    const oldUsername = aclUsers[index].username
-    
     aclUsers[index] = {
       ...aclUsers[index],
       ...req.body,
       updateTime: new Date().toISOString().split('T')[0],
     }
-    
-    // 同步更新 users 数组（登录用的数组）
-    const userIndex = users.findIndex(u => u.username === oldUsername)
-    if (userIndex !== -1) {
-      users[userIndex].username = aclUsers[index].username
-      users[userIndex].name = aclUsers[index].name
-      users[userIndex].password = aclUsers[index].password
-    }
-    
-    // 如果修改的是当前登录用户（通过token中的username判断），返回特定状态码提示前端重新登录
-    if (user.username === oldUsername) {
-      return res.json({ 
-        code: 200, 
-        message: '更新成功，请重新登录', 
-        data: { needRelogin: true }, 
-        ok: true 
-      })
-    }
-    
     res.json({ code: 200, message: '更新成功', data: null, ok: true })
   } else {
     res.json({ code: 404, message: '用户不存在', data: null, ok: false })
   }
-})
-
-// 根据用户分配角色
-app.post('/admin/acl/user/doAssignRole', (req, res) => {
-  const { valid, message } = verifyToken(req)
-  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
-
-  const { userId, roleIdList } = req.body
-  const user = aclUsers.find(u => u.id === userId)
-  if (!user) {
-    return res.json({ code: 404, message: '用户不存在', data: null, ok: false })
-  }
-
-  // 从角色列表中匹配选中的所有角色
-  const assignedRoles = roles.filter(r => roleIdList.includes(r.id))
-  if (assignedRoles.length === 0) {
-    return res.json({ code: 404, message: '角色不存在', data: null, ok: false })
-  }
-
-  // 更新用户的角色（支持多角色）
-  user.role = assignedRoles.map(r => r.roleName)
-  user.updateTime = new Date().toISOString().split('T')[0]
-
-  res.json({ code: 200, message: '分配角色成功', data: null, ok: true })
 })
 
 // 删除用户
@@ -2601,33 +2381,6 @@ app.delete('/admin/acl/user/remove/:id', (req, res) => {
   const id = parseInt(req.params.id)
   aclUsers = aclUsers.filter(u => u.id !== id)
   res.json({ code: 200, message: '删除成功', data: null, ok: true })
-})
-
-// 批量删除用户
-app.delete('/admin/acl/user/batchRemove', (req, res) => {
-  const { valid, message } = verifyToken(req)
-  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
-
-  const { idList } = req.body
-  
-  if (!Array.isArray(idList) || idList.length === 0) {
-    return res.json({ code: 400, message: 'idList不能为空', data: null, ok: false })
-  }
-
-  // 将idList转换为数字数组
-  const idsToDelete = idList.map(id => parseInt(id))
-  
-  // 过滤掉要删除的用户
-  const originalLength = aclUsers.length
-  aclUsers = aclUsers.filter(u => !idsToDelete.includes(u.id))
-  const deletedCount = originalLength - aclUsers.length
-
-  res.json({ 
-    code: 200, 
-    message: `成功删除${deletedCount}个用户`, 
-    data: { deletedCount }, 
-    ok: true 
-  })
 })
 
 // ==================== 角色管理接口 ====================
@@ -2644,8 +2397,8 @@ app.get('/admin/acl/role/:page/:limit', (req, res) => {
   let filteredRoles = roles
   if (roleName && roleName.trim() !== '') {
     const keyword = roleName.toLowerCase()
-    filteredRoles = roles.filter(r => 
-      r.roleName.toLowerCase().includes(keyword) || 
+    filteredRoles = roles.filter(r =>
+      r.roleName.toLowerCase().includes(keyword) ||
       r.remark.toLowerCase().includes(keyword)
     )
   }
@@ -2662,7 +2415,7 @@ app.get('/admin/acl/role/:page/:limit', (req, res) => {
       total: filteredRoles.length,
       size: limit,
       current: page,
-      pages: Math.ceil(roles.length / limit),
+      pages: Math.ceil(filteredRoles.length / limit),
     },
     ok: true,
   })
@@ -2674,8 +2427,8 @@ app.post('/admin/acl/role/save', (req, res) => {
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
   const newRole = {
-    id: Date.now(),
     ...req.body,
+    id: Date.now(),
     createTime: new Date().toISOString().split('T')[0],
     updateTime: new Date().toISOString().split('T')[0],
   }
@@ -3350,7 +3103,6 @@ app.listen(PORT, () => {
   console.log(`  POST   http://localhost:${PORT}/admin/acl/user/save`)
   console.log(`  PUT    http://localhost:${PORT}/admin/acl/user/update`)
   console.log(`  DELETE http://localhost:${PORT}/admin/acl/user/remove/:id`)
-  console.log(`  POST   http://localhost:${PORT}/admin/acl/user/doAssignRole`)
   console.log('\n【角色管理】')
   console.log(`  GET    http://localhost:${PORT}/admin/acl/role/:page/:limit`)
   console.log(`  POST   http://localhost:${PORT}/admin/acl/role/save`)

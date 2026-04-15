@@ -6,7 +6,7 @@ export interface ResponseData {
 
 // 职位数据类型
 export interface RoleData {
-  id: number;
+  id?: number | string;
   roleName: string;
   remark: string;
   createTime: string;
@@ -17,7 +17,7 @@ export interface RoleData {
 export type Records = RoleData[]
 
 // 全部职位数据的相应的ts类型
-export interface RoleListResponseData extends ResponseData {
+export interface RoleResponseData extends ResponseData {
   data: {
     records: Records;
     total: number;

@@ -7,13 +7,11 @@ export interface ResponseData {
 export interface Attr {
   attrId: number | string // 平台属性的ID
   valueId: number | string // 属性值的ID
-  valueName?: string // 属性值的名称
 }
 
 export interface SaleAttr {
   saleAttrId: number | string // 属性ID
   saleAttrValueId: number | string // 属性值的ID
-  saleAttrValueName?: string // 属性值的名称
 }
 
 export interface SkuData {
@@ -29,7 +27,6 @@ export interface SkuData {
   skuDefaultImg?: string
   isSale?: number
   id?: number
-  skuImageList?: []
 }
 
 // 获取SKU接口返回的数据ts类型

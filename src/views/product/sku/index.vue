@@ -28,11 +28,7 @@
             :icon="row.isSale === 1 ? 'Bottom' : 'Top'"></el-button>
           <el-button type="primary" size="small" icon="Edit" @click="updateSku"></el-button>
           <el-button type="info" size="small" icon="InfoFilled" @click="findSku(row)"></el-button>
-          <el-popconfirm :title="`确认要删除${row.skuName}吗？`" @confirm="removeSku(row.id)" width="200px">
-            <template #reference>
-              <el-button type="danger" size="small" icon="Delete"></el-button>
-            </template>
-          </el-popconfirm>
+          <el-button type="danger" size="small" icon="Delete"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -74,33 +70,23 @@
           <el-col :span="18">{{skuInfo.price}}</el-col>
         </el-row>
         <el-row style="margin: 10px 0;">
-          <el-col :span="6">重量(g)</el-col>
-          <el-col :span="18">{{skuInfo.weight}}</el-col>
-        </el-row>
-        <el-row style="margin: 10px 0;">
-          <el-col :span="6">默认图片</el-col>
-          <el-col :span="18">
-            <img :src="skuInfo.skuDefaultImg" style="width: 100px; height: 100px;" />
-          </el-col>
-        </el-row>
-        <el-row style="margin: 10px 0;">
           <el-col :span="6">平台属性</el-col>
           <el-col :span="18">
-            <el-tag style="margin: 5px;" v-for="item in skuInfo.skuAttrValueList" :key="item.valueId">{{ item.valueName }}</el-tag>
+            <el-tag style="margin: 5px;" v-for="item in skuInfo.skuAttrValueList" :key="item.attrId">{{ item.valueName }}</el-tag>
           </el-col>
         </el-row>
         <el-row style="margin: 10px 0;">
           <el-col :span="6">销售属性</el-col>
           <el-col :span="18">
-            <el-tag type="success" style="margin: 5px;" v-for="item in skuInfo.skuSaleAttrValueList" :key="item.saleAttrValueId">{{ item.saleAttrValueName }}</el-tag>
+            <el-tag type="success" style="margin: 5px;" v-for="item in skuInfo.skuSaleAttrValueList" :key="item.saleAttrId">{{ item.saleAttrValueName }}</el-tag>
           </el-col>
         </el-row>
         <el-row style="margin: 10px 0;">
           <el-col :span="6">商品图片</el-col>
           <el-col :span="18">
             <el-carousel :interval="4000" type="card" height="200px">
-              <el-carousel-item v-for="item in skuInfo.skuImageList" :key="item.id">
-                <img :src="item.imgUrl" alt="商品图片" style="width: 100%; height: 100%;"/>
+              <el-carousel-item v-for="item in 6" :key="item">
+                <h3 text="2xl" justify="center">{{ item }}</h3>
               </el-carousel-item>
             </el-carousel>
           </el-col>
@@ -113,8 +99,8 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
   // 引入请求
-  import { reqSkuList, reqSaleSku, reqCancelSale, reqSkuInfo, reqRemoveSku } from '@/api/product/sku'
-  import { type SkuData, type SkuResponseData } from '@/api/product/sku/type'
+  import { reqSkuList, reqSaleSku, reqCancelSale, reqSkuInfo } from '@/api/product/sku'
+  import type { SkuData, SkuResponseData } from '@/api/product/sku/type'
   import { ElMessage } from 'element-plus'
   import type { SkuInfoData } from '@/api/product/sku/type'
 
@@ -128,7 +114,7 @@
   const skuArr = ref<SkuData[]>([])
   // 控制抽屉显示与隐藏的字段
   const drawer = ref<boolean>(false)
-  const skuInfo = ref<any>({
+  const skuInfo = ref<SkuData>({
     category3Id: '', // 三级分类的ID
     spuId: '', // 已有的SPU的ID
     tmId: '', // SPU品牌的ID
@@ -136,10 +122,9 @@
     price: '', // sku价格
     weight: '', // sku重量
     skuDesc: '', // sku的描述
-    skuDefaultImg: '', // 默认图片
     skuAttrValueList: [],
     skuSaleAttrValueList: [],
-    skuImageList: []
+    skuDefaultImg: ''
   })
 
   // 获取已有的SKU
@@ -191,20 +176,6 @@
       skuInfo.value= result.data
     }
   }
-
-  //删除某一个已有的商品
-  const removeSku = async (id: number) => {
-    const result:any = await reqRemoveSku(id)
-    if (result.code === 200) {
-      // 提示信息
-      ElMessage.success(result.message)
-      // 获取已有全部商品
-      getHasSku(skuArr.value.length > 1 ? pageNo.value : pageNo.value - 1)
-    } else {
-      ElMessage.error(result.message)
-    }
-  }
-
   // 每页条数变化时的回调
   const handler = () => {
     getHasSku()
@@ -217,19 +188,18 @@
 </script>
 
 <style scoped>
-/* 强制轮播指示器一行水平展示 */
-:deep(.el-carousel__indicators) {
-  display: flex !important;
-  flex-direction: row !important;
-  flex-wrap: nowrap !important; /* 禁止换行 */
-  justify-content: center !important; /* 居中对齐 */
-  align-items: center !important;
-  gap: 8px !important; /* 指示器之间的间距（可自行调整） */
+.el-carousel__item h3 {
+  color: #475669;
+  opacity: 0.75;
+  line-height: 200px;
+  margin: 0;
+  text-align: center;
 }
 
-/* 针对卡片式轮播的指示器单独优化 */
-:deep(.el-carousel__indicator--card) {
-  display: inline-block !important;
-  flex-shrink: 0 !important; /* 防止指示器被压缩 */
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
 }
-</style>
+
+.el-carousel__item:nth-child(2n + 1) {
+  background-color: #d3dce6;
+}</style>
