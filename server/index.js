@@ -219,6 +219,12 @@ let permissions = [
     component: 'Layout',
     icon: 'Lock',
     permissionValue: '',
+    code: null,
+    toCode: null,
+    status: null,
+    select: false,
+    createTime: '2019-11-15 17:13:06',
+    updateTime: '2020-09-25 13:47:54',
   },
   {
     id: 2,
@@ -230,6 +236,12 @@ let permissions = [
     component: 'User',
     icon: 'User',
     permissionValue: '',
+    code: null,
+    toCode: null,
+    status: null,
+    select: false,
+    createTime: '2019-11-15 17:13:06',
+    updateTime: '2020-09-25 13:47:54',
   },
   {
     id: 3,
@@ -241,6 +253,12 @@ let permissions = [
     component: 'Role',
     icon: 'UserFilled',
     permissionValue: '',
+    code: null,
+    toCode: null,
+    status: null,
+    select: false,
+    createTime: '2019-11-15 17:13:06',
+    updateTime: '2020-09-25 13:47:54',
   },
   {
     id: 4,
@@ -252,6 +270,12 @@ let permissions = [
     component: 'Permission',
     icon: 'Monitor',
     permissionValue: '',
+    code: null,
+    toCode: null,
+    status: null,
+    select: false,
+    createTime: '2019-11-15 17:13:06',
+    updateTime: '2020-09-25 13:47:54',
   },
   {
     id: 5,
@@ -263,6 +287,12 @@ let permissions = [
     component: 'Layout',
     icon: 'Goods',
     permissionValue: '',
+    code: null,
+    toCode: null,
+    status: null,
+    select: false,
+    createTime: '2019-11-15 17:13:06',
+    updateTime: '2020-09-25 13:47:54',
   },
   {
     id: 6,
@@ -274,6 +304,12 @@ let permissions = [
     component: 'Trademark',
     icon: 'ShoppingCartFull',
     permissionValue: '',
+    code: null,
+    toCode: null,
+    status: null,
+    select: false,
+    createTime: '2019-11-15 17:13:06',
+    updateTime: '2020-09-25 13:47:54',
   },
   {
     id: 7,
@@ -285,6 +321,12 @@ let permissions = [
     component: 'Spu',
     icon: 'Calendar',
     permissionValue: '',
+    code: null,
+    toCode: null,
+    status: null,
+    select: false,
+    createTime: '2019-11-15 17:13:06',
+    updateTime: '2020-09-25 13:47:54',
   },
   {
     id: 8,
@@ -296,6 +338,12 @@ let permissions = [
     component: 'Sku',
     icon: 'Orange',
     permissionValue: '',
+    code: null,
+    toCode: null,
+    status: null,
+    select: false,
+    createTime: '2019-11-15 17:13:06',
+    updateTime: '2020-09-25 13:47:54',
   },
   {
     id: 9,
@@ -307,6 +355,12 @@ let permissions = [
     component: 'Attr',
     icon: 'ChromeFilled',
     permissionValue: '',
+    code: null,
+    toCode: null,
+    status: null,
+    select: false,
+    createTime: '2019-11-15 17:13:06',
+    updateTime: '2020-09-25 13:47:54',
   },
   {
     id: 10,
@@ -318,6 +372,12 @@ let permissions = [
     component: '',
     icon: '',
     permissionValue: 'btn.user.add',
+    code: null,
+    toCode: null,
+    status: null,
+    select: false,
+    createTime: '2019-11-15 17:13:06',
+    updateTime: '2020-09-25 13:47:54',
   },
   {
     id: 11,
@@ -329,6 +389,12 @@ let permissions = [
     component: '',
     icon: '',
     permissionValue: 'btn.user.delete',
+    code: null,
+    toCode: null,
+    status: null,
+    select: false,
+    createTime: '2019-11-15 17:13:06',
+    updateTime: '2020-09-25 13:47:54',
   },
   {
     id: 12,
@@ -340,6 +406,12 @@ let permissions = [
     component: '',
     icon: '',
     permissionValue: 'btn.user.update',
+    code: null,
+    toCode: null,
+    status: null,
+    select: false,
+    createTime: '2019-11-15 17:13:06',
+    updateTime: '2020-09-25 13:47:54',
   },
   {
     id: 13,
@@ -351,6 +423,12 @@ let permissions = [
     component: '',
     icon: '',
     permissionValue: 'btn.role.add',
+    code: null,
+    toCode: null,
+    status: null,
+    select: false,
+    createTime: '2019-11-15 17:13:06',
+    updateTime: '2020-09-25 13:47:54',
   },
   {
     id: 14,
@@ -362,6 +440,12 @@ let permissions = [
     component: '',
     icon: '',
     permissionValue: 'btn.role.delete',
+    code: null,
+    toCode: null,
+    status: null,
+    select: false,
+    createTime: '2019-11-15 17:13:06',
+    updateTime: '2020-09-25 13:47:54',
   },
 ]
 
@@ -2558,10 +2642,26 @@ app.get('/admin/acl/permission', (req, res) => {
   const { valid, message } = verifyToken(req)
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
+  // 构建树形结构
+  const buildTree = (list, parentId = 0) => {
+    return list
+      .filter(item => item.pid === parentId)
+      .map(item => {
+        const children = buildTree(list, item.id)
+        const node = { ...item }
+        if (children.length > 0) {
+          node.children = children
+        }
+        return node
+      })
+  }
+
+  const permissionTree = buildTree(permissions)
+
   res.json({
     code: 200,
     message: '获取成功',
-    data: permissions,
+    data: permissionTree,
     ok: true,
   })
 })

@@ -43,7 +43,7 @@ export interface MenuResponseData extends ResponseData {
   data: MenuList
 }
 
-export interface Data {
+export interface AssignData {
   roleId: number
   permissionId: number[]
 }
