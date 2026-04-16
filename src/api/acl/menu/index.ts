@@ -1,4 +1,4 @@
-import request from "@/utils/request";
+import request from '@/utils/request'
 import type { PermissionResponseData, Permission } from './type'
 
 // 【菜单管理】
@@ -11,19 +11,20 @@ import type { PermissionResponseData, Permission } from './type'
 enum API {
   // 获取全部菜单与按钮的标识数据
   ALLPERMISSION_URL = '/admin/acl/permission',
-  // 添加菜单
+  // 给某一级菜单新增一个子菜单
   ADDPERMISSION_URL = '/admin/acl/permission/save',
-  // 更新菜单
+  // 更新某一个已有的菜单
   UPDATEPERMISSION_URL = '/admin/acl/permission/update',
 }
 
 // 获取菜单数据的请求
-export const reqAllPermission = () => request.get<any, PermissionResponseData>(API.ALLPERMISSION_URL)
+export const reqAllPermission = () =>
+  request.get<any, PermissionResponseData>(API.ALLPERMISSION_URL)
 
 // 添加或更新菜单的请求
 export const reqAddOrUpdatePermission = (data: Permission) => {
   if (data.id) {
-    return request.put<any, any>(API.UPDATEPERMISSION_URL)
+    return request.put<any, any>(API.UPDATEPERMISSION_URL, data)
   } else {
     return request.post<any, any>(API.ADDPERMISSION_URL, data)
   }

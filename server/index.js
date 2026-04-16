@@ -2643,11 +2643,12 @@ app.get('/admin/acl/permission', (req, res) => {
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
   // 构建树形结构
-  const buildTree = (list, parentId = 0) => {
+  const buildTree = (list, parentId = 0, visited = new Set()) => {
     return list
-      .filter(item => item.pid === parentId)
+      .filter(item => item.pid === parentId && !visited.has(item.id))
       .map(item => {
-        const children = buildTree(list, item.id)
+        visited.add(item.id)
+        const children = buildTree(list, item.id, visited)
         const node = { ...item }
         if (children.length > 0) {
           node.children = children
@@ -2671,9 +2672,13 @@ app.post('/admin/acl/permission/save', (req, res) => {
   const { valid, message } = verifyToken(req)
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
+  // 排除前端可能传来的id和children，防止覆盖
+  const { id, children, ...rest } = req.body
   const newPermission = {
-    id: Date.now(),
-    ...req.body,
+    id: permissions.length > 0 ? Math.max(...permissions.map(p => p.id)) + 1 : 1,
+    createTime: new Date().toISOString().replace('T', ' ').substring(0, 19),
+    updateTime: new Date().toISOString().replace('T', ' ').substring(0, 19),
+    ...rest,
   }
   permissions.push(newPermission)
 
@@ -2687,7 +2692,9 @@ app.put('/admin/acl/permission/update', (req, res) => {
 
   const index = permissions.findIndex(p => p.id === req.body.id)
   if (index !== -1) {
-    permissions[index] = { ...permissions[index], ...req.body }
+    // 排除children字段，避免树形子节点数据被写入permissions数组
+    const { children, ...rest } = req.body
+    permissions[index] = { ...permissions[index], ...rest }
     res.json({ code: 200, message: '更新成功', data: null, ok: true })
   } else {
     res.json({ code: 404, message: '权限不存在', data: null, ok: false })
