@@ -11,8 +11,15 @@
     <el-table-column label="操作">
       <!-- row：已有的菜单对象|按钮对象的数据 -->
       <template #default="{row}">
-        <el-button type="primary"  :disabled="row.level === 3 ? true : false">{{ row.level === 2 ? '添加功能' : '添加菜单' }}</el-button>
-        <el-button type="primary" :disabled="row.level === 0 ? true : false">编辑</el-button>
+        <el-button
+          type="primary"
+          :disabled="row.level === 3 ? true : false"
+          @click="addPermission(row)"
+          >{{ row.level === 2 ? '添加功能' : '添加菜单' }}</el-button>
+        <el-button
+          type="primary"
+          @click="updatePermission(row)"
+          :disabled="row.level === 0 ? true : false">编辑</el-button>
         <el-popconfirm title="确定要删除吗？">
           <template #reference>
             <el-button type="primary"  :disabled="row.level === 0 ? true : false">删除</el-button>
@@ -21,6 +28,25 @@
       </template>
     </el-table-column>
   </el-table>
+  <!-- 对话框组件：添加或者更新已有的菜单的数据结构 -->
+  <el-dialog
+    v-model="dialogVisible"
+    title="Tips"
+  >
+  <!-- 表单组件：收集新增与已有的菜单的数据 -->
+    <el-form>
+      <el-form-item label="名称"><el-input placeholder="请输入名称" v-model="permissionParams.name" /></el-form-item>
+      <el-form-item label="权限值"><el-input placeholder="请输入权限值" v-model="permissionParams.permissionValue" /></el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">
+          确定
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup lang='ts'>
@@ -31,8 +57,15 @@ import { reqAllPermission } from '@/api/acl/menu'
 import type { PermissionResponseData, PermissionList } from '@/api/acl/menu/type'
 // 存储菜单的数据
 const permissionArr = ref<PermissionList>([])
+// 控制对话框的显示与隐藏
+const dialogVisible = ref<boolean>(false)
+//
+const permissionParams = ref<any>({
+  name: '',
+  permissionValue: ''
+})
 
-  // 获取菜单数据的方法
+// 获取菜单数据的方法
 const getAllPermission = async () => {
   const result: PermissionResponseData = await reqAllPermission()
   if (result.code === 200) {
@@ -44,6 +77,21 @@ const getAllPermission = async () => {
 onMounted(() => {
   getAllPermission()
 })
+
+// 添加菜单按钮的回调
+const addPermission = () => {
+  dialogVisible.value = true
+  Object.assign(permissionParams.value, {
+    name: '',
+    permissionValue: ''
+  })
+}
+
+// 编辑按钮的回调
+const updatePermission = (row: PermissionList) => {
+  dialogVisible.value = true
+  permissionParams.value = {... row}
+}
 </script>
 
 <style scoped>
