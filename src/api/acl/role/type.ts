@@ -6,11 +6,11 @@ export interface ResponseData {
 
 // 职位数据类型
 export interface RoleData {
-  id?: number | string;
+  id?: number;
   roleName: string;
-  remark: string;
-  createTime: string;
-  updateTime: string;
+  remark?: string;
+  createTime?: string;
+  updateTime?: string;
 }
 
 // 全部职位的数组的ts类型
@@ -25,4 +25,25 @@ export interface RoleResponseData extends ResponseData {
     current: number;
     pages: number;
   }
+}
+
+// 菜单与按钮数据的ts类型
+export interface MenuData {
+  id: number;
+  name: string;
+  pid: number;
+  level: number;
+  select: boolean;
+  children?: MenuList;
+}
+
+export type MenuList = MenuData[]
+
+export interface MenuResponseData extends ResponseData {
+  data: MenuList
+}
+
+export interface Data {
+  roleId: number
+  permissionId: number[]
 }

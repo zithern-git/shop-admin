@@ -205,6 +205,9 @@ let roles = [
   },
 ]
 
+// 角色权限关联关系存储
+let rolePermissions = {}
+
 let permissions = [
   {
     id: 1,
@@ -2466,6 +2469,90 @@ app.delete('/admin/acl/role/remove/:id', (req, res) => {
 })
 
 // ==================== 菜单/权限管理接口 ====================
+// 根据角色获取菜单权限
+app.get('/admin/acl/permission/toAssign/:roleId', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  const roleId = parseInt(req.params.roleId)
+  console.log('根据角色获取菜单权限, roleId:', roleId)
+
+  // 查找角色
+  const role = roles.find(r => r.id === roleId)
+  if (!role) {
+    return res.json({ code: 404, message: '角色不存在', data: null, ok: false })
+  }
+
+  // 获取角色已分配的权限ID列表
+  // 优先从 rolePermissions 中获取，如果没有则使用默认逻辑
+  let assignedPermissionIds = rolePermissions[roleId] || []
+  
+  // 如果没有保存过权限，使用默认逻辑
+  if (assignedPermissionIds.length === 0) {
+    if (role.roleName === '管理员') {
+      assignedPermissionIds = permissions.map(p => p.id)
+    } else if (role.roleName === '运营') {
+      assignedPermissionIds = permissions.filter(p => p.name.includes('商品') || p.name.includes('品牌')).map(p => p.id)
+    } else if (role.roleName === '客服') {
+      assignedPermissionIds = permissions.filter(p => p.name.includes('商品')).map(p => p.id)
+    } else {
+      // 其他角色默认拥有查看权限
+      assignedPermissionIds = permissions.filter(p => p.level === 1).map(p => p.id)
+    }
+  }
+
+  // 构建树形结构
+  const buildTree = (list, parentId = 0) => {
+    return list
+      .filter(item => item.pid === parentId)
+      .map(item => {
+        const children = buildTree(list, item.id)
+        const node = {
+          ...item,
+          select: assignedPermissionIds.includes(item.id)
+        }
+        if (children.length > 0) {
+          node.children = children
+        }
+        return node
+      })
+  }
+
+  const permissionTree = buildTree(permissions)
+
+  res.json({
+    code: 200,
+    message: '成功',
+    data: permissionTree,
+    ok: true,
+  })
+})
+
+// 给角色分配权限
+app.post('/admin/acl/permission/doAssign', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  const { roleId, permissionId } = req.body
+  console.log('给角色分配权限, roleId:', roleId, 'permissionId:', permissionId)
+
+  // 查找角色
+  const role = roles.find(r => r.id === roleId)
+  if (!role) {
+    return res.json({ code: 404, message: '角色不存在', data: null, ok: false })
+  }
+
+  // 存储角色和权限的关联关系
+  rolePermissions[roleId] = permissionId || []
+
+  res.json({
+    code: 200,
+    message: '分配成功',
+    data: null,
+    ok: true,
+  })
+})
+
 // 获取权限列表
 app.get('/admin/acl/permission', (req, res) => {
   const { valid, message } = verifyToken(req)

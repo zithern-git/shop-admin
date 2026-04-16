@@ -1,6 +1,6 @@
 // 角色管理模块的接口
 import request from "@/utils/request";
-import type { RoleResponseData, RoleData} from './type'
+import type { RoleResponseData, RoleData, MenuResponseData, AssignData} from './type'
 
 // 枚举地址
 enum API{
@@ -9,7 +9,11 @@ enum API{
   // 新增角色接口的地址
   ADDROLE_URL = '/admin/acl/role/save',
   // 更新已有角色
-  UPDATEROLE_URL = '/admin/acl/role/update'
+  UPDATEROLE_URL = '/admin/acl/role/update',
+  // 获取全部的菜单与按钮的数据
+  ALLPERMISSIONS = '/admin/acl/permission/toAssign/',
+  // 给角色分配权限的接口
+  ASSIGNPERMISSION_URL = '/admin/acl/permission/doAssign'
 }
 
 // 获取权限列表
@@ -25,3 +29,9 @@ export const reqAddOrUpdateRole = (data: RoleData) => {
     return request.post<any, any>(API.ADDROLE_URL, data)
   }
 }
+
+// 获取全部菜单与按钮权限数据
+export const reqAllMenuList = (roleId: number) => request.get<any, MenuResponseData>(API.ALLPERMISSIONS + roleId)
+
+// 给角色分配权限
+export const reqAssignPermission = (data: AssignData) => request.post<any, any>(API.ASSIGNPERMISSION_URL, data)

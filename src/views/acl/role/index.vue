@@ -56,13 +56,23 @@
         <h3>分配权限</h3>
       </template>
       <template #default>
-        <el-form>
-        </el-form>
+        <!-- 树形控件 -->
+         <el-tree
+            ref="treeRef"
+            style="max-width: 600px"
+            :data="menuArr"
+            show-checkbox
+            node-key="id"
+            default-expand-all
+            :default-checked-keys="selectArr"
+            :props="props"
+            check-strictly
+          />
       </template>
       <template #footer>
         <div style="flex: auto">
           <el-button @click="drawer = false">取消</el-button>
-          <el-button type="primary" @click="drawer = false">确定</el-button>
+          <el-button type="primary" @click="confirm">确定</el-button>
         </div>
       </template>
     </el-drawer>
@@ -71,8 +81,8 @@
 
 <script setup lang='ts'>
 import { ref, onMounted, reactive, nextTick } from 'vue'
-import { reqAllRoleList, reqAddOrUpdateRole} from '@/api/acl/role'
-import type { RoleResponseData, Records, RoleData } from '@/api//acl/role/type'
+import { reqAllRoleList, reqAddOrUpdateRole, reqAllMenuList, reqAssignPermission} from '@/api/acl/role'
+import type { RoleResponseData, Records, RoleData, MenuResponseData, MenuList, AssignData } from '@/api//acl/role/type'
 // 引入骨架的仓库
 import useLayoutSettingStore from '@/store/modules/setting'
 import { ElMessage } from 'element-plus'
@@ -98,6 +108,17 @@ const dialogVisible = ref<boolean>(false)
 const form = ref<any>()
 // 控制抽屉显示与隐藏
 const drawer = ref<boolean>(false)
+// 定义数组存储用户权限的数据
+const menuArr = ref<MenuList>([])
+// 准备一个数组：数组用于存储勾选的节点id（最后一级）
+const selectArr = ref<number[]>([])
+// 树形控件ref
+const treeRef = ref<any>()
+// 收集新增角色权限
+const selectParams = ref<AssignData>({
+  roleId: 0,
+  permissionId: []
+})
 
 // 自定义校验规则的回调
 const validateRoleName = (rule: any, value: any, callback: any) => {
@@ -193,10 +214,61 @@ const reset = () => {
   layoutSettingStore.refresh = !layoutSettingStore.refresh
 }
 
-// 分配权限按钮的回调
-const setPermission = (row: RoleData) => {
+// 分配权限按钮的回调，row：已有的角色的数据
+const setPermission = async (row: RoleData) => {
   // 显示抽屉
   drawer.value = true
+  // 收集当前要分类权限的角色的数据
+  Object.assign(roleParams.value, row)
+  // 根据角色获取权限的数据
+  const result: MenuResponseData = await reqAllMenuList(roleParams.value.id as number)
+  if (result.code === 200) {
+    menuArr.value = result.data
+    // 使用 nextTick 确保数据加载后再计算选中节点
+    nextTick(() => {
+      selectArr.value = filterSelectArr(menuArr.value, [])
+      // 使用 setCheckedKeys 动态设置选中状态
+      treeRef.value?.setCheckedKeys(selectArr.value)
+    })
+  }
+}
+
+const filterSelectArr = (allData: MenuList, initArr: number[]) => {
+  allData.forEach(item => {
+    // 只要 select 为 true 就加入数组（包括父节点和叶子节点）
+    if(item.select) {
+      initArr.push(item.id)
+    }
+    if (item.children && item.children.length > 0) {
+      filterSelectArr(item.children, initArr)
+    }
+  })
+  return initArr
+}
+
+// 树形控件
+const props = {
+  children: 'children',
+  label: 'name',
+}
+
+// 确定按钮的回调
+const confirm = async () => {
+  selectParams.value.roleId = roleParams.value.id as number
+  // 从树控件获取实际选中的节点
+  const checkedKeys = treeRef.value?.getCheckedKeys() || []
+  const halfCheckedKeys = treeRef.value?.getHalfCheckedKeys() || []
+  selectParams.value.permissionId = [...checkedKeys, ...halfCheckedKeys]
+  // 下发权限
+  const result:any = await reqAssignPermission(selectParams.value)
+  if (result.code === 200) {
+    // 抽屉关闭
+    drawer.value = false
+    // 提示信息
+    ElMessage.success(result.message)
+    // 页面刷新
+    window.location.reload()
+  }
 }
 </script>
 
