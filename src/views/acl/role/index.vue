@@ -23,7 +23,11 @@
         <template #default="{row}">
           <el-button type="primary" icon="User" @click="setPermission(row)">分配权限</el-button>
           <el-button type="primary" icon="Edit" @click="updateRole(row)">编辑</el-button>
-          <el-button type="primary" icon="Delete">删除</el-button>
+          <el-popconfirm :title="`确认要删除${row.roleName}吗？`"  @confirm="deleteRole(row.id)">
+            <template #reference>
+              <el-button type="primary" icon="Delete">删除</el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -81,7 +85,7 @@
 
 <script setup lang='ts'>
 import { ref, onMounted, reactive, nextTick } from 'vue'
-import { reqAllRoleList, reqAddOrUpdateRole, reqAllMenuList, reqAssignPermission} from '@/api/acl/role'
+import { reqAllRoleList, reqAddOrUpdateRole, reqAllMenuList, reqAssignPermission, reqRemoveRole} from '@/api/acl/role'
 import type { RoleResponseData, Records, RoleData, MenuResponseData, MenuList, AssignData } from '@/api//acl/role/type'
 // 引入骨架的仓库
 import useLayoutSettingStore from '@/store/modules/setting'
@@ -268,6 +272,16 @@ const confirm = async () => {
     ElMessage.success(result.message)
     // 页面刷新
     window.location.reload()
+  }
+}
+
+// 删除按钮的回调
+const deleteRole = async (id: number) => {
+  const result: any = await reqRemoveRole(id)
+  if (result.code === 200) {
+    // 提示信息
+    ElMessage.success(result.message)
+    getHasRole(allRole.value.length > 1 ? pageNo.value : pageNo.value - 1)
   }
 }
 </script>

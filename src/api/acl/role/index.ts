@@ -12,8 +12,10 @@ enum API{
   UPDATEROLE_URL = '/admin/acl/role/update',
   // 获取全部的菜单与按钮的数据
   ALLPERMISSIONS = '/admin/acl/permission/toAssign/',
-  // 给角色分配权限的接口
-  ASSIGNPERMISSION_URL = '/admin/acl/permission/doAssign'
+  // 给相应的角色分配权限的接口
+  ASSIGNPERMISSION_URL = '/admin/acl/permission/doAssign',
+  // 删除相应的据角色
+  REMOVEROLE_URL = '/admin/acl/role/remove/'
 }
 
 // 获取权限列表
@@ -35,3 +37,6 @@ export const reqAllMenuList = (roleId: number) => request.get<any, MenuResponseD
 
 // 给角色分配权限
 export const reqAssignPermission = (data: AssignData) => request.post<any, any>(API.ASSIGNPERMISSION_URL, data)
+
+// 删除相应的角色
+export const reqRemoveRole = (id: number) => request.delete<any, any>(API.REMOVEROLE_URL + id)
