@@ -18,7 +18,11 @@
           :disabled="row.level === 0 ? true : false"
           >编辑</el-button
         >
-        <el-popconfirm title="确定要删除吗？">
+        <el-popconfirm
+          :title="`确定要删除${row.name}吗？`"
+          width="260"
+          @confirm="removePermission(row.id)"
+        >
           <template #reference>
             <el-button type="primary" :disabled="row.level === 0 ? true : false">删除</el-button>
           </template>
@@ -49,7 +53,7 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
   // 引入获取菜单请求API
-  import { reqAllPermission, reqAddOrUpdatePermission } from '@/api/acl/menu'
+  import { reqAllPermission, reqAddOrUpdatePermission, reqRemovePermission } from '@/api/acl/menu'
   // 引入ts类型
   import type {
     PermissionResponseData,
@@ -121,6 +125,16 @@
       // 提示信息
       ElMessage.success(result.message)
       // 再次获取全部最新的菜单的数据
+      getAllPermission()
+    } else {
+      ElMessage.error(result.message)
+    }
+  }
+
+  const removePermission = async (id: number) => {
+    const result: any = await reqRemovePermission(id)
+    if (result.code === 200) {
+      ElMessage.success(result.message)
       getAllPermission()
     } else {
       ElMessage.error(result.message)
