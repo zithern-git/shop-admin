@@ -3,7 +3,7 @@
     <div class="box">
       <img :src="userStore.avatar" alt="" class="avatar" />
       <div class="bottom">
-        <h3 class="title">{{ `${getTime()}好${userStore.username}` }}</h3>
+        <h3 class="title">{{ getTime() }}好！{{ userStore.username }}</h3>
         <p class="subtitle">后台测试管理系统</p>
       </div>
     </div>

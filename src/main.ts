@@ -15,6 +15,7 @@ import './permission'
 // 引入 SVG 图标注册脚本（必须）
 import 'virtual:svg-icons-register'
 import globalComponent from './components'
+import 'element-plus/theme-chalk/dark/css-vars.css' // 👈 暗黑模式必须加这个
 
 const app = createApp(App)
 

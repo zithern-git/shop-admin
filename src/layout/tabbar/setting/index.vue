@@ -13,7 +13,28 @@
     style="border: 1px solid #d5d3d3"
     @click="fullScreen"
   />
-  <el-button size="small" icon="Setting" circle style="border: 1px solid #d5d3d3" />
+  <el-popover title="主题设置">
+    <!-- 表单元素 -->
+    <el-form>
+      <el-form-item label="主题颜色">
+        <!-- 颜色选择器 -->
+        <el-color-picker v-model="color" />
+      </el-form-item>
+      <el-form-item label="暗黑模式">
+        <!-- 开关 -->
+        <el-switch
+          v-model="isDark"
+          inline-prompt
+          :active-icon="Moon"
+          :inactive-icon="Sunny"
+          @change="changeDark"
+        />
+      </el-form-item>
+    </el-form>
+    <template #reference>
+      <el-button size="small" icon="Setting" circle style="border: 1px solid #d5d3d3" />
+    </template>
+  </el-popover>
   <img
     :src="userStore.avatar"
     style="width: 24px; height: 24px; border-radius: 12px; margin: 0 10px"
@@ -34,6 +55,9 @@
 </template>
 
 <script setup lang="ts">
+  import { ref, watch } from 'vue'
+  // 👇 必须先导入这两个图标
+  import { Sunny, Moon } from '@element-plus/icons-vue'
   // 获取骨架的小仓库
   import useLayoutSettingStore from '@/store/modules/setting'
   // 获取用户相关的小仓库
@@ -47,6 +71,18 @@
   const $route: any = useRoute()
 
   const layoutSettingStore = useLayoutSettingStore()
+
+  const color = ref<string>('red')
+
+  const isDark = ref<boolean>(false)
+
+  // switch开关的change事件进行暗黑模式切换
+  const changeDark = () => {
+    const html = document.documentElement
+    // 判断html标签标签是否有类名dark
+    isDark.value ? (html.className = 'dark') : (html.className = '')
+  }
+
   // 刷新按钮点击回调
   const updateRefresh = () => {
     layoutSettingStore.refresh = !layoutSettingStore.refresh
