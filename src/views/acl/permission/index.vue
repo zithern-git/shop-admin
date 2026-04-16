@@ -41,7 +41,7 @@
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">
+        <el-button type="primary" @click="save">
           确定
         </el-button>
       </div>
@@ -52,9 +52,10 @@
 <script setup lang='ts'>
 import { ref, onMounted } from 'vue'
 // 引入获取菜单请求API
-import { reqAllPermission } from '@/api/acl/menu'
+import { reqAllPermission, reqAddOrUpdatePermission } from '@/api/acl/menu'
 // 引入ts类型
-import type { PermissionResponseData, PermissionList } from '@/api/acl/menu/type'
+import type { PermissionResponseData, Permission } from '@/api/acl/menu/type'
+import { ElMessage } from 'element-plus'
 // 存储菜单的数据
 const permissionArr = ref<PermissionList>([])
 // 控制对话框的显示与隐藏
@@ -79,7 +80,7 @@ onMounted(() => {
 })
 
 // 添加菜单按钮的回调
-const addPermission = () => {
+const addPermission = async () => {
   dialogVisible.value = true
   Object.assign(permissionParams.value, {
     name: '',
@@ -88,9 +89,20 @@ const addPermission = () => {
 }
 
 // 编辑按钮的回调
-const updatePermission = (row: PermissionList) => {
+const updatePermission = async (row: Permission) => {
   dialogVisible.value = true
   permissionParams.value = {... row}
+}
+
+// 对话框确定按钮的回调
+const save = async () => {
+  const result: any = await reqAddOrUpdatePermission(permissionParams.value)
+  if (result.code === 200) {
+    dialogVisible.value = false
+    ElMessage.success(result.message)
+  } else {
+    ElMessage.error(result.message)
+  }
 }
 </script>
 
