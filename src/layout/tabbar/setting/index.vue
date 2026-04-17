@@ -18,7 +18,7 @@
     <el-form>
       <el-form-item label="主题颜色">
         <!-- 颜色选择器 -->
-        <el-color-picker v-model="color" />
+        <el-color-picker v-model="color" show-alpha color-format="hex" @change="changeColor" :hide-after="2000"/>
       </el-form-item>
       <el-form-item label="暗黑模式">
         <!-- 开关 -->
@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { ref } from 'vue'
   // 👇 必须先导入这两个图标
   import { Sunny, Moon } from '@element-plus/icons-vue'
   // 获取骨架的小仓库
@@ -73,14 +73,22 @@
   const layoutSettingStore = useLayoutSettingStore()
 
   const color = ref<string>('red')
-
   const isDark = ref<boolean>(false)
-
   // switch开关的change事件进行暗黑模式切换
   const changeDark = () => {
     const html = document.documentElement
     // 判断html标签标签是否有类名dark
     isDark.value ? (html.className = 'dark') : (html.className = '')
+  }
+
+  const changeColor = () => {
+    // document.documentElement 是全局变量时
+    const el = document.documentElement
+    console.log('el', el.style)
+    // 获取 css 变量
+    // getComputedStyle(el).getPropertyValue(`--el-color-primary`)
+    // 设置 css 变量
+    el.style.setProperty('--el-color-primary', color.value)
   }
 
   // 刷新按钮点击回调

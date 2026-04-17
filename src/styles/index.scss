@@ -3,12 +3,12 @@
 @use './reset.scss';
 
 // Element Plus 按钮样式修复
-// type="primary" 的按钮应该有的样式
+// type="primary" 的按钮使用 CSS 变量以支持动态主题切换
 .el-button--primary,
 .el-button[type='primary'],
 .el-button.el-button--primary {
-  background-color: #409eff !important;
-  border-color: #409eff !important;
+  background-color: var(--el-color-primary) !important;
+  border-color: var(--el-color-primary) !important;
   color: #fff !important;
 }
 // type="danger" 的按钮应该有的样式
