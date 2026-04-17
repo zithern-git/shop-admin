@@ -39,8 +39,10 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .container-top {
   width: 100%;
-  height: 40px;
+  height: 80px;
   display: flex;
+  align-items: center;
+  color: #00d4ff;
   background: linear-gradient(180deg, rgba(0, 150, 255, 0.1) 0%, transparent 100%);
   border-bottom: 1px solid rgba(0, 212, 255, 0.3);
   .left {
@@ -48,9 +50,16 @@ onUnmounted(() => {
   }
   .center {
     flex: 2;
+    font-size: 30px;
+    text-align: center;
   }
   .right {
-    flex: 1.5
+    flex: 1.5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 20px;
+
   }
 }
 </style>

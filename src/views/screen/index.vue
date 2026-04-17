@@ -18,6 +18,7 @@ import {ref, onMounted} from 'vue'
 import Top from './components/Top/index.vue'
 const screen = ref<HTMLElement | null>(null)
 
+// 定义大屏缩放比例
 const getScale = (w = 1920, h = 1080) => {
   const ww = window.innerWidth / w;
   const wh = window.innerHeight/ h;
@@ -25,11 +26,17 @@ const getScale = (w = 1920, h = 1080) => {
 }
 
 onMounted(() => {
-  const scale = getScale()
   if (screen.value) {
-    screen.value.style.transform = `translate(-50%, -50%) scale(${scale})`
+    screen.value.style.transform = `scale(${getScale()}) translate(-50%, -50%) `
   }
 })
+
+// 监听视口变化
+window.onresize = () => {
+  if (screen.value) {
+    screen.value.style.transform = `scale(${getScale()}) translate(-50%, -50%) `
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -39,19 +46,20 @@ onMounted(() => {
   background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 50%, #0d1b2a 100%);
   color: #fff;
   .screen {
-    position: fixed;
     width: 1920px;
     height: 1080px;
     display: flex;
+    align-items: center;
     flex-direction: column;
     transform-origin: left top;
+    position: fixed;
     left: 50%;
     top: 50%;
     transform: translate(50%, 50%);
-    // background-color: #b3f253;
+    background-color: #b3f253;
     .top {
         width: 100%;
-        height: 40px;
+        height: 80px;
         // background-color: antiquewhite;
       }
   }
