@@ -16,7 +16,11 @@
           <Map class="map"></Map>
           <Line class="line"></Line>
         </div>
-        <div class="right"></div>
+        <div class="right">
+          <Rank class="rank"></Rank>
+          <Year class="year"></Year>
+          <Counter class="counter"></Counter>
+        </div>
       </div>
     </div>
   </div>
@@ -29,8 +33,13 @@
   import Tourist from './components/tourist/index.vue'
   import Sex from './components/sex/index.vue'
   import Age from './components/age/index.vue'
+  // 引入中间的两个子组件
   import Map from './components/map/index.vue'
   import Line from './components/line/index.vue'
+  // 引入右侧的三个子组件
+  import Rank from './components/rank/index.vue'
+  import Year from './components/year/index.vue'
+  import Counter from './components/counter/index.vue'
 
   const screen = ref<HTMLElement | null>(null)
 
@@ -110,6 +119,18 @@
         }
         .right {
           flex: 1;
+          display: flex;
+          flex-direction: column;
+          font-size: 20px;
+          .rank {
+            flex: 1;
+          }
+          .counter {
+            flex: 1;
+          }
+          .year {
+            flex: 1;
+          }
         }
       }
     }
