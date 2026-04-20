@@ -54,7 +54,7 @@
   .container-box {
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(135deg, #2c4975 0%, #4164a9 50%, #5e92ca 100%);
+    background: linear-gradient(135deg, #2c4975 0%, #264179 50%, #1c4d81 100%);
     color: #fff;
     .screen {
       width: 1920px;
