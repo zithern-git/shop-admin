@@ -45,6 +45,21 @@ const upload = multer({
 
 app.use('/uploads', express.static(uploadDir))
 
+// ==================== 静态文件服务（前端打包文件）====================
+// 生产环境：提供前端静态文件
+const distPath = path.join(__dirname, '../dist')
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath))
+  // 所有路由都指向 index.html（支持前端路由）
+  app.get('*', (req, res) => {
+    // API 请求不处理
+    if (req.path.startsWith('/admin') || req.path.startsWith('/uploads')) {
+      return res.status(404).json({ code: 404, message: '接口不存在' })
+    }
+    res.sendFile(path.join(distPath, 'index.html'))
+  })
+}
+
 // ==================== 用户数据 ====================
 const users = [
   {

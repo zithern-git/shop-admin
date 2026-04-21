@@ -8,7 +8,6 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
   import * as echarts from 'echarts'
-  import { Bottom } from '@element-plus/icons-vue'
 
   const chartRef = ref<HTMLElement | null>(null)
 
@@ -109,7 +108,7 @@
             },
             label: {
               show: true,
-              formatter: function (params) {
+              formatter: function (params: any) {
                 return params.value
               },
             },

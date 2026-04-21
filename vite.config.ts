@@ -16,6 +16,7 @@ export default defineConfig(({ mode }) => {
   // 获取各种环境下的对应的变量，mode 是 'development' 或 'production'
   const env = loadEnv(mode, process.cwd(), '')
   return {
+    base: './',
     server: {
       // hmr: true,
       // watch: {

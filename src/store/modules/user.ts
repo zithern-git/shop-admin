@@ -11,10 +11,12 @@ import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from '@/utils/token'
 // 引入路由（常量路由）
 import { constantRoutes, asyncRoutes, anyRoutes } from '@/router/routes'
 import router from '@/router'
+// 引入深拷贝方法
+import cloneDeep from 'lodash/cloneDeep'
 
 // 用于过滤当前用户需要展示的异步路由
-const filterRoutes = (allRoutes: any[], routeNames: string[]) => {
-  return allRoutes.filter((item: any) => {
+const filterRoutes = (asyncRoute: any[], routeNames: string[]) => {
+  return asyncRoute.filter((item: any) => {
     if (routeNames.includes(item.name)) {
       if (item.children && item.children.length > 0) {
         item.children = filterRoutes(item.children, routeNames)
@@ -34,6 +36,7 @@ const useUserStore = defineStore('User', {
       menuRoutes: constantRoutes, //仓库存储生成菜单需要数组（路由）
       username: '',
       avatar: '',
+      buttons: [],
     }
   },
   getters: {},
@@ -65,10 +68,11 @@ const useUserStore = defineStore('User', {
       if (result.code === 200) {
         this.username = result.data.name
         this.avatar = result.data.avatar
+        this.buttons = result.data.buttons
         // console.log('设置 avatar:', this.avatar) // 调试日志
         // 计算异步路由
         const routes = result.data.routes || []
-        const userAsyncRoutes = filterRoutes(asyncRoutes, routes)
+        const userAsyncRoutes = filterRoutes(cloneDeep(asyncRoutes), routes)
         // 菜单的数据
         this.menuRoutes = [...constantRoutes, ...userAsyncRoutes, anyRoutes]
         // 目前路由器管理的只有常量路由：用户计算完毕异步路由、任意路由动态追加
@@ -85,15 +89,32 @@ const useUserStore = defineStore('User', {
     async userLogout() {
       const result: any = await reqLogout()
       if (result.code === 200) {
-        // 目前没有mock接口：退出登录接口（通知服务器本地用户唯一标识失效）
+        // 清空动态添加的路由
+        this.resetRouter()
+        // 重置仓库状态
         this.token = ''
         this.username = ''
         this.avatar = ''
+        this.menuRoutes = constantRoutes
         REMOVE_TOKEN()
         return 'ok'
       } else {
         return Promise.reject(new Error(result.message))
       }
+    },
+
+    // 重置路由方法
+    resetRouter() {
+      // 获取当前所有路由
+      const allRoutes = router.getRoutes()
+      // 移除动态添加的异步路由
+      allRoutes.forEach(route => {
+        const routeName = route.name
+        // 只移除异步路由（根据 name 判断）
+        if (routeName && asyncRoutes.some(r => r.name === routeName)) {
+          router.removeRoute(routeName)
+        }
+      })
     },
   },
 })

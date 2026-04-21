@@ -7,11 +7,13 @@ export interface ResponseData {
 export interface Attr {
   attrId: number | string // 平台属性的ID
   valueId: number | string // 属性值的ID
+  valueName?: string
 }
 
 export interface SaleAttr {
   saleAttrId: number | string // 属性ID
   saleAttrValueId: number | string // 属性值的ID
+  saleAttrValueName?: string
 }
 
 export interface SkuData {

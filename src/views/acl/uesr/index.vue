@@ -6,7 +6,9 @@
         <el-input v-model="keyword" placeholder="请输入用户名" style="width: 200px" />
       </div>
       <div>
-        <el-button type="primary" :disabled="!keyword" size="default" @click="search">搜索</el-button>
+        <el-button type="primary" :disabled="!keyword" size="default" @click="search"
+          >搜索</el-button
+        >
         <el-button size="default" @click="reset">重置</el-button>
       </div>
     </div>
@@ -14,11 +16,13 @@
   <el-card>
     <el-form>
       <el-form-item>
-        <el-button type="primary" @click="addUser">添加</el-button>
-        <el-button type="danger" :disabled="!selectedIdArr.length" @click="deleteSelectUser">批量删除</el-button>
+        <el-button type="primary" @click="addUser" v-has="'btn.add'">添加</el-button>
+        <el-button type="danger" :disabled="!selectedIdArr.length" @click="deleteSelectUser"
+          >批量删除</el-button
+        >
       </el-form-item>
       <el-form-item>
-        <el-table ref="tableRef" :data="userArr" border  @selection-change="selectChange">
+        <el-table ref="tableRef" :data="userArr" border @selection-change="selectChange">
           <el-table-column type="selection" align="center"></el-table-column>
           <el-table-column label="#" type="index" align="center"></el-table-column>
           <el-table-column label="ID" align="center" prop="id"></el-table-column>
@@ -70,13 +74,7 @@
                 </template>
                 <template #actions="{ confirm, cancel }">
                   <el-button size="small" @click="cancel">取消</el-button>
-                  <el-button
-                    type="danger"
-                    size="small"
-                    @click="confirm"
-                  >
-                    确认
-                  </el-button>
+                  <el-button type="danger" size="small" @click="confirm"> 确认 </el-button>
                 </template>
               </el-popconfirm>
             </template>
@@ -158,7 +156,14 @@
 
 <script setup lang="ts">
   import { ref, onMounted, reactive, nextTick } from 'vue'
-  import { reqUserInfo, reqAddOrUpdateUser, reqAllRole, reqSetUserRole, reqRemoveUser, reqSelectUser } from '@/api/acl/user'
+  import {
+    reqUserInfo,
+    reqAddOrUpdateUser,
+    reqAllRole,
+    reqSetUserRole,
+    reqRemoveUser,
+    reqSelectUser,
+  } from '@/api/acl/user'
   import type {
     UserResponseData,
     Records,
@@ -167,7 +172,7 @@
     AllRole,
     SetRoleData,
   } from '@/api/acl/user/type'
-  import { ElMessage, ElMessageBox  } from 'element-plus'
+  import { ElMessage, ElMessageBox } from 'element-plus'
   import type { CheckboxValueType } from 'element-plus'
   import useLayoutSettingStore from '@/store/modules/setting'
 
@@ -208,7 +213,7 @@
   const loading = ref(false)
   // 定义响应式数据：收集用户输入的关键字
   const keyword = ref<string>('')
-    // 获取模板setting仓库
+  // 获取模板setting仓库
   const layoutSettingStore = useLayoutSettingStore()
 
   // 搜索按钮的回调
@@ -305,15 +310,14 @@
     })
   }
 
-
   // table复选框勾选的时候会触发的事件
-  const selectChange = (val:any) => {
+  const selectChange = (val: any) => {
     selectedIdArr.value = val
   }
   // 批量删除按钮的回调
   const deleteSelectUser = async () => {
     // 整理批量删除的参数
-    const idList:any = selectedIdArr.value.map(item => item.id)
+    const idList: any = selectedIdArr.value.map(item => item.id)
     // 未选择提示
     if (idList.length === 0) {
       ElMessage.warning('请选择要删除的数据')
@@ -321,15 +325,11 @@
     }
     // 确认删除
     try {
-      await ElMessageBox.confirm(
-        `确定要删除选中的 ${idList.length} 条数据吗？`,
-        '提示',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        }
-      )
+      await ElMessageBox.confirm(`确定要删除选中的 ${idList.length} 条数据吗？`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
     } catch {
       ElMessage.info('已取消删除')
       return

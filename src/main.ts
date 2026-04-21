@@ -16,9 +16,12 @@ import './permission'
 import 'virtual:svg-icons-register'
 import globalComponent from './components'
 import 'element-plus/theme-chalk/dark/css-vars.css' // 👈 暗黑模式必须加这个
+// 引入自定义指令文件
+import { hasButtons } from '@/directive/has'
 
 const app = createApp(App)
 
+hasButtons(app)
 app.use(pinia)
 app.use(router)
 app.use(ElementPlus)
