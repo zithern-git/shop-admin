@@ -56,7 +56,8 @@ const users = [
     desc: '平台管理员',
     roles: ['admin'],
     buttons: ['btn.add', 'btn.delete', 'btn.update', 'btn.select'],
-    routes: ['home', 'screen', 'acl', 'product'],
+    // 注意：routes 中的名称必须与前端路由的 name 字段完全匹配（区分大小写）
+    routes: ['Acl', 'User', 'Role', 'Permission', 'Product', 'Trademark', 'Attr', 'Spu', 'Sku'],
   },
   {
     userId: 2,
@@ -67,7 +68,8 @@ const users = [
     desc: '普通用户',
     roles: ['user'],
     buttons: ['btn.select'],
-    routes: ['home', 'screen'],
+    // 普通用户只有商品管理权限
+    routes: ['Product', 'Trademark', 'Attr', 'Spu', 'Sku'],
   },
 ]
 

@@ -9,7 +9,21 @@ import { defineStore } from 'pinia'
 // 引入操作本地存储的工具方法
 import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from '@/utils/token'
 // 引入路由（常量路由）
-import { constantRoutes } from '@/router/routes'
+import { constantRoutes, asyncRoutes, anyRoutes } from '@/router/routes'
+import router from '@/router'
+
+// 用于过滤当前用户需要展示的异步路由
+const filterRoutes = (allRoutes: any[], routeNames: string[]) => {
+  return allRoutes.filter((item: any) => {
+    if (routeNames.includes(item.name)) {
+      if (item.children && item.children.length > 0) {
+        item.children = filterRoutes(item.children, routeNames)
+      }
+      return true
+    }
+    return false
+  })
+}
 
 // 创建用户小仓库
 const useUserStore = defineStore('User', {
@@ -52,6 +66,16 @@ const useUserStore = defineStore('User', {
         this.username = result.data.name
         this.avatar = result.data.avatar
         // console.log('设置 avatar:', this.avatar) // 调试日志
+        // 计算异步路由
+        const routes = result.data.routes || []
+        const userAsyncRoutes = filterRoutes(asyncRoutes, routes)
+        // 菜单的数据
+        this.menuRoutes = [...constantRoutes, ...userAsyncRoutes, anyRoutes]
+        // 目前路由器管理的只有常量路由：用户计算完毕异步路由、任意路由动态追加
+        const routesToAdd = [...userAsyncRoutes, anyRoutes]
+        routesToAdd.forEach((route: any) => {
+          router.addRoute(route)
+        })
         return 'ok'
       } else {
         return Promise.reject('获取用户信息失败')
@@ -59,7 +83,7 @@ const useUserStore = defineStore('User', {
     },
     // 用户退出登录的方法
     async userLogout() {
-      let result: any = await reqLogout()
+      const result: any = await reqLogout()
       if (result.code === 200) {
         // 目前没有mock接口：退出登录接口（通知服务器本地用户唯一标识失效）
         this.token = ''
