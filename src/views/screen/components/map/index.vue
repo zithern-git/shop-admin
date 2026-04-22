@@ -10,7 +10,7 @@
 
   onMounted(async () => {
     // 动态加载中国地图数据（使用阿里云 DataV 提供的 GeoJSON）
-    const response = await fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json')
+    const response = await fetch('/public/china.json')
     const chinaMap = await response.json()
 
     // 注册中国地图
