@@ -45,21 +45,6 @@ const upload = multer({
 
 app.use('/uploads', express.static(uploadDir))
 
-// ==================== 静态文件服务（前端打包文件）====================
-// 生产环境：提供前端静态文件
-const distPath = path.join(__dirname, '../dist')
-if (fs.existsSync(distPath)) {
-  app.use(express.static(distPath))
-  // 所有路由都指向 index.html（支持前端路由）
-  app.get('*', (req, res) => {
-    // API 请求不处理
-    if (req.path.startsWith('/admin') || req.path.startsWith('/uploads')) {
-      return res.status(404).json({ code: 404, message: '接口不存在' })
-    }
-    res.sendFile(path.join(distPath, 'index.html'))
-  })
-}
-
 // ==================== 用户数据 ====================
 const users = [
   {
@@ -89,6 +74,14 @@ const users = [
 ]
 
 // ==================== 权限管理数据 ====================
+// 用户-角色分配关系持久化存储 { userId: [roleId1, roleId2, ...] }
+let userRoles = {
+  1: [1], // admin -> 管理员
+  2: [2], // 张三 -> 运营
+  3: [3], // 李四 -> 客服
+  4: [2], // 王五 -> 运营
+}
+
 let aclUsers = [
   {
     id: 1,
@@ -471,126 +464,126 @@ let trademarks = [
   {
     id: 1,
     tmName: '华为',
-    logoUrl: 'http://localhost:3003/uploads/logo-huawei.svg',
+    logoUrl: '/logo-huawei.svg',
     createTime: '2024-01-01',
     updateTime: '2024-01-01',
   },
   {
     id: 2,
     tmName: '小米',
-    logoUrl: 'http://localhost:3003/uploads/logo-xiaomi.svg',
+    logoUrl: '/logo-xiaomi.svg',
     createTime: '2024-01-02',
     updateTime: '2024-01-02',
   },
   {
     id: 3,
     tmName: '苹果',
-    logoUrl: 'http://localhost:3003/uploads/logo-apple.svg',
+    logoUrl: '/logo-apple.svg',
     createTime: '2024-01-03',
     updateTime: '2024-01-03',
   },
   {
     id: 4,
     tmName: '三星',
-    logoUrl: 'http://localhost:3003/uploads/logo-samsung.svg',
+    logoUrl: '/logo-samsung.svg',
     createTime: '2024-01-04',
     updateTime: '2024-01-04',
   },
   {
     id: 5,
     tmName: 'OPPO',
-    logoUrl: 'http://localhost:3003/uploads/logo-oppo.svg',
+    logoUrl: '/logo-oppo.svg',
     createTime: '2024-01-05',
     updateTime: '2024-01-05',
   },
   {
     id: 6,
     tmName: 'vivo',
-    logoUrl: 'http://localhost:3003/uploads/logo-vivo.svg',
+    logoUrl: '/logo-vivo.svg',
     createTime: '2024-01-06',
     updateTime: '2024-01-06',
   },
   {
     id: 7,
     tmName: '耐克',
-    logoUrl: 'http://localhost:3003/uploads/logo-nike.svg',
+    logoUrl: '/logo-nike.svg',
     createTime: '2024-01-07',
     updateTime: '2024-01-07',
   },
   {
     id: 8,
     tmName: '阿迪达斯',
-    logoUrl: 'http://localhost:3003/uploads/logo-adidas.svg',
+    logoUrl: '/logo-adidas.svg',
     createTime: '2024-01-08',
     updateTime: '2024-01-08',
   },
   {
     id: 9,
     tmName: '优衣库',
-    logoUrl: 'http://localhost:3003/uploads/logo-uniqlo.svg',
+    logoUrl: '/logo-uniqlo.svg',
     createTime: '2024-01-09',
     updateTime: '2024-01-09',
   },
   {
     id: 10,
     tmName: 'ZARA',
-    logoUrl: 'http://localhost:3003/uploads/logo-zara.svg',
+    logoUrl: '/logo-zara.svg',
     createTime: '2024-01-10',
     updateTime: '2024-01-10',
   },
   {
     id: 11,
     tmName: '海尔',
-    logoUrl: 'http://localhost:3003/uploads/logo-haier.svg',
+    logoUrl: '/logo-haier.svg',
     createTime: '2024-01-11',
     updateTime: '2024-01-11',
   },
   {
     id: 12,
     tmName: '美的',
-    logoUrl: 'http://localhost:3003/uploads/logo-midea.svg',
+    logoUrl: '/logo-midea.svg',
     createTime: '2024-01-12',
     updateTime: '2024-01-12',
   },
   {
     id: 13,
     tmName: '格力',
-    logoUrl: 'http://localhost:3003/uploads/logo-gree.svg',
+    logoUrl: '/logo-gree.svg',
     createTime: '2024-01-13',
     updateTime: '2024-01-13',
   },
   {
     id: 14,
     tmName: '索尼',
-    logoUrl: 'http://localhost:3003/uploads/logo-sony.svg',
+    logoUrl: '/logo-sony.svg',
     createTime: '2024-01-14',
     updateTime: '2024-01-14',
   },
   {
     id: 15,
     tmName: '联想',
-    logoUrl: 'http://localhost:3003/uploads/logo-lenovo.svg',
+    logoUrl: '/logo-lenovo.svg',
     createTime: '2024-01-15',
     updateTime: '2024-01-15',
   },
   {
     id: 16,
     tmName: '戴尔',
-    logoUrl: 'http://localhost:3003/uploads/logo-dell.svg',
+    logoUrl: '/logo-dell.svg',
     createTime: '2024-01-16',
     updateTime: '2024-01-16',
   },
   {
     id: 17,
     tmName: '诺基亚',
-    logoUrl: 'http://localhost:3003/uploads/logo-nokia.svg',
+    logoUrl: '/logo-nokia.svg',
     createTime: '2024-01-17',
     updateTime: '2024-01-17',
   },
   {
     id: 18,
     tmName: '飞利浦',
-    logoUrl: 'http://localhost:3003/uploads/logo-philips.svg',
+    logoUrl: '/logo-philips.svg',
     createTime: '2024-01-18',
     updateTime: '2024-01-18',
   },
@@ -1567,8 +1560,7 @@ let skus = [
     skuName: '华为 P60 Pro 256GB 羽砂白',
     price: 5988,
     weight: 200,
-    skuDefaultImg:
-      'https://images.unsplash.com/photo-1556656793-08538906a9f8?w=400&h=400&fit=crop',
+    skuDefaultImg: 'https://images.unsplash.com/photo-1556656793-08538906a9f8?w=400&h=400&fit=crop',
     skuDesc: '羽砂白配色',
     isSale: 0,
     category3Id: 111,
@@ -2487,6 +2479,59 @@ app.delete('/admin/acl/user/remove/:id', (req, res) => {
   res.json({ code: 200, message: '删除成功', data: null, ok: true })
 })
 
+// 获取用户可分配的角色（全部角色 + 已分配角色）
+app.get('/admin/acl/user/toAssign/:adminId', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  const adminId = parseInt(req.params.adminId)
+  const user = aclUsers.find(u => u.id === adminId)
+  if (!user) {
+    return res.json({ code: 404, message: '用户不存在', data: null, ok: false })
+  }
+
+  // 获取当前用户已分配的角色ID列表
+  const assignedRoleIds = userRoles[adminId] || []
+
+  // allRolesList: 系统中所有角色
+  const allRolesList = roles.map(r => ({ ...r }))
+
+  // assignRoles: 当前用户已分配的角色
+  const assignRoles = allRolesList.filter(r => assignedRoleIds.includes(r.id))
+
+  res.json({
+    code: 200,
+    message: '成功',
+    data: { allRolesList, assignRoles },
+    ok: true,
+  })
+})
+
+// 给用户分配角色
+app.post('/admin/acl/user/doAssignRole', (req, res) => {
+  const { valid, message } = verifyToken(req)
+  if (!valid) return res.json({ code: 401, message, data: null, ok: false })
+
+  const { userId, roleIdList } = req.body
+  if (!userId || !Array.isArray(roleIdList)) {
+    return res.json({ code: 400, message: '参数错误', data: null, ok: false })
+  }
+
+  // 保存用户-角色关系
+  userRoles[userId] = roleIdList
+
+  // 同步更新用户表中的 role 字段（取第一个角色名）
+  const user = aclUsers.find(u => u.id === userId)
+  if (user && roleIdList.length > 0) {
+    const firstRole = roles.find(r => r.id === roleIdList[0])
+    if (firstRole) user.role = firstRole.roleName
+  } else if (user) {
+    user.role = ''
+  }
+
+  res.json({ code: 200, message: '分配角色成功', data: null, ok: true })
+})
+
 // ==================== 角色管理接口 ====================
 // 获取角色列表
 app.get('/admin/acl/role/:page/:limit', (req, res) => {
@@ -2501,9 +2546,8 @@ app.get('/admin/acl/role/:page/:limit', (req, res) => {
   let filteredRoles = roles
   if (roleName && roleName.trim() !== '') {
     const keyword = roleName.toLowerCase()
-    filteredRoles = roles.filter(r =>
-      r.roleName.toLowerCase().includes(keyword) ||
-      r.remark.toLowerCase().includes(keyword)
+    filteredRoles = roles.filter(
+      r => r.roleName.toLowerCase().includes(keyword) || r.remark.toLowerCase().includes(keyword)
     )
   }
 
@@ -2587,13 +2631,15 @@ app.get('/admin/acl/permission/toAssign/:roleId', (req, res) => {
   // 获取角色已分配的权限ID列表
   // 优先从 rolePermissions 中获取，如果没有则使用默认逻辑
   let assignedPermissionIds = rolePermissions[roleId] || []
-  
+
   // 如果没有保存过权限，使用默认逻辑
   if (assignedPermissionIds.length === 0) {
     if (role.roleName === '管理员') {
       assignedPermissionIds = permissions.map(p => p.id)
     } else if (role.roleName === '运营') {
-      assignedPermissionIds = permissions.filter(p => p.name.includes('商品') || p.name.includes('品牌')).map(p => p.id)
+      assignedPermissionIds = permissions
+        .filter(p => p.name.includes('商品') || p.name.includes('品牌'))
+        .map(p => p.id)
     } else if (role.roleName === '客服') {
       assignedPermissionIds = permissions.filter(p => p.name.includes('商品')).map(p => p.id)
     } else {
@@ -2610,7 +2656,7 @@ app.get('/admin/acl/permission/toAssign/:roleId', (req, res) => {
         const children = buildTree(list, item.id)
         const node = {
           ...item,
-          select: assignedPermissionIds.includes(item.id)
+          select: assignedPermissionIds.includes(item.id),
         }
         if (children.length > 0) {
           node.children = children
@@ -2742,7 +2788,7 @@ app.post('/admin/product/fileUpload', upload.single('file'), (req, res) => {
       console.log('❌ 没有上传文件')
       return res.json({ code: 400, message: '没有上传文件', data: null, ok: false })
     }
-    const fileUrl = `http://localhost:${PORT}/uploads/${req.file.filename}`
+    const fileUrl = `/uploads/${req.file.filename}`
     console.log('✅ 上传成功，URL:', fileUrl)
     res.json({ code: 200, message: '上传成功', data: fileUrl, ok: true })
   } catch (error) {
@@ -3150,8 +3196,8 @@ app.get('/admin/product/cancelSale/:skuId', (req, res) => {
 // })
 // 获取SKU详情 【修复版】
 app.get('/admin/product/sku/detail/:skuId', (req, res) => {
-    // 加这一行！！！
-  console.log('========= 我执行了！skuId =', req.params.skuId);
+  // 加这一行！！！
+  console.log('========= 我执行了！skuId =', req.params.skuId)
   const { valid, message } = verifyToken(req)
   if (!valid) return res.json({ code: 401, message, data: null, ok: false })
 
@@ -3361,3 +3407,14 @@ app.listen(PORT, () => {
   console.log('  管理员: admin / 111111')
   console.log('  普通用户: user / 111111\n')
 })
+
+// ==================== 静态文件服务（前端打包文件）====================
+// 必须放在所有 API 路由之后，否则会拦截 API 请求
+const distPath = path.join(__dirname, '../dist')
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath))
+  // 所有未匹配的路由指向 index.html（支持前端路由）
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'))
+  })
+}
